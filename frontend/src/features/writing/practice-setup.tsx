@@ -12,6 +12,7 @@ import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
 import { post } from "@/services/api";
+import { TEST_PROFILE } from "@/lib/test-profile";
 import { topics, task1Types, task2Types } from "@/lib/constants";
 import type { Exam, Question } from "@/types";
 
@@ -26,8 +27,7 @@ export function QuestionCard({ question }: { question: Question }) {
           {topics[question.topic] || question.topic}
         </span>
         <span className="rounded-md bg-stone-100 px-2.5 py-1 text-xs text-stone-500">
-          {question.difficulty} ·{" "}
-          {question.source === "AI" ? "Đề AI" : "Đề mẫu"}
+          VSTEP.3–5 · {question.source === "AI" ? "Đề AI" : "Đề mẫu"}
         </span>
       </div>
       <p
@@ -69,7 +69,7 @@ function Setup({ task }: { task: 1 | 2 }) {
       question_type: questionType,
       topic,
       source,
-      difficulty: "B2",
+      test_profile: TEST_PROFILE,
       exclude_ids: seen.slice(-30),
     });
     setQuestion(result);

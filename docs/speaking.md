@@ -4,7 +4,7 @@ Speaking mở rộng project hiện tại; giữ FastAPI, PostgreSQL, Next.js v�
 
 ## Sử dụng
 
-Mở `/speaking`, chọn Thi thử, Part 1, Part 2, Part 3 hoặc Luyện nhanh. Đề mẫu B2 có sẵn không cần API key. Part 1/Luyện nhanh chọn một câu cho mỗi lượt; Full Test lấy hai topics với sáu câu Part 1, một tình huống ba phương án Part 2, một chủ đề Part 3 với ba ý gợi ý/ý riêng và hai follow-ups. AI có thể tạo 3–6 câu Part 1 và 2–3 follow-ups trong giới hạn schema.
+Mở `/speaking`, chọn Thi thử, Part 1, Part 2, Part 3 hoặc Luyện nhanh. Đề mẫu VSTEP.3–5 có sẵn không cần API key. Part 1/Luyện nhanh chọn một câu cho mỗi lượt; Full Test lấy hai topics với sáu câu Part 1, một tình huống ba phương án Part 2, một chủ đề Part 3 với ba ý gợi ý/ý riêng và hai follow-ups. AI có thể tạo 3–6 câu Part 1 và 2–3 follow-ups trong giới hạn schema.
 
 Full Test hiển thị đồng hồ đã trôi qua với mốc khoảng 12 phút; đây là mốc luyện tập, không tự cắt bài ở phút 12. Mỗi câu chỉ nhận một bản ghi đã lưu; không có transcript, audio playback hay grading cho Full Test đang diễn ra. Backend chỉ trả các câu đã mở; mỗi follow-up được mở sau khi chốt bước trước. Bỏ qua được lưu rõ là `SKIPPED` và đưa vào đánh giá toàn bài.
 
@@ -17,19 +17,20 @@ Ghi âm cần HTTPS hoặc `localhost`, microphone và MediaRecorder. Trình duy
 ```dotenv
 OPENAI_API_KEY=
 OPENAI_MODEL=gpt-5.6
-OPENAI_TRANSCRIBE_MODEL=gpt-transcribe
-OPENAI_SPEAKING_AUDIO_MODEL=
-OPENAI_TTS_MODEL=
+OPENAI_TRANSCRIBE_MODEL=gpt-4o-transcribe
+OPENAI_AUDIO_MODEL=gpt-audio
+AUDIO_ANALYSIS_ENABLED=true
+OPENAI_TTS_MODEL=gpt-4o-mini-tts
 OPENAI_TTS_VOICE=alloy
 AUDIO_STORAGE_DIR=data/audio
-MAX_SPEAKING_AUDIO_MB=20
-MAX_SPEAKING_AUDIO_SECONDS=360
-PRONUNCIATION_CONFIDENCE_THRESHOLD=0.75
+SPEAKING_AUDIO_MAX_MB=20
+SPEAKING_AUDIO_MAX_SECONDS=360
+AUDIO_FEEDBACK_MIN_CONFIDENCE=0.70
 ```
 
-Model IDs phải được tài khoản OpenAI cấp quyền. `OPENAI_MODEL` cần Responses + Structured Outputs. Transcription model cần Audio Transcriptions với English và JSON. Audio analyzer cần Chat Completions hỗ trợ `input_audio` WAV và đầu ra text, chẳng hạn dòng `gpt-audio` nếu tài khoản có quyền. Không điền text-only model vào `OPENAI_SPEAKING_AUDIO_MODEL`. TTS model cần Audio Speech API. Không đặt key ở frontend.
+Model IDs phải được tài khoản OpenAI cấp quyền. `OPENAI_MODEL` cần Responses + Structured Outputs. Transcription model cần Audio Transcriptions với English và JSON. Audio analyzer cần Chat Completions hỗ trợ `input_audio` WAV và đầu ra text, chẳng hạn dòng `gpt-audio` nếu tài khoản có quyền. Không điền text-only model vào `OPENAI_AUDIO_MODEL`. TTS model cần Audio Speech API. Không đặt key ở frontend.
 
-`OPENAI_SPEAKING_AUDIO_MODEL` để trống nghĩa là chỉ có phản hồi ngôn ngữ; phát âm, độ trôi chảy và tổng điểm để `null`, mức tham khảo là chưa đủ dữ liệu. Trang kết quả có nút thử phân tích audio lại sau khi cấu hình được cập nhật. Thiếu key, sai model, timeout hoặc lỗi hạn mức được trả bằng lỗi tiếng Việt và giữ audio đã nộp.
+`OPENAI_AUDIO_MODEL` để trống nghĩa là chỉ có phản hồi ngôn ngữ; phát âm, độ trôi chảy và tổng điểm để `null`, mức tham khảo là chưa đủ dữ liệu. Trang kết quả có nút thử phân tích audio lại sau khi cấu hình được cập nhật. Thiếu key, sai model, timeout hoặc lỗi hạn mức được trả bằng lỗi tiếng Việt và giữ audio đã nộp.
 
 Docker tự cài FFmpeg, migrate và nạp hai bộ seed Writing/Speaking. Chạy backend trực tiếp phải tự cài FFmpeg và chạy `python -m app.db.speaking_seed` sau `alembic upgrade head`. Docker dùng volume `speaking_audio` ở `/app/data/audio`; thiết lập này được cố định trong Compose để khớp mount. `AUDIO_STORAGE_DIR` dùng cho backend ngoài Docker. Giữ Compose project name `vstep-writing-lab` để tiếp tục dùng volume PostgreSQL cũ.
 
@@ -39,8 +40,8 @@ Docker tự cài FFmpeg, migrate và nạp hai bộ seed Writing/Speaking. Chạ
 2. Next proxy chuyển multipart bằng bytes, giới hạn body 25 MiB kể cả luồng đọc và bảo toàn content type. FastAPI yêu cầu Content-Length cho audio, chặn theo giới hạn cấu hình; storage đọc giới hạn số bytes và kiểm tra MIME. Tên tệp client không dùng làm đường dẫn.
 3. `AudioStorageService` cung cấp `store/resolve/remove`. Local adapter tạo UUID, FFmpeg giải mã audio thật về WAV mono 16 kHz, đo thời lượng từ số mẫu thay vì tin client. WAV này giữ toàn bộ nội dung âm thanh để nghe lại/STT/analyze; upload gốc tạm thời được xóa. Muốn thay bằng S3/MinIO/R2 có thể viết adapter cùng hợp đồng và materialize WAV vào staging khi speech provider cần file.
 4. `SpeechTranscriptionService` gọi `SpeechClient.transcribe`; adapter OpenAI dùng Audio Transcriptions. Transcript là dữ liệu nhận dạng, không được user sửa để thay thế phần nói. Không giả timestamp từ JSON transcription.
-5. `SpeechClient.analyze_audio` gửi **WAV thật** qua `input_audio`. Phản hồi acoustic là dữ liệu trung gian, không gửi cho frontend. Audio model không bắt buộc hỗ trợ JSON Schema. Model text nhận transcript, evidence audio, đề, metrics và trả grading qua Responses Structured Outputs, validate bằng Pydantic. Không parse JSON bằng regex và không tạo điểm mẫu.
-6. `SpeakingCorrectionService` áp ngưỡng confidence, loại diagnostic thiếu evidence và IPA chưa đủ confidence. Backend tính `overall = (grammar + vocabulary + pronunciation + fluency + structures) / 5` nếu cả năm tiêu chí có điểm. Thiếu acoustic evidence cho bất kỳ recording được nộp thì không cho tổng điểm. Full Test được chấm holistically từ **mọi** answer/follow-up, không tự đặt trọng số Part.
+5. `AudioAnalysisProvider` tách khỏi transcription/TTS. `OpenAIAudioAnalysisProvider` gửi **WAV thật** qua `input_audio` cho model audio. Model trả function call `record_audio_assessment`, adapter kiểm tra bằng Pydantic và thử lại một lần nếu cấu trúc sai. Dòng `gpt-audio` hỗ trợ function calling nhưng không hỗ trợ Structured Outputs `json_schema`; không có lời gọi text-model để đoán/chuẩn hóa điểm audio. Kết quả chuẩn hóa gồm pronunciation, intelligibility, clarity, stress, intonation, rhythm, fluency và nhận xét tiếng Việt. Target phải xuất hiện trong lời mà audio model nghe được; chỉ giữ issue đủ confidence, không dựng IPA/phoneme/timestamp.
+6. Text model chỉ nhận câu hỏi/transcript/trạng thái trả lời, chấm Grammar, Vocabulary, Structures bằng schema riêng; không nhận hoặc tự đặt điểm phát âm. `SpeakingCorrectionService` lấy acoustic scores từ kết quả audio đã kiểm tra, trung bình các recording và làm tròn đến nửa điểm. Đây là phép tổng hợp cho luyện tập, không phải trọng số Part chính thức. Mỗi recording đã nộp phải có điểm audio đáng tin cậy để cho điểm tiêu chí tổng hợp; thiếu dữ liệu thì `null`. Overall là trung bình năm tiêu chí 20%. Phần ngôn ngữ Full Test vẫn được chấm holistically trên tất cả answer/follow-up. Lỗi acoustic trong analytics chỉ được tạo từ issue audio.
 7. Kết quả lưu feedback/điểm/correction/errors/model/prompt version; frontend hiện ba ưu tiên rồi mới phân tích chi tiết. Mỗi audio có play/pause/seek; transcript và chữa câu liên kết qua sequence. Bản sửa giữ ý gốc; bản B2 dùng spoken English, không biến thành essay.
 
 Mức tham khảo dùng khoảng nửa điểm theo yêu cầu sản phẩm: 0–3.5 Chưa xét, 4–5.5 B1, 6–8 B2, 8.5–10 C1. Với trung bình không nằm đúng nửa điểm (ví dụ 5.8), chỉ làm tròn tới nửa điểm để tra mức; điểm trung bình gốc giữ nguyên. UI hiển thị một chữ số thập phân. Đây là mapping luyện tập, không quy tắc cấp chứng chỉ.
@@ -54,7 +55,7 @@ Tất cả dưới `/api/v1/speaking`, bắt buộc cookie xác thực. Audio ch
 | Method | Path | Nội dung |
 | --- | --- | --- |
 | GET | `/config` | Khả năng AI/TTS và giới hạn, không có secrets |
-| POST | `/questions/generate` | Đề mẫu hoặc AI, nhận part/source/topic/difficulty/recent history |
+| POST | `/questions/generate` | Đề mẫu hoặc AI, nhận part/source/topic/test_profile/recent history |
 | POST | `/sessions` | Tạo phiên đủ câu hỏi |
 | GET | `/sessions/{id}` | Tiến độ, câu hiện tại và câu đã mở |
 | POST | `/sessions/{id}/answers` | Mở answer theo `sequence_number` |
@@ -78,3 +79,29 @@ Migration `008c2258fea3` thêm `speaking_questions`, `speaking_exam_sessions`, `
 Grading đồng bộ có timeout; kết quả từng bước được lưu để retry. Nếu provider xử lý xong nhưng server mất kết nối trước khi lưu DB, retry vẫn có thể phát sinh phí. TTS cache theo model/voice/text; không là điều kiện của core flow. Snapshot IndexedDB là bản dự phòng trên thiết bị, không đồng bộ sang thiết bị khác. Dữ liệu thật chỉ bền sau upload; backup cần cả PostgreSQL **và** volume audio. Không chạy `docker compose down -v` nếu cần giữ dữ liệu.
 
 Nguồn API dùng khi triển khai: [OpenAI speech-to-text](https://developers.openai.com/api/docs/guides/speech-to-text), [audio guide](https://developers.openai.com/api/docs/guides/audio), [gpt-audio capabilities](https://developers.openai.com/api/docs/models/gpt-audio). Quyền model và chi phí phụ thuộc tài khoản.
+
+
+Tạo đề và phiên Speaking dùng `test_profile=VSTEP_3_5`, không nhận difficulty B1/B2/C1. Cùng prompt có thể đánh giá các bậc năng lực khác nhau thông qua chất lượng câu trả lời; mức AI ước tính vẫn hiện sau chấm. Nhãn difficulty cũ được giữ riêng trong DB để bảo toàn dữ liệu, không hiển thị ở đề hoặc lịch sử.
+
+
+## Pronunciation coach
+
+Trang `/speaking/pronunciation` nhận từ/câu tham chiếu (tối đa 500 ký tự), có thể liên kết từ lỗi trong bài Speaking. Người học nghe mẫu AI OpenAI TTS, ghi âm, nghe lại và phân tích. Một lượt đã upload là bất biến; luyện lại tạo lượt mới và không ghi đè lịch sử. Bản ghi tạm có IndexedDB backup, URL chứa ID lượt luyện để mở lại; lỗi API vẫn giữ audio đã tải lên. Audio model so sánh bản ghi thật với reference, trả `heard_text`, mức phủ nội dung, phản hồi trọng âm, vấn đề chính, cách luyện và độ tin cậy. Không có điểm nếu thiếu nội dung tham chiếu; từ đơn có thể chưa đủ để chấm fluency/intonation.
+
+TTS cache chung theo text + voice + model, khóa PostgreSQL chống tạo trùng và ghi tệp nguyên tử. Giọng mẫu được ghi rõ là AI. Coach cần OpenAI TTS, không thay mẫu bằng giả lập. SpeechSynthesis vẫn là phương án dự phòng cho **đọc câu hỏi** trong bài thi.
+
+Các route mới, dưới `/api/v1/speaking/pronunciation`, đều xác thực và kiểm tra quyền sở hữu:
+
+| Method | Path | Nội dung |
+| --- | --- | --- |
+| POST | `/practices` | Tạo lượt với reference_text, optional source_answer_id/source_issue_type, client_request_id chống lặp |
+| GET | `/practices/{id}` | Nội dung, kết quả, ngày luyện và URL audio riêng tư |
+| POST / GET | `/practices/{id}/audio` | Lưu / nghe lại WAV |
+| POST | `/practices/{id}/tts` | Mẫu OpenAI TTS có cache |
+| POST | `/practices/{id}/analyze` | Chấm bản ghi thật, có cache theo user/audio/reference/model/version/confidence |
+| GET | `/history` | reference_hash tùy chọn, offset/limit |
+| GET | `/progress` | Timeline phát âm/trôi chảy, vấn đề lặp lại, từ khó và từ tiến bộ |
+
+`pronunciation_practices` được thêm bởi migration `e41b6d0a9f22`. UI History/Progress tích hợp các lượt này. Tiến bộ so sánh lần đầu và lần gần nhất **cùng reference**; điểm dưới 7 được gợi ý luyện tiếp, không phải kết luận rớt VSTEP. Confidence là tự đánh giá của model, chưa được hiệu chuẩn thành xác suất chính xác. Scores cũng là ước tính luyện tập; cần dữ liệu audio có người chấm để đánh giá chất lượng thực tế.
+
+Tham khảo triển khai TTS: [OpenAI Text to Speech](https://developers.openai.com/api/docs/guides/text-to-speech).

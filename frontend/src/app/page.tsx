@@ -65,7 +65,7 @@ export default function Home() {
                 <PenLine size={15} />
                 NHẬT KÝ LUYỆN VIẾT
               </span>
-              <span className="text-xs text-stone-400">B2</span>
+              <span className="text-xs text-stone-400">VSTEP.3–5</span>
             </div>
             <div className="my-6 h-px bg-stone-200" />
             <p className="font-serif text-2xl italic leading-relaxed text-stone-600">

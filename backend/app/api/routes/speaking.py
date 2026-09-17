@@ -160,7 +160,7 @@ async def tts(session_id: str, db: DB, user: CurrentUser):
             ],
         )
     )
-    path = await TextToSpeechService(OpenAISpeechClient()).speak_question(spoken, user.id)
+    path = await TextToSpeechService(OpenAISpeechClient(), db).speak_question(spoken, user.id)
     return FileResponse(path, media_type="audio/mpeg", headers={"Cache-Control": "private, no-store"})
 
 

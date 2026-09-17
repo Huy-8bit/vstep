@@ -7,8 +7,9 @@ from app.common.errors import AppError
 from app.common.words import count_words
 from app.core.config import settings
 from app.models.speaking import SpeakingAnswer, SpeakingExamSession
-from app.prompts.speaking_grader import SPEAKING_AUDIO_PROMPT_VERSION
-from app.schemas.speaking import AudioAnalysisResult
+from app.prompts.audio_assessment import AUDIO_ASSESSMENT_VERSION
+from app.schemas.audio_assessment import unavailable_audio
+from app.speech.openai_audio_analysis import OpenAIAudioAnalysisProvider
 
 
 def speech_cache_key(*parts: str) -> str:
@@ -21,8 +22,9 @@ async def speech_lock(db, key: str):
 
 
 class SpeechTranscriptionService:
-    def __init__(self, db, speech, storage):
+    def __init__(self, db, speech, storage, audio_provider=None):
         self.db, self.speech, self.storage = db, speech, storage
+        self.audio_provider = audio_provider or OpenAIAudioAnalysisProvider()
 
     async def _lock_recording(self, answer, user_id):
         # Retakes and processing share a session row lock; never attach an old transcript
@@ -82,6 +84,14 @@ class SpeechTranscriptionService:
         await self.db.commit()
         return answer
 
+    @staticmethod
+    def _complete_audio(analysis):
+        return (
+            analysis.get("available")
+            and analysis.get("pronunciation_score") is not None
+            and analysis.get("fluency_score") is not None
+        )
+
     async def analyze(self, answer: SpeakingAnswer, user_id: str, retry: bool = False):
         if answer.transcript is None:
             answer = await self.transcribe(answer, user_id)
@@ -92,14 +102,15 @@ class SpeechTranscriptionService:
             answer.audio_hash,
             answer.transcript_hash,
             settings.openai_speaking_audio_model,
-            SPEAKING_AUDIO_PROMPT_VERSION,
+            AUDIO_ASSESSMENT_VERSION,
+            str(settings.audio_feedback_min_confidence),
         )
         await speech_lock(self.db, f"audio-analysis:{user_id}:{key}")
         await self.db.refresh(answer)
         if (
             answer.audio_analysis_key == key
             and answer.audio_analysis
-            and (answer.audio_analysis.get("available") or not retry)
+            and (not retry or self._complete_audio(answer.audio_analysis))
         ):
             await self.db.commit()
             return answer
@@ -113,22 +124,28 @@ class SpeechTranscriptionService:
             )
             .limit(1)
         )
-        if cached and cached.audio_analysis and cached.audio_analysis.get("available"):
+        if (
+            cached
+            and cached.audio_analysis
+            and cached.audio_analysis.get("available")
+            and (not retry or self._complete_audio(cached.audio_analysis))
+        ):
             answer.audio_analysis = cached.audio_analysis
         else:
             try:
-                result = await self.speech.analyze_audio(
-                    self.storage.resolve(answer.audio_path), answer.transcript or "", user_id
+                result = await self.audio_provider.assess(
+                    self.storage.resolve(answer.audio_path),
+                    {"mode": "SPONTANEOUS", "transcript": answer.transcript or "", "metrics": answer.metrics},
+                    user_id,
                 )
             except AppError as exc:
                 # Preserve transcript feedback if the optional acoustic model is unavailable.
-                result = AudioAnalysisResult(
-                    available=False,
-                    evidence="",
-                    model=settings.openai_speaking_audio_model or None,
-                    reason_vi=exc.message,
-                )
-            answer.audio_analysis = result.model_dump()
+                result = unavailable_audio(exc.message)
+            answer.audio_analysis = {
+                **result.model_dump(),
+                "model": settings.openai_speaking_audio_model or None,
+                "schema_version": AUDIO_ASSESSMENT_VERSION,
+            }
         answer.audio_analysis_key = key
         await self.db.commit()
         return answer

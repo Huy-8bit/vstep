@@ -10,7 +10,6 @@ import { modes, topics, duration, type ReadingMode } from "./types";
 type Item = {
   id: string;
   mode: ReadingMode;
-  difficulty: string;
   topic: string;
   status: string;
   started_at: string;
@@ -100,7 +99,7 @@ function History() {
                   {[
                     "Ngày luyện",
                     "Chế độ",
-                    "Mức / Chủ đề",
+                    "Chủ đề",
                     "Số câu đúng",
                     "Điểm luyện tập",
                     "Thời gian",
@@ -138,7 +137,6 @@ function History() {
                       </p>
                     </td>
                     <td className="px-5 py-5 text-xs leading-6">
-                      {row.difficulty}
                       <p className="text-stone-500">
                         {row.topic === "random"
                           ? "Nhiều chủ đề"

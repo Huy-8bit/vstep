@@ -27,7 +27,7 @@ class ReadingProgressService:
                 {
                     "id": s.id,
                     "mode": s.mode,
-                    "difficulty": s.difficulty,
+                    "test_profile": s.test_profile,
                     "topic": s.topic,
                     "status": s.status,
                     "started_at": s.started_at,
@@ -55,12 +55,11 @@ class ReadingProgressService:
             p.id: p
             for p in await self.db.scalars(select(ReadingPassage).where(ReadingPassage.id.in_(passage_ids)))
         }
-        by_type, by_topic, by_level = defaultdict(list), defaultdict(list), defaultdict(list)
+        by_type, by_topic = defaultdict(list), defaultdict(list)
         for s in sessions:
             for a in s.answers:
                 by_type[a.question.question_type].append(a)
                 by_topic[passages[a.question.passage_id].topic].append(a)
-                by_level[s.difficulty].append(a)
         total = sum(s.question_count for s in sessions)
         correct = sum(s.result.correct_count for s in sessions)
         answered = sum(s.result.correct_count + s.result.incorrect_count for s in sessions)
@@ -80,7 +79,6 @@ class ReadingProgressService:
             else None,
             "question_types": types,
             "topics": breakdown(by_topic),
-            "difficulties": breakdown(by_level),
             "weaknesses": weaknesses,
             "timeline": [
                 {

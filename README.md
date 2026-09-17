@@ -19,6 +19,10 @@ Backend tự chạy Alembic và nạp **10 đề Task 1 + 10 đề Task 2 + 45 �
 
 Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp bài, ghi âm và nghe lại trong Practice. Chấm AI và sinh đề AI yêu cầu key thật; khi thiếu key, ứng dụng báo **“Chưa cấu hình OpenAI API.”** và giữ bài đã nộp. Reading chấm đúng/sai bằng Python từ đáp án có sẵn và không cần gọi AI khi nộp. Không có điểm giả lập trong ứng dụng.
 
+## Một bài thi đa bậc
+
+Writing, Speaking và Reading dùng chung `test_profile=VSTEP_3_5`. Người học không chọn B1/B2/C1 để sinh đề; bậc năng lực được ước tính từ kết quả làm bài. Metadata nội bộ chỉ giúp cân bằng đề Reading, không phải chứng nhận CEFR. Xem [format VSTEP.3–5](docs/vstep-format.md).
+
 ## Cấu hình
 
 | Biến | Ý nghĩa |
@@ -28,12 +32,14 @@ Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp
 | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | Thông tin DB dùng trong Docker Compose |
 | `OPENAI_API_KEY` | Key chỉ đọc ở backend; để trống nếu chỉ dùng đề mẫu |
 | `OPENAI_MODEL` | Model hỗ trợ Responses API + Structured Outputs; ví dụ cấu hình `gpt-5.6` |
-| `OPENAI_TRANSCRIBE_MODEL` | Audio Transcriptions, mặc định `gpt-transcribe`; tùy quyền tài khoản |
-| `OPENAI_SPEAKING_AUDIO_MODEL` | Model nhận audio WAV qua Chat Completions; để trống thì chưa chấm phát âm/fluency/tổng điểm |
-| `OPENAI_TTS_MODEL`, `OPENAI_TTS_VOICE` | Đọc câu hỏi tùy chọn; bỏ trống model để dùng giọng trình duyệt |
+| `OPENAI_TRANSCRIBE_MODEL` | Audio Transcriptions, mặc định `gpt-4o-transcribe`; tùy quyền tài khoản |
+| `OPENAI_AUDIO_MODEL` | Mặc định `gpt-audio`; cần nhận WAV qua Chat Completions và hỗ trợ function calling |
+| `AUDIO_ANALYSIS_ENABLED`, `AUDIO_FEEDBACK_MIN_CONFIDENCE` | Bật phân tích audio và lọc nhận xét theo độ tin cậy; mặc định `true`, `0.70` |
+| `OPENAI_TTS_MODEL`, `OPENAI_TTS_VOICE` | Mặc định `gpt-4o-mini-tts`, `alloy`; đọc câu hỏi và phát âm mẫu có cache |
 | `AUDIO_STORAGE_DIR` | Backend ngoài Docker: `data/audio`; Docker mount `/app/data/audio` |
-| `MAX_SPEAKING_AUDIO_MB`, `MAX_SPEAKING_AUDIO_SECONDS` | Mặc định 20 MB và 360 giây mỗi bản ghi |
-| `PRONUNCIATION_CONFIDENCE_THRESHOLD` | Mặc định 0.75; IPA chỉ khi confidence ≥0.9 |
+| `SPEAKING_AUDIO_MAX_MB`, `SPEAKING_AUDIO_MAX_SECONDS` | Mặc định 20 MB và 360 giây mỗi bản ghi |
+| `OPENAI_GRADING_TEMPERATURE` | Tùy chọn 0–0.3 nếu text model hỗ trợ; mặc định không gửi |
+| `WRITING_CALIBRATION_ADMIN_EMAILS` | Danh sách email được mở route inspection nội bộ; mặc định trống |
 | `JWT_SECRET` | Secret ký JWT; thay giá trị phát triển trước khi triển khai production |
 | `JWT_ACCESS_EXPIRE_MINUTES` | Mặc định 15 phút |
 | `JWT_REFRESH_EXPIRE_DAYS` | Mặc định 7 ngày |
@@ -122,7 +128,7 @@ Xem [tài liệu Speaking đầy đủ](docs/speaking.md) cho endpoint, schema, 
 
 ## Reading
 
-Mở `/reading`: Thi thử (4 passages/40 câu/60 phút), Luyện 1 Passage, Luyện nhanh và Luyện theo dạng câu hỏi; lọc B1/B2/C1 và chủ đề. Bộ mẫu gồm 2 B1, 4 B2, 2 C1, mỗi bài khoảng 500 từ/10 câu. Chọn **B2 + chủ đề ngẫu nhiên** để thi full ngay khi chưa có OpenAI key.
+Mở `/reading`: Thi thử (4 passages/40 câu/60 phút), Luyện 1 Passage, Luyện nhanh và Luyện theo dạng câu hỏi; giữ bộ lọc chủ đề. Tám bài mẫu dùng chung profile **VSTEP.3–5**, mỗi bài khoảng 500 từ/10 câu. Full Test phối hợp các bài có độ phân hóa và dạng câu theo blueprint nội bộ. Chọn **chủ đề ngẫu nhiên** để thi full ngay khi chưa có OpenAI key.
 
 Đáp án tự lưu, có dự phòng trên thiết bị, xử lý xung đột giữa tab và đồng hồ do backend quản lý. Sau nộp, xem điểm, giải thích đúng/sai từng lựa chọn, đoạn bằng chứng được tô sáng, lịch sử và biểu đồ tiến độ. Tạo đề mới và giải thích từ vựng theo ngữ cảnh dùng OpenAI; chấm điểm và analytics dùng Python/SQL. History/progress có nút chuyển Writing/Speaking/Reading.
 
@@ -170,3 +176,12 @@ Chạy một backend worker; rate limit đơn giản trong bộ nhớ theo IP/ro
 Trước production: HTTPS, secret mạnh, CORS đúng origin, backup PostgreSQL và giới hạn chi phí OpenAI. Bản Compose hiện tại dành cho local, các cổng chỉ bind `127.0.0.1`.
 
 Xem thêm: [kiến trúc](docs/architecture.md), [database](docs/database.md), [AI grading](docs/ai-grading.md), [format luyện thi](docs/vstep-format.md).
+
+
+## Bộ chấm Writing 2.0 và phòng luyện phát âm
+
+Writing phân tích bài gốc trước, tổng hợp số lỗi/cấu trúc bằng Python, rồi hiệu chỉnh bốn tiêu chí theo bằng chứng và các bài tham chiếu. Điểm từ 0 đến 10 theo bước 0.5, tổng điểm là trung bình bốn tiêu chí. Bản sửa và bài tham khảo chỉ được tạo sau khi chốt điểm. Các kết quả cũ giữ nguyên cho tới khi người học bấm **Chấm lại với bộ chấm mới**; bản cũ được lưu trong lịch sử phiên bản. Trang kết quả giải thích điểm bằng trích dẫn cụ thể. Xem [kiến trúc và cấu hình bộ chấm](docs/writing-assessment.md).
+
+Mở `/speaking/pronunciation` hoặc bấm **Luyện từ này / Luyện câu này** từ kết quả Speaking: nghe mẫu OpenAI TTS → ghi âm → phân tích audio → luyện lại. Mỗi lượt có bản ghi riêng, điểm, ngày luyện và phản hồi; `/speaking/history` và `/speaking/progress` hiển thị lịch sử/tiến bộ. Pronunciation và Fluency chỉ lấy từ audio model; text model chỉ chấm ngữ pháp, từ vựng, mạch lạc. Điểm thiếu bằng chứng là `null`.
+
+Migration mới `e41b6d0a9f22` bổ sung bằng chứng Writing, lịch sử phiên bản, bảng mẫu hiệu chỉnh của giáo viên và bảng lượt luyện phát âm. Docker tự áp dụng khi khởi động; giữ nguyên project name và các volume hiện có. Tên biến audio cũ vẫn được nhận như alias, nhưng nên chuyển `.env` sang các tên trong `.env.example`. Đặt `OPENAI_AUDIO_MODEL=gpt-audio`, `AUDIO_ANALYSIS_ENABLED=true`, `OPENAI_TTS_MODEL=gpt-4o-mini-tts` để bật toàn bộ coach, cùng API key hợp lệ.

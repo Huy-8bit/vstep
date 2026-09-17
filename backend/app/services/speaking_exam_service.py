@@ -92,7 +92,7 @@ class SpeakingExamService:
             else:
                 q = await SpeakingQuestionGeneratorService(self.db, self.llm).generate(
                     SpeakingQuestionRequest(
-                        part=part, topic=data.topic, source=data.source, difficulty=data.difficulty
+                        part=part, topic=data.topic, source=data.source, test_profile=data.test_profile
                     ),
                     user_id,
                 )
@@ -104,6 +104,7 @@ class SpeakingExamService:
         session = SpeakingExamSession(
             user_id=user_id,
             mode=data.mode,
+            test_profile=data.test_profile,
             current_part=steps[0]["part"],
             current_sequence=0,
             question_set=steps,

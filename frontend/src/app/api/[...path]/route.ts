@@ -25,7 +25,11 @@ async function proxy(
     if (value) headers.set(name, value);
   }
   const audioUpload =
-    path[1] === "speaking" && path[2] === "answers" && path[4] === "audio";
+    path[1] === "speaking" &&
+    ((path[2] === "answers" && path[4] === "audio") ||
+      (path[2] === "pronunciation" &&
+        path[3] === "practices" &&
+        path[5] === "audio"));
   const limit = audioUpload ? 25 * 1024 * 1024 : 100000;
   if (Number(request.headers.get("content-length") || 0) > limit)
     return Response.json(

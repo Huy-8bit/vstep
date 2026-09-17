@@ -176,11 +176,6 @@ function Dashboard() {
             <section className="panel p-6">
               <h2 className="mb-5 text-lg font-bold">Theo chủ đề</h2>
               <Bars rows={data.topics} labels={topics} />
-              <h2 className="mb-5 mt-8 text-lg font-bold">Theo độ khó</h2>
-              <Bars
-                rows={data.difficulties}
-                labels={{ B1: "B1", B2: "B2", C1: "C1" }}
-              />
             </section>
           </div>
           <p className="text-xs leading-6 text-stone-500">

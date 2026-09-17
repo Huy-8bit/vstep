@@ -2,6 +2,7 @@ from typing import Literal
 
 from pydantic import EmailStr, Field
 
+from app.common.test_profiles import TestProfile
 from app.schemas.writing import StrictModel
 
 
@@ -11,6 +12,7 @@ class Credentials(StrictModel):
 
 
 class ExamCreate(StrictModel):
+    test_profile: TestProfile = "VSTEP_3_5"
     mode: Literal["FULL_TEST", "TASK1", "TASK2"]
     question_ids: list[str] = Field(default_factory=list, max_length=2)
     timed: bool = True

@@ -15,7 +15,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, IdentityMixin, UpdatedMixin, utcnow
 from app.models.speaking import (  # noqa: F401
-    SpeakingQuestion, SpeakingExamSession, SpeakingAnswer, SpeakingGrading, SpeakingError,
+    SpeakingAnswer,
+    SpeakingError,
+    SpeakingExamSession,
+    SpeakingGrading,
+    SpeakingQuestion,
 )
 
 
@@ -42,7 +46,9 @@ class WritingQuestion(IdentityMixin, Base):
     task_type: Mapped[int] = mapped_column(Integer, index=True)
     question_type: Mapped[str] = mapped_column(String(50))
     topic: Mapped[str] = mapped_column(String(50), index=True)
-    difficulty: Mapped[str] = mapped_column(String(10), default="B2")
+    # Retained only to preserve historical data; never used for generation or public DTOs.
+    legacy_difficulty: Mapped[str | None] = mapped_column("difficulty", String(10))
+    test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
     instruction: Mapped[str] = mapped_column(Text)
     requirements: Mapped[list] = mapped_column(JSONB, default=list)
     minimum_words: Mapped[int] = mapped_column(Integer)
@@ -55,6 +61,7 @@ class ExamSession(IdentityMixin, Base):
     __tablename__ = "exam_sessions"
     __table_args__ = (CheckConstraint("mode IN ('FULL_TEST', 'TASK1', 'TASK2')"),)
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
     mode: Mapped[str] = mapped_column(String(20))
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -83,6 +90,7 @@ class WritingAttempt(IdentityMixin, UpdatedMixin, Base):
     status: Mapped[str] = mapped_column(String(20), default="DRAFT")
     question: Mapped[WritingQuestion] = relationship(lazy="selectin")
     exam: Mapped[ExamSession] = relationship(back_populates="attempts")
+    grading_work: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
     grading: Mapped["WritingGrading | None"] = relationship(
         back_populates="attempt", lazy="selectin", uselist=False
     )
@@ -120,6 +128,11 @@ class WritingGrading(IdentityMixin, Base):
     improved_b2_version: Mapped[str] = mapped_column(Text)
     ai_model: Mapped[str] = mapped_column(String(100))
     prompt_version: Mapped[str] = mapped_column(String(20))
+    grader_version: Mapped[str] = mapped_column(String(30), default="2.0.0", server_default="1.0.0")
+    analysis_prompt_version: Mapped[str | None] = mapped_column(String(30))
+    calibration_prompt_version: Mapped[str | None] = mapped_column(String(30))
+    criterion_evidence: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
+    analysis_snapshot: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
     attempt: Mapped[WritingAttempt] = relationship(back_populates="grading")
     errors: Mapped[list["WritingError"]] = relationship(lazy="selectin", cascade="all, delete-orphan")
 
@@ -145,4 +158,16 @@ class AIUsageLog(IdentityMixin, Base):
     latency_ms: Mapped[int] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String(30))
 
-from app.models.reading import ReadingPassage, ReadingQuestion, ReadingExamSession, ReadingAnswer, ReadingResult  # noqa: F401, E402
+
+from app.models.assessment import (  # noqa: F401, E402
+    PronunciationPractice,
+    WritingCalibrationSample,
+    WritingGradingRevision,
+)
+from app.models.reading import (  # noqa: F401, E402
+    ReadingAnswer,
+    ReadingExamSession,
+    ReadingPassage,
+    ReadingQuestion,
+    ReadingResult,
+)

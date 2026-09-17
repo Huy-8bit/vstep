@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
-from app.api.routes import auth, progress, reading, speaking, writing
+from app.api.routes import auth, progress, pronunciation, reading, speaking, writing
 from app.common.errors import AppError
 from app.core.config import settings
 from app.db.session import SessionLocal, engine
@@ -46,9 +46,9 @@ async def request_guards(request: Request, call_next):
             )
         if request.headers.get("sec-fetch-site") == "cross-site":
             return JSONResponse({"detail": "Yêu cầu không hợp lệ."}, status_code=403)
-        audio_upload = request.url.path.startswith("/api/v1/speaking/answers/") and request.url.path.endswith(
-            "/audio"
-        )
+        audio_upload = request.url.path.startswith(
+            ("/api/v1/speaking/answers/", "/api/v1/speaking/pronunciation/practices/")
+        ) and request.url.path.endswith("/audio")
         if audio_upload and not request.headers.get("content-length"):
             return JSONResponse(
                 {"detail": "Upload audio cần Content-Length.", "code": "length_required"}, status_code=411
@@ -62,7 +62,18 @@ async def request_guards(request: Request, call_next):
             return JSONResponse({"detail": "Nội dung quá dài."}, status_code=413)
         path = request.url.path
         if path.endswith(
-            ("/login", "/register", "/grade", "/generate", "/transcribe", "/analyze", "/tts", "/explain")
+            (
+                "/login",
+                "/register",
+                "/grade",
+                "/generate",
+                "/transcribe",
+                "/analyze",
+                "/tts",
+                "/explain",
+                "/regrade",
+                "/calibrate",
+            )
         ):
             now = time.monotonic()
             # Bounded, single-worker MVP rate limiter; do not trust forwarded IP headers.
@@ -125,5 +136,12 @@ async def health():
     return {"status": "ok", "ai_configured": bool(settings.openai_api_key)}
 
 
-for router in (auth.router, writing.router, progress.router, speaking.router, reading.router):
+for router in (
+    auth.router,
+    writing.router,
+    progress.router,
+    speaking.router,
+    pronunciation.router,
+    reading.router,
+):
     app.include_router(router, prefix="/api/v1")

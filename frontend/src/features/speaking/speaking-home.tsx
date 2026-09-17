@@ -7,6 +7,7 @@ import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
 import { api, post } from "@/services/api";
+import { TEST_PROFILE } from "@/lib/test-profile";
 import {
   modes,
   topics,
@@ -31,7 +32,6 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
   const [mode, setMode] = useState<SpeakingMode>(initialMode);
   const [source, setSource] = useState("SEED");
   const [topic, setTopic] = useState("random");
-  const [difficulty, setDifficulty] = useState("B2");
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
   const [preview, setPreview] = useState<SpeakingQuestion | null>(null);
@@ -50,7 +50,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
           part: mode === "PART2" ? 2 : mode === "PART3" ? 3 : 1,
           source,
           topic,
-          difficulty,
+          test_profile: TEST_PROFILE,
           recent_question_ids: preview ? [preview.id] : [],
         }),
       );
@@ -68,7 +68,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
         mode,
         source,
         topic,
-        difficulty,
+        test_profile: TEST_PROFILE,
         question_id: mode !== "FULL_TEST" ? preview?.id : undefined,
       });
       router.push(`/speaking/exam/${session.id}`);
@@ -79,6 +79,17 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
   }
   return (
     <div className="space-y-8">
+      <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">
+        <div>
+          <h2 className="font-semibold">Luyện phát âm từng từ, từng câu</h2>
+          <p className="mt-1 text-sm text-stone-500">
+            Nghe mẫu, thu âm và theo dõi tiến bộ.
+          </p>
+        </div>
+        <Button asChild variant="outline">
+          <Link href="/speaking/pronunciation">Mở phòng luyện phát âm</Link>
+        </Button>
+      </div>
       <section className="relative overflow-hidden rounded-3xl bg-[#e8f0eb] p-7 sm:p-10">
         <div className="relative z-10 max-w-2xl">
           <p className="eyebrow">VSTEP.3–5 · Speaking</p>
@@ -143,7 +154,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
           <p className="mt-2 text-sm leading-6 text-stone-500">
             {modes[mode].description}
           </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <label className="space-y-2 text-xs font-semibold">
               Nguồn đề
               <select
@@ -153,7 +164,6 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
                 onChange={(e) => {
                   setSource(e.target.value);
                   setPreview(null);
-                  if (e.target.value === "SEED") setDifficulty("B2");
                 }}
               >
                 <option value="SEED">Đề mẫu có sẵn</option>
@@ -178,26 +188,10 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
                 ))}
               </select>
             </label>
-            <label className="space-y-2 text-xs font-semibold">
-              Độ khó
-              <select
-                className="field mt-2"
-                value={difficulty}
-                disabled={!!busy || source === "SEED"}
-                onChange={(e) => {
-                  setDifficulty(e.target.value);
-                  setPreview(null);
-                }}
-              >
-                {["B1", "B2", "C1"].map((x) => (
-                  <option key={x}>{x}</option>
-                ))}
-              </select>
-            </label>
           </div>
           {source === "SEED" && (
             <p className="mt-3 text-xs leading-5 text-stone-500">
-              45 đề mẫu ở mức B2. Chọn chủ đề ngẫu nhiên để dùng toàn bộ ngân
+              45 đề mẫu VSTEP.3–5. Chọn chủ đề ngẫu nhiên để dùng toàn bộ ngân
               hàng đề.
             </p>
           )}

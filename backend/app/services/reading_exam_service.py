@@ -5,6 +5,7 @@ from sqlalchemy import select
 from app.common.errors import AppError
 from app.db.base import utcnow
 from app.models.reading import ReadingAnswer, ReadingExamSession, ReadingPassage
+from app.services.reading_blueprint import READING_BLUEPRINT
 from app.services.reading_question_generator import ReadingQuestionGeneratorService
 from app.services.reading_scoring_service import ReadingScoringService
 
@@ -33,7 +34,8 @@ class ReadingExamService:
         session = ReadingExamSession(
             user_id=user_id,
             mode=data.mode,
-            difficulty=data.difficulty,
+            test_profile=data.test_profile,
+            blueprint_version=READING_BLUEPRINT.version if data.mode == "FULL_TEST" else None,
             topic=next(iter(selected_topics)) if len(selected_topics) == 1 else "random",
             started_at=now,
             expires_at=now + timedelta(minutes=minutes) if data.mode == "FULL_TEST" or data.timed else None,

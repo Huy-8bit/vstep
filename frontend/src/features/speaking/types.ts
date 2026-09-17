@@ -1,3 +1,5 @@
+import type { AudioAssessment } from "./pronunciation-types";
+import type { TestProfile } from "@/lib/test-profile";
 export type SpeakingMode =
   "FULL_TEST" | "PART1" | "PART2" | "PART3" | "QUICK_PRACTICE";
 export const modes: Record<
@@ -89,7 +91,7 @@ export type SpeakingQuestion = {
   options: string[];
   suggested_ideas: string[];
   follow_up_questions: string[];
-  difficulty: string;
+  test_profile: TestProfile;
   source: string;
 };
 export type Step = {
@@ -186,7 +188,7 @@ export type SpeakingAnswer = {
   transcript: string | null;
   word_count: number | null;
   metrics: Record<string, number | string | null>;
-  audio_analysis: { available: boolean; reason_vi: string | null } | null;
+  audio_analysis: AudioAssessment | null;
   grading: SpeakingGrading | null;
 };
 export type SpeakingSession = {

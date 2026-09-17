@@ -15,6 +15,7 @@ import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { api } from "@/services/api";
+import { PronunciationProgress } from "./pronunciation-progress";
 import { SkillSwitch } from "./skill-switch";
 import {
   criterionLabels,
@@ -93,6 +94,9 @@ function ProgressView() {
   return (
     <>
       <SkillSwitch section="progress" active="speaking" />
+      <div className="mb-7">
+        <PronunciationProgress />
+      </div>
       <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="eyebrow">Từng câu nói, từng bước tiến</p>

@@ -1,4 +1,8 @@
 "use client";
+import {
+  WritingEvidencePanel,
+  WritingGradingHistory,
+} from "./writing-evidence";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
@@ -358,6 +362,8 @@ function Result({ id }: { id: string }) {
   const [error, setError] = useState("");
   const [grading, setGrading] = useState(false);
   const [gradingTask, setGradingTask] = useState(1);
+  const [stage, setStage] = useState("");
+  const [upgrading, setUpgrading] = useState(false);
   const started = useRef(false);
   const load = useCallback(async () => {
     const result = await api<AttemptDetail>(`/attempts/${id}`);
@@ -365,14 +371,32 @@ function Result({ id }: { id: string }) {
     return result;
   }, [id]);
   const grade = useCallback(
-    async (initial: AttemptDetail) => {
+    async (initial: AttemptDetail, upgrade = false) => {
       setError("");
       setGrading(true);
+      setUpgrading(upgrade);
       try {
         for (const attempt of initial.exam.attempts) {
-          if (!attempt.grading && attempt.status !== "DRAFT") {
+          if (
+            (!attempt.grading || (upgrade && attempt.id === initial.id)) &&
+            attempt.status !== "DRAFT"
+          ) {
             setGradingTask(attempt.task_type);
-            await post(`/attempts/${attempt.id}/grade`);
+            const suffix = upgrade ? "?upgrade=true" : "";
+            setStage("Đang phân tích bài gốc và đối chiếu lỗi");
+            await post(`/attempts/${attempt.id}/analyze${suffix}`);
+            setStage("Đang hiệu chỉnh điểm theo bằng chứng");
+            const calibration = await post<{ reviewed: boolean }>(
+              `/attempts/${attempt.id}/calibrate${suffix}`,
+            );
+            if (!calibration.reviewed) {
+              setStage("Đang rà soát mức điểm và bằng chứng");
+              await post(`/attempts/${attempt.id}/calibrate${suffix}`);
+            }
+            setStage("Đã chốt điểm · Đang viết hướng dẫn sửa bài");
+            await post(
+              `/attempts/${attempt.id}/${upgrade ? "regrade" : "grade"}`,
+            );
             await load();
           }
         }
@@ -504,7 +528,7 @@ function Result({ id }: { id: string }) {
           <LoaderCircle className="size-6 shrink-0 animate-spin" />
           <div>
             <p className="font-semibold">
-              AI đang đọc và phân tích Task {gradingTask}...
+              Task {gradingTask} · {stage}...
             </p>
             <p className="mt-1 text-xs leading-6 text-teal-700">
               Quá trình có thể mất vài phút. Bài đã được lưu; bạn có thể quay
@@ -518,7 +542,7 @@ function Result({ id }: { id: string }) {
           <ErrorNotice message={error} />
           <Button
             variant="outline"
-            onClick={() => grade(data)}
+            onClick={() => grade(data, upgrading)}
             disabled={grading}
           >
             <Sparkles />
@@ -540,7 +564,7 @@ function Result({ id }: { id: string }) {
                 </span>
               </p>
               <span className="rounded-md bg-white/10 px-3 py-1.5 text-xs">
-                Mức tham khảo: {level}
+                Mức năng lực AI ước tính: {level}
               </span>
               <p className="mt-4 text-[11px] leading-5 text-teal-100/70">
                 Ước lượng riêng kỹ năng viết, không dùng để xác nhận bậc VSTEP
@@ -579,6 +603,31 @@ function Result({ id }: { id: string }) {
               </p>
             </div>
           </section>
+          <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">
+            <div>
+              <p className="text-sm font-semibold">
+                Bộ chấm {g.grader_version || "1.0.0"}
+              </p>
+              <p className="mt-1 text-xs text-stone-500">
+                {g.ai_model} · Phân tích {g.analysis_prompt_version || "—"} ·
+                Hiệu chỉnh {g.calibration_prompt_version || "—"}
+              </p>
+            </div>
+            {g.grader_version !== "2.0.0" && (
+              <Button
+                variant="outline"
+                disabled={grading}
+                onClick={() => grade(data, true)}
+              >
+                Chấm lại với bộ chấm mới
+              </Button>
+            )}
+          </div>
+          <WritingEvidencePanel grading={g} />
+          <WritingGradingHistory
+            key={`${data.id}:${g.grader_version}`}
+            attemptId={data.id}
+          />
           <Feedback key={data.id} grading={g} answer={data.answer} />
         </>
       ) : !grading && !error ? (

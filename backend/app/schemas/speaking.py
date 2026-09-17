@@ -2,6 +2,7 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
+from app.common.test_profiles import TestProfile
 from app.schemas.writing import Improvement, StrictModel
 
 SpeakingMode = Literal["FULL_TEST", "PART1", "PART2", "PART3", "QUICK_PRACTICE"]
@@ -35,7 +36,7 @@ SPEAKING_TOPICS = [
 class SpeakingQuestionRequest(StrictModel):
     part: Literal[1, 2, 3]
     topic: str = "random"
-    difficulty: Literal["B1", "B2", "C1"] = "B2"
+    test_profile: TestProfile = "VSTEP_3_5"
     source: Literal["AI", "SEED"] = "SEED"
     recent_question_ids: list[str] = Field(default_factory=list, max_length=45)
     recent_topics: list[str] = Field(default_factory=list, max_length=15)
@@ -63,7 +64,7 @@ class GeneratedSpeakingQuestion(StrictModel):
     suggested_ideas: list[str]
     allow_own_idea: bool
     follow_up_questions: list[str]
-    difficulty: Literal["B1", "B2", "C1"]
+    test_profile: TestProfile = "VSTEP_3_5"
 
     @model_validator(mode="after")
     def validate_format(self):
@@ -99,7 +100,7 @@ class SpeakingSessionCreate(StrictModel):
     mode: SpeakingMode
     source: Literal["AI", "SEED"] = "SEED"
     topic: str = "random"
-    difficulty: Literal["B1", "B2", "C1"] = "B2"
+    test_profile: TestProfile = "VSTEP_3_5"
     question_id: str | None = None
 
     @model_validator(mode="after")
@@ -121,13 +122,6 @@ class TranscriptionResult(StrictModel):
     text: str
     model: str
     segments: list[dict] = Field(default_factory=list)
-
-
-class AudioAnalysisResult(StrictModel):
-    available: bool
-    evidence: str
-    model: str | None
-    reason_vi: str | None
 
 
 class SpeakingScores(StrictModel):
@@ -211,3 +205,33 @@ class SpeakingGradingOutput(StrictModel):
     speaking_frame: list[Improvement]
     corrected_transcript: str
     improved_b2_answer: str
+
+
+class SpeakingTextScores(StrictModel):
+    grammar: float = Field(ge=0, le=10, multiple_of=0.5)
+    vocabulary: float = Field(ge=0, le=10, multiple_of=0.5)
+    structures: float = Field(ge=0, le=10, multiple_of=0.5)
+
+
+class SpeakingTextGradingOutput(StrictModel):
+    part: Literal[0, 1, 2, 3]
+    scores: SpeakingTextScores
+    summary_vi: str
+    strengths: list[str]
+    priority_improvements: list[Improvement] = Field(min_length=3, max_length=3)
+    grammar_errors: list[SpeakingErrorOutput]
+    other_errors: list[SpeakingErrorOutput]
+    vocabulary_suggestions: list[SpeakingVocabulary]
+    structure_feedback: list[Improvement]
+    content_feedback: list[Improvement]
+    sentence_corrections: list[SpokenCorrection]
+    answer_feedback: list[AnswerFeedback]
+    speaking_frame: list[Improvement]
+    corrected_transcript: str
+    improved_b2_answer: str
+
+    @model_validator(mode="after")
+    def language_only(self):
+        if any(e.category in {"pronunciation", "fluency"} for e in self.grammar_errors + self.other_errors):
+            raise ValueError("Acoustic diagnostics belong to the audio provider only")
+        return self

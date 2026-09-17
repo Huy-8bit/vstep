@@ -172,7 +172,7 @@ async def seed():
                     task_type=task,
                     question_type=kind,
                     topic=topic,
-                    difficulty="B2",
+                    test_profile="VSTEP_3_5",
                     instruction=instruction,
                     requirements=item[3] if task == 1 else [],
                     minimum_words=120 if task == 1 else 250,

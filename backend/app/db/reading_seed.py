@@ -12,11 +12,62 @@ from app.services.reading_question_generator import passage_from_generated
 ARTICLES = []
 
 
-def article(title, topic, level, paragraphs, questions):
+def article(title, topic, band, paragraphs, questions):
     # Authored correct option is first; position rotates in a nonsequential pattern.
     pattern = [1, 3, 0, 2, 0, 1, 3, 2, 1, 0]
     items = []
     offset = len(ARTICLES) % 4
+    # Editorial item demands vary within each passage; these are not CEFR mappings.
+    item_bands = {
+        "ACCESSIBLE": [
+            "MODERATE",
+            "ACCESSIBLE",
+            "MODERATE",
+            "ACCESSIBLE",
+            "ACCESSIBLE",
+            "MODERATE",
+            "ACCESSIBLE",
+            "MODERATE",
+            "MODERATE",
+            "MODERATE",
+        ],
+        "MODERATE": [
+            "MODERATE",
+            "ACCESSIBLE",
+            "CHALLENGING",
+            "MODERATE",
+            "ACCESSIBLE",
+            "MODERATE",
+            "MODERATE",
+            "CHALLENGING",
+            "MODERATE",
+            "CHALLENGING",
+        ],
+        "CHALLENGING": [
+            "CHALLENGING",
+            "MODERATE",
+            "ADVANCED",
+            "CHALLENGING",
+            "MODERATE",
+            "CHALLENGING",
+            "MODERATE",
+            "CHALLENGING",
+            "CHALLENGING",
+            "ADVANCED",
+        ],
+        "ADVANCED": [
+            "CHALLENGING",
+            "MODERATE",
+            "ADVANCED",
+            "CHALLENGING",
+            "MODERATE",
+            "ADVANCED",
+            "CHALLENGING",
+            "ADVANCED",
+            "CHALLENGING",
+            "ADVANCED",
+        ],
+    }[band]
     for i, (kind, text, paragraph, answers) in enumerate(questions):
         position = (pattern[i] + offset) % 4
         arranged = answers[1:].copy()
@@ -25,6 +76,7 @@ def article(title, topic, level, paragraphs, questions):
         items.append(
             dict(
                 question_number=i + 1,
+                internal_difficulty_band=item_bands[i],
                 question_type=kind,
                 question_text=text,
                 options={letter: option[0] for letter, option in zip("ABCD", arranged)},
@@ -41,7 +93,8 @@ def article(title, topic, level, paragraphs, questions):
         dict(
             title=title,
             topic=topic,
-            difficulty=level,
+            test_profile="VSTEP_3_5",
+            internal_difficulty_band=band,
             paragraphs=[{"id": f"p{i + 1}", "text": text} for i, text in enumerate(paragraphs)],
             questions=items,
         )
@@ -51,7 +104,7 @@ def article(title, topic, level, paragraphs, questions):
 article(
     "A Library Beyond Its Walls",
     "education",
-    "B1",
+    "ACCESSIBLE",
     [
         "When the library in the small town of Bellford reviewed its visitor numbers, staff noticed a problem. Many adults said they wanted to read more, but they rarely entered the building. Some finished work after the library closed. Others lived too far away to visit regularly. The manager, Anna, decided that the answer was not simply to buy more books. She first needed to understand how people used their time. For two weeks, library staff spoke to passengers at the bus station and parents waiting outside a primary school. Their conversations helped shape a different kind of library service.",
         "The staff then placed small shelves in three locations: a bus station, a community centre and a local bakery. Each shelf held about sixty books, including short novels, practical guides and books for children. People could take a book without showing a library card and return it to any of the three shelves. There was no fixed return date. Anna hoped this simple arrangement would attract people who worried about late fees. A notice asked readers to return books when they had finished, so that someone else could enjoy them. The books remained public property rather than gifts to individual readers.",
@@ -242,7 +295,7 @@ article(
 article(
     "Saturday at the Repair Table",
     "lifestyle",
-    "B1",
+    "ACCESSIBLE",
     [
         "Every second Saturday, a room above the market in Mill Lane becomes a repair café. Visitors bring broken household objects and sit beside volunteers who help them understand what has gone wrong. There is tea and coffee, but repairing things is the main activity. The café began when a retired engineer called Ben noticed how many small appliances his neighbours threw away. Some needed only a new wire or a simple cleaning. He invited two friends to spend a morning helping local people. Their first event attracted twelve visitors, and several asked when they could come again with other objects.",
         "The café now uses a booking system because the room is small. A visitor describes the object when making an appointment, and a volunteer decides whether someone at the café has the right skills. Furniture, clothes and simple electrical items are common, but dangerous equipment is not accepted. Visitors do not pay for the volunteer's time, although they must buy any new parts that are needed. Sometimes a repair cannot be finished on the same day. In that case, the volunteer writes down which part is missing and explains where the visitor might find it. No successful repair is promised in advance.",
@@ -427,7 +480,7 @@ article(
 article(
     "When the Field Sends a Message",
     "technology",
-    "B2",
+    "MODERATE",
     [
         "For years, farmers in the fictional Green Valley cooperative decided when to water their vegetables by examining the soil and watching the weather. Their methods were based on experience, but fields that looked similar from the road sometimes held very different amounts of moisture. During a particularly dry summer, the cooperative began a small project using electronic sensors. The devices measured moisture below the surface and sent readings to a shared phone application. The aim was not to remove farmers from the decision. It was to give them another source of information when water supplies were limited and a mistake could damage a crop.",
         "The first sensors were installed in only two fields, one sandy and one containing heavier soil. A technician explained that a single reading could not represent an entire farm. Water moved quickly through the sandy field, while the heavier soil held it for longer. Sensors were therefore placed at several depths and locations. Farmers compared their measurements with observations made during ordinary field walks. They discovered that a patch near an old drainage channel dried faster than the rest. Watering every part of the field for the same amount of time would have supplied too much water in some places and too little in others.",
@@ -645,7 +698,7 @@ article(
 article(
     "A Garden Above the Street",
     "environment",
-    "B2",
+    "MODERATE",
     [
         "From the pavement, the Hartwell office building looked much like the others on its crowded street. Above its top floor, however, a shallow garden had replaced part of a dark, unused roof. The building manager hoped the plants would make the roof more attractive and reduce the amount of rainwater flowing directly into the drains. During heavy storms, the street's drainage system often struggled to carry water away. A roof garden would not solve that problem by itself, but it offered a way to slow some of the water before it reached the ground. The project began with a practical question rather than a purely decorative ambition.",
         "Before planting anything, the owners asked an engineer to examine the roof. Wet soil can be considerably heavier than dry soil, so the structure had to support the garden after a storm, not just on a sunny afternoon. The design used a lightweight growing material and plants that could survive dry periods. Below the plants, a protective layer prevented roots from damaging the roof surface. Channels allowed excess water to leave safely. Without these preparations, an attractive garden could have created expensive problems for the offices below. The most important early work was therefore largely invisible once the plants had grown.",
@@ -842,7 +895,7 @@ article(
 article(
     "The Meeting That Began in Silence",
     "work",
-    "B2",
+    "CHALLENGING",
     [
         "At a small design company, Monday meetings had become predictable. Two or three confident speakers usually introduced ideas, while other employees listened and contributed only when invited. The manager initially assumed that the quieter members had little to add. That assumption changed when a junior designer sent a detailed proposal after a meeting in which she had barely spoken. Several of her suggestions addressed problems the group had overlooked. The manager began to wonder whether the meeting format, rather than the quality of people's ideas, was influencing whose views received attention. Instead of asking everyone to speak more loudly, she decided to change how discussions began.",
         "For the next month, each meeting opened with eight minutes of silent reading and writing. A short document described the decision to be made, and everyone wrote down questions or possible solutions before discussion started. Employees could add their notes to a shared board without speaking immediately. The manager then invited different people to explain the notes, taking care not to let the first response determine the entire conversation. The change gave participants time to organise their thoughts. It also meant that a person entering the discussion later could refer to an idea already recorded, rather than struggling to find a gap between louder voices.",
@@ -1066,7 +1119,7 @@ article(
 article(
     "Whose Words Are Beside the Object?",
     "culture",
-    "B2",
+    "CHALLENGING",
     [
         "In the Northbridge town museum, a wooden fishing boat had stood behind a rope for many years. Its label gave the date it was built, the type of wood used and the name of its maker. Although these facts were accurate, visitors often passed it without stopping. When the museum prepared a new exhibition about working life, a curator asked former fishers what they remembered about boats like this one. Their answers included difficult journeys, repairs made in bad weather and jokes shared while waiting for the tide. The curator realised that the existing label described the object but said little about the people who had used it.",
         "The museum invited several residents to help write new labels for selected objects. A historian checked dates and names, while participants discussed memories and chose which details might interest visitors. The task was not simply to replace professional knowledge with personal stories. Memories could be incomplete, and two people sometimes described the same event differently. When an exact detail could not be confirmed, the label made that uncertainty clear. For example, one account of a journey was introduced as a fisher's recollection rather than as an established fact. This distinction allowed the museum to include a personal voice without presenting every remembered detail as certain.",
@@ -1266,7 +1319,7 @@ article(
 article(
     "The Value of a Qualified Answer",
     "psychology",
-    "C1",
+    "ADVANCED",
     [
         "When an expert answers a public question with 'it depends', the response can sound evasive. Audiences accustomed to brief interviews may interpret qualification as a lack of knowledge, especially when another speaker offers a confident prediction. Yet certainty and expertise are not interchangeable. A specialist may recognise conditions that a less experienced observer overlooks, and those conditions can materially alter an outcome. The difficulty is not merely that experts know more facts. They may also have a more developed understanding of where available evidence stops. Communicating that boundary requires more effort than delivering a simple conclusion, but it can be central to giving useful advice.",
         "Consider a fictional advisory panel asked whether a town should introduce a new bus route. One consultant promises that the route will immediately reduce traffic. Another explains that its effect will depend on frequency, ticket prices and whether passengers can reach the stops safely. The second answer is harder to turn into a headline, but it identifies decisions the town can actually influence. Rather than withholding a recommendation, the consultant is describing the circumstances under which it might succeed. The distinction matters because an apparently decisive answer can conceal assumptions, leaving decision-makers unaware that they are committing themselves to conditions that have never been examined.",
@@ -1496,7 +1549,7 @@ article(
 article(
     "Many Observers, Uneven Evidence",
     "science",
-    "C1",
+    "ADVANCED",
     [
         "A photograph of a bird beside a footpath may seem like a minor contribution to scientific knowledge. When thousands of observations are collected, however, they can reveal patterns that a small research team could not document alone. In citizen-science projects, members of the public record what they see and submit the information to a shared database. The resulting reach is attractive, but the size of a collection should not be confused with the strength of every conclusion drawn from it. Observations accumulate through human choices about where to go, what to notice and whether an encounter seems interesting enough to report. Those choices leave a trace in the data.",
         "A fictional project in the Alder district illustrates the issue. Volunteers recorded birds using an application that automatically attached a location and time to each photograph. Reports clustered around popular walking routes and the homes of enthusiastic participants. Remote farmland received relatively little attention, even though it occupied a large part of the district. A map of submissions therefore showed both where birds had been observed and where people had looked for them. Without separating these influences, a researcher might interpret an empty area on the map as evidence that birds were absent, when it could simply indicate that few observers had visited.",
@@ -1714,9 +1767,18 @@ async def seed():
         for raw in ARTICLES:
             generated = GeneratedReadingPassage.model_validate(raw)
             passage = passage_from_generated(generated, source="SEED")
-            if not await db.scalar(
-                select(ReadingPassage.id).where(ReadingPassage.fingerprint == passage.fingerprint)
-            ):
+            existing = await db.scalar(
+                select(ReadingPassage).where(ReadingPassage.fingerprint == passage.fingerprint)
+            )
+            if existing:
+                # Refresh editorial metadata only; preserve IDs, content, answer keys and old attempts.
+                existing.test_profile = generated.test_profile
+                existing.internal_difficulty_band = generated.internal_difficulty_band
+                metadata = {q.question_number: q.internal_difficulty_band for q in generated.questions}
+                for question in existing.questions:
+                    question.test_profile = generated.test_profile
+                    question.internal_difficulty_band = metadata[question.question_number]
+            else:
                 db.add(passage)
         await db.commit()
     await engine.dispose()

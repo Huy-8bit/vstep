@@ -25,7 +25,7 @@ class QuestionGeneratorService:
             query = select(WritingQuestion).where(
                 WritingQuestion.task_type == request.task,
                 WritingQuestion.source == "SEED",
-                WritingQuestion.difficulty == request.difficulty,
+                WritingQuestion.test_profile == request.test_profile,
             )
             if request.question_type != "random":
                 query = query.where(WritingQuestion.question_type == request.question_type)

@@ -4,10 +4,12 @@ from fastapi import APIRouter, Query
 from sqlalchemy import func, select
 
 from app.api.deps import DB, CurrentUser
-from app.api.serializers import attempt_view, exam_view, question_view
+from app.api.serializers import attempt_view, exam_view, grading_view, question_view
 from app.common.errors import AppError
+from app.core.config import settings
 from app.llm.openai_client import OpenAILLMClient
 from app.models import ExamSession, WritingAttempt, WritingQuestion
+from app.models.assessment import WritingGradingRevision
 from app.repositories.writing import owned_attempt
 from app.schemas.api import AnswerUpdate, ExamCreate, ExamSubmit
 from app.schemas.writing import QuestionRequest
@@ -68,6 +70,50 @@ async def submit_attempt(attempt_id: str, data: AnswerUpdate, db: DB, user: Curr
 @router.post("/attempts/{attempt_id}/grade")
 async def grade_attempt(attempt_id: str, db: DB, user: CurrentUser):
     return attempt_view(await WritingGradingService(db, get_llm()).grade(attempt_id, user.id))
+
+
+@router.post("/attempts/{attempt_id}/analyze")
+async def analyze_attempt(attempt_id: str, db: DB, user: CurrentUser, upgrade: bool = False):
+    return await WritingGradingService(db, get_llm()).analyze(attempt_id, user.id, upgrade)
+
+
+@router.post("/attempts/{attempt_id}/calibrate")
+async def calibrate_attempt(attempt_id: str, db: DB, user: CurrentUser, upgrade: bool = False):
+    return await WritingGradingService(db, get_llm()).calibrate(attempt_id, user.id, upgrade)
+
+
+@router.post("/attempts/{attempt_id}/regrade")
+async def regrade_attempt(attempt_id: str, db: DB, user: CurrentUser):
+    return attempt_view(await WritingGradingService(db, get_llm()).grade(attempt_id, user.id, upgrade=True))
+
+
+@router.get("/attempts/{attempt_id}/grading-history")
+async def grading_history(attempt_id: str, db: DB, user: CurrentUser):
+    attempt = await owned_attempt(db, attempt_id, user.id)
+    revisions = await db.scalars(
+        select(WritingGradingRevision)
+        .where(WritingGradingRevision.attempt_id == attempt.id)
+        .order_by(WritingGradingRevision.created_at.desc())
+    )
+    return {
+        "current": grading_view(attempt.grading),
+        "previous": [{"id": r.id, "grading": r.snapshot} for r in revisions],
+    }
+
+
+@router.get("/internal/writing-calibration/{attempt_id}")
+async def inspect_calibration(attempt_id: str, db: DB, user: CurrentUser):
+    admins = {
+        email.strip().lower()
+        for email in settings.writing_calibration_admin_emails.split(",")
+        if email.strip()
+    }
+    if user.email.lower() not in admins:
+        raise AppError(404, "Không tìm thấy trang kiểm tra hiệu chỉnh.")
+    attempt = await db.scalar(select(WritingAttempt).where(WritingAttempt.id == attempt_id))
+    if not attempt:
+        raise AppError(404, "Không tìm thấy bài viết.")
+    return {"attempt": attempt_view(attempt), "work": attempt.grading_work}
 
 
 @router.get("/attempts")

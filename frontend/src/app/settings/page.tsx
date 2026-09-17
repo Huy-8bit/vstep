@@ -128,8 +128,8 @@ function Settings() {
           ))}
         </div>
         <p className="mt-5 text-xs leading-6 text-stone-500">
-          Nếu giọng đọc AI chưa sẵn sàng, hệ thống dùng giọng đọc của trình
-          duyệt.
+          Câu hỏi có thể dùng giọng đọc của trình duyệt. Phát âm mẫu trong phòng
+          luyện cần giọng đọc AI được cấu hình trên máy chủ.
         </p>
       </section>
     </div>

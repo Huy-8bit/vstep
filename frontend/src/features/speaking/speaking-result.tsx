@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { api, post } from "@/services/api";
+import { AudioAssessmentPanel } from "./audio-assessment-panel";
+import { coachLink } from "./pronunciation-types";
 import { AudioPlayer } from "./audio-player";
 import {
   criterionLabels,
@@ -216,7 +218,7 @@ function Result({ id }: { id: string }) {
                 </span>
               </p>
               <p className="mt-3 text-sm font-semibold text-teal-100">
-                Mức tham khảo: {g.estimated_level}
+                Mức năng lực AI ước tính: {g.estimated_level}
               </p>
             </div>
             <div>
@@ -358,6 +360,19 @@ function Result({ id }: { id: string }) {
           ))}
         </div>
       </section>
+      {chosen
+        .filter((a) => a.audio_analysis)
+        .map((a) => (
+          <div key={`audio:${a.id}`} className="space-y-2">
+            <p className="eyebrow">
+              Câu {a.sequence_number + 1} · Phân tích âm thanh
+            </p>
+            <AudioAssessmentPanel
+              analysis={a.audio_analysis!}
+              sourceAnswerId={a.id}
+            />
+          </div>
+        ))}
       {g && details && (
         <Tabs value={tab} onValueChange={setTab} className="space-y-5">
           <TabsList className="flex h-auto flex-wrap justify-start gap-1">
@@ -480,7 +495,7 @@ function Result({ id }: { id: string }) {
               </h2>
               <p className="text-sm leading-6 text-stone-500">
                 Mục tiêu là nói rõ và dễ hiểu. Phản hồi dưới đây chỉ gồm vấn đề
-                có đủ bằng chứng audio; IPA chỉ hiển thị khi độ tin cậy cao.
+                có đủ bằng chứng audio để đưa ra hướng dẫn luyện tập.
               </p>
               {g.pronunciation_feedback.filter(match).map((p, i) => (
                 <article
@@ -512,6 +527,19 @@ function Result({ id }: { id: string }) {
                   <p className="mt-3 rounded-lg bg-teal-50 p-3 text-sm leading-6 text-teal-900">
                     {p.suggestion}
                   </p>
+                  <Button asChild className="mt-3" size="sm" variant="outline">
+                    <Link
+                      href={coachLink(
+                        p.word,
+                        session.answers.find(
+                          (a) => a.sequence_number === p.sequence_number,
+                        )?.id,
+                        p.issue,
+                      )}
+                    >
+                      {p.word.includes(" ") ? "Luyện câu này" : "Luyện từ này"}
+                    </Link>
+                  </Button>
                 </article>
               ))}
               {!g.pronunciation_feedback.filter(match).length && (

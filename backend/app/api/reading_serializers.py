@@ -17,7 +17,7 @@ def reading_passage_view(passage, selected_ids=None, numbers=None):
     return {
         **{
             key: getattr(passage, key)
-            for key in ("id", "title", "topic", "difficulty", "paragraphs", "word_count", "source")
+            for key in ("id", "title", "topic", "test_profile", "paragraphs", "word_count", "source")
         },
         "questions": [
             reading_question_view(q, (numbers or {}).get(q.id))
@@ -49,7 +49,7 @@ def reading_session_view(session, passages):
             for key in (
                 "id",
                 "mode",
-                "difficulty",
+                "test_profile",
                 "topic",
                 "started_at",
                 "expires_at",

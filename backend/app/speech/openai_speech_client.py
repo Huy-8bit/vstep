@@ -1,24 +1,21 @@
-import base64
 import logging
 import time
 from pathlib import Path
 
 from openai import APIConnectionError, APIStatusError, APITimeoutError, AsyncOpenAI
-from starlette.concurrency import run_in_threadpool
 
 from app.common.errors import AppError
 from app.core.config import settings
 from app.db.session import SessionLocal
 from app.models import AIUsageLog
-from app.prompts.speaking_grader import SPEAKING_AUDIO_PROMPT
-from app.schemas.speaking import AudioAnalysisResult, TranscriptionResult
+from app.schemas.speaking import TranscriptionResult
 from app.speech.base import SpeechClient
 
 logger = logging.getLogger(__name__)
 
 
 class OpenAISpeechClient(SpeechClient):
-    async def _call(self, operation, model, user_id, callback):
+    async def call(self, operation, model, user_id, callback):
         if not settings.openai_api_key:
             raise AppError(503, "Chưa cấu hình OpenAI API. Bản ghi của bạn đã được lưu.", "ai_not_configured")
         start, result, status = time.monotonic(), None, "error"
@@ -73,50 +70,10 @@ class OpenAISpeechClient(SpeechClient):
                     model=settings.openai_transcribe_model, file=audio, language="en", response_format="json"
                 )
 
-        result = await self._call("speaking_transcribe", settings.openai_transcribe_model, user_id, send)
+        result = await self.call("speaking_transcribe", settings.openai_transcribe_model, user_id, send)
         if not isinstance(result.text, str):
             raise AppError(502, "Không nhận được bản chuyển lời nói hợp lệ.", "transcript_invalid")
         return TranscriptionResult(text=result.text.strip(), model=settings.openai_transcribe_model)
-
-    async def analyze_audio(self, audio_path: Path, transcript: str, user_id: str) -> AudioAnalysisResult:
-        model = settings.openai_speaking_audio_model
-        if not model:
-            return AudioAnalysisResult(
-                available=False,
-                evidence="",
-                model=None,
-                reason_vi="Chưa cấu hình model phân tích audio; phát âm và độ trôi chảy chưa được chấm.",
-            )
-        encoded = base64.b64encode(await run_in_threadpool(audio_path.read_bytes)).decode("ascii")
-
-        async def send(client):
-            return await client.chat.completions.create(
-                model=model,
-                modalities=["text"],
-                store=False,
-                messages=[
-                    {"role": "system", "content": SPEAKING_AUDIO_PROMPT},
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": "Reference transcript (may contain recognition errors; judge the AUDIO):\n"
-                                + transcript,
-                            },
-                            {"type": "input_audio", "input_audio": {"data": encoded, "format": "wav"}},
-                        ],
-                    },
-                ],
-            )
-
-        result = await self._call("speaking_audio", model, user_id, send)
-        evidence = result.choices[0].message.content if result.choices else None
-        if not evidence:
-            raise AppError(502, "AI chưa trả được phân tích audio.", "audio_analysis_invalid")
-        # Audio models need not support JSON Schema. Their actual audio-grounded evidence feeds
-        # the configured text model's strictly validated final grading, never invented phonetics.
-        return AudioAnalysisResult(available=True, evidence=evidence[:24000], model=model, reason_vi=None)
 
     async def synthesize(self, text: str, user_id: str) -> bytes:
         async def send(client):
@@ -127,5 +84,5 @@ class OpenAISpeechClient(SpeechClient):
                 response_format="mp3",
             )
 
-        result = await self._call("speaking_tts", settings.openai_tts_model, user_id, send)
+        result = await self.call("speaking_tts", settings.openai_tts_model, user_id, send)
         return result.content

@@ -38,7 +38,7 @@ def speaking_question_view(question):
         "options",
         "suggested_ideas",
         "follow_up_questions",
-        "difficulty",
+        "test_profile",
         "source",
     )
     return {**{key: getattr(question, key) for key in fields}, "allow_own_idea": question.part == 3}
@@ -95,12 +95,7 @@ def speaking_answer_view(answer, review: bool):
         "transcript": answer.transcript if review else None,
         "word_count": answer.word_count if review else None,
         "metrics": answer.metrics if review else {},
-        "audio_analysis": {
-            "available": answer.audio_analysis.get("available", False),
-            "reason_vi": answer.audio_analysis.get("reason_vi"),
-        }
-        if review and answer.audio_analysis
-        else None,
+        "audio_analysis": answer.audio_analysis if review else None,
         "grading": speaking_grading_view(answer.grading) if review else None,
     }
 
@@ -115,6 +110,7 @@ def speaking_session_view(session):
             for key in (
                 "id",
                 "mode",
+                "test_profile",
                 "started_at",
                 "completed_at",
                 "status",

@@ -11,11 +11,13 @@ Reading dùng chung tài khoản, PostgreSQL, FastAPI, Next.js và OpenAI adapte
 | `QUICK_PRACTICE` | 5 câu trên một passage có sẵn; đề AI mới khoảng 250–350 từ | Tùy chọn 8 phút |
 | `QUESTION_TYPE_PRACTICE` | Các câu cùng dạng từ một hoặc nhiều passage, tối đa 5 | Tùy chọn 8 phút |
 
-Các mức B1/B2/C1 và 15 chủ đề được lọc trên ngân hàng. Mặc định B2/chủ đề ngẫu nhiên. Bộ mẫu có **8 bài gốc, 80 câu**, mỗi bài 490–534 từ: 2 B1, 4 B2, 2 C1. Mỗi bài có 10 dạng câu, đáp án, giải thích tiếng Việt cho từng phương án và bằng chứng. B1 dùng tình huống cụ thể và cấu trúc dễ đọc; B2 có mệnh đề, diễn đạt lại và suy luận; C1 tập trung lập luận, giới hạn bằng chứng và thái độ có điều kiện.
+Ngân hàng chung **VSTEP.3–5** có 15 bộ lọc chủ đề, không có lựa chọn B1/B2/C1. Bộ mẫu gồm **8 bài gốc, 80 câu**, mỗi bài 490–534 từ; giữ nguyên nội dung, đáp án, giải thích và ID từ trước refactor.
 
-Full B2/ngẫu nhiên hoạt động ngay khi không có API key. Full B1/C1 hoặc một chủ đề riêng có thể thiếu bốn passage; ứng dụng bổ sung bằng OpenAI khi đã cấu hình, hoặc báo số đề còn thiếu. Luyện theo dạng dùng số câu thực có: bộ mẫu hiện cho 2 câu ở B1/C1 và 4 câu ở B2 nếu không giới hạn chủ đề; chọn một passage chỉ lấy câu đúng dạng trong bài đó. Giao diện thông báo số câu thực tế, không lặp câu để tăng số lượng.
+`ReadingTestBlueprint` phiên bản `2.0.0` ghép một bài cho mỗi vị trí theo nhóm nội bộ ACCESSIBLE → MODERATE → CHALLENGING → ADVANCED. Đây là phân loại biên soạn theo nội dung cụ thể, không phải phép quy đổi CEFR chính thức. Mỗi vị trí yêu cầu các dạng câu nhất định; cả đề phủ mười dạng. Mỗi bài phải có 10 câu và ít nhất hai nhóm yêu cầu ở cấp câu hỏi. Đề thiếu độ phủ hoặc metadata không được ghép chỉ để đủ số lượng.
 
-Bank ưu tiên bài người dùng chưa mở trong phiên trước, cho phép làm lại khi hết bài mới. Không gọi AI mỗi lần bắt đầu nếu có đủ bài. Nút **Tạo đề mới bằng AI** tạo một passage rồi lưu dùng lại cho nhiều người. Khi phải bổ sung nhiều passage, frontend gọi từng lần trước khi bắt đầu đồng hồ. Đề đã dùng không được chỉnh sửa qua API. Seed dùng fingerprint nội dung và có thể chạy lại an toàn:
+Full Test/chủ đề ngẫu nhiên dùng được ngay khi không có key. Một chủ đề riêng có thể cần thêm bài; API bank báo số passage cần bổ sung theo blueprint, không tiết lộ nhãn nội bộ. Luyện dạng câu lấy tối đa năm câu có thật từ một hoặc nhiều passage, không lặp câu để tăng số lượng. Chọn một passage chỉ lấy các câu đúng dạng trong bài đó.
+
+Bank ưu tiên bài người dùng chưa mở trong phiên trước, cho phép làm lại khi hết bài mới. Không gọi AI mỗi lần bắt đầu nếu có đủ bài. Nút **Tạo đề mới bằng AI** tạo một passage rồi lưu dùng lại cho nhiều người; ở Full Test, passage được tạo cho vị trí còn thiếu (hoặc một vị trí thay thế khi đã đủ) trong blueprint toàn đề. Khi phải bổ sung nhiều passage, frontend gọi từng lần trước khi bắt đầu đồng hồ. Đề đã dùng không được chỉnh sửa qua API. Seed dùng fingerprint nội dung và có thể chạy lại an toàn:
 
 ```sh
 cd backend
@@ -39,9 +41,9 @@ Exam, passage, bank, generation và autosave API dùng serializer với danh sá
 
 ## AI và từ vựng
 
-`ReadingQuestionGeneratorService` gọi `LLMClient.generate_reading` qua OpenAI Responses Structured Outputs, cùng `OPENAI_API_KEY` / `OPENAI_MODEL` hiện có. Prompt `READING_GENERATOR_PROMPT_VERSION` hiện `1.0.0`. Pydantic kiểm tra số câu, số từ, đoạn có ID tuần tự, bốn phương án khác nhau, dạng câu hợp lệ, key A/B/C/D, cờ đúng/sai khớp key, câu không trùng và quote thực sự nằm trong đoạn. Adapter kiểm tra thêm difficulty, topic, số câu và dạng đích; đầu ra không hợp lệ được thử lại một lần. Fingerprint ngăn lưu passage trùng nội dung. Recent titles/topics được gửi để giảm lặp.
+`ReadingQuestionGeneratorService` gọi `LLMClient.generate_reading` qua OpenAI Responses Structured Outputs, cùng `OPENAI_API_KEY` / `OPENAI_MODEL` hiện có. Prompt `READING_GENERATOR_PROMPT_VERSION` hiện `2.0.0`. Pydantic kiểm tra số câu, số từ, đoạn có ID tuần tự, bốn phương án khác nhau, dạng câu hợp lệ, key A/B/C/D, cờ đúng/sai khớp key, câu không trùng và quote thực sự nằm trong đoạn. Adapter kiểm tra thêm test_profile, topic, số câu, band nội bộ, dạng đích và dạng câu bắt buộc của blueprint; đầu ra không hợp lệ được thử lại một lần. Fingerprint ngăn lưu passage trùng nội dung. Recent titles/topics được gửi để giảm lặp.
 
-Prompt yêu cầu một đáp án tốt nhất, distractor hợp lý, không dùng kiến thức ngoài passage và điều chỉnh thực chất ngôn ngữ theo level. Kiểm tra xác định không bảo đảm mọi câu AI đều hết mơ hồ về ngữ nghĩa; không gọi thêm model chấm/kiểm định cho mỗi bài.
+Prompt yêu cầu một đáp án tốt nhất, distractor hợp lý, không dùng kiến thức ngoài passage và phân hóa thực chất yêu cầu đọc trong cùng profile đa bậc. Kiểm tra xác định không bảo đảm mọi câu AI đều hết mơ hồ về ngữ nghĩa; không gọi thêm model chấm/kiểm định cho mỗi bài.
 
 Sau nộp, người học chạm từ/bôi đen cụm từ hoặc nhập từ và chọn đoạn. `VocabularyService` chỉ gọi AI theo yêu cầu, trả nghĩa tiếng Việt, từ loại, nghĩa trong ngữ cảnh, ví dụ và từ gần nghĩa. Cache theo passage/paragraph/term/model/prompt version lưu trong PostgreSQL, dùng lại giữa người học. Khi không có key, giải thích đáp án mẫu vẫn đầy đủ; chức năng sinh đề/tra từ báo lỗi cấu hình rõ ràng. Không có provider giả hoặc kết quả AI giả lập.
 
@@ -51,7 +53,7 @@ Tất cả endpoint dưới `/api/v1/reading`, xác thực bằng JWT cookie hi�
 
 | Method | Path | Nội dung |
 | --- | --- | --- |
-| GET | `/bank` | Metadata theo difficulty/topic và trạng thái cấu hình AI |
+| GET | `/bank` | Metadata theo topic, số bài còn thiếu theo blueprint và trạng thái AI |
 | POST | `/questions/generate` | Sinh và lưu một passage |
 | GET | `/passages/{id}` | Passage/câu hỏi, không có answer key |
 | POST | `/sessions` | Tạo phiên từ bank hoặc bổ sung đề thiếu |
@@ -61,7 +63,7 @@ Tất cả endpoint dưới `/api/v1/reading`, xác thực bằng JWT cookie hi�
 | POST | `/sessions/{id}/submit` | Chốt đáp án và chấm bằng Python |
 | GET | `/results/{id}` | Điểm, review, giải thích từng option và evidence |
 | GET | `/history` | Phân trang và lọc mode |
-| GET | `/progress` | Thống kê theo mode/type/topic/difficulty |
+| GET | `/progress` | Thống kê theo mode/type/topic |
 | POST | `/vocabulary/explain` | Giải thích từ vựng sau nộp |
 
 Migration `5c96e8660369` nối sau Speaking `008c2258fea3`, thêm `reading_passages`, `reading_questions`, `reading_exam_sessions`, `reading_answers`, `reading_results`. Thứ tự passage/question lưu bằng JSONB ID trong session; câu hỏi và đáp án dùng bảng riêng với foreign key/unique constraint. Không đổi Compose project hoặc volumes cũ.
@@ -70,8 +72,17 @@ Frontend ở `frontend/src/features/reading`, routes `/reading`, `/reading/exam/
 
 ## Analytics và phạm vi
 
-Lịch sử lưu cả phiên đang làm để tiếp tục. Tiến độ chỉ tính bài đã chốt: điểm trung bình mỗi phiên, tổng đã trả lời, tỷ lệ đúng trên toàn bộ câu kể cả bỏ trống, thời gian phiên trung bình mỗi câu, biểu đồ điểm và breakdown type/topic/level. CTA chọn dạng có tỷ lệ thấp từ dữ liệu thực. Phản hồi từng bài nêu số đúng/tổng, câu bỏ trống và thời gian xem passage ước lượng; bài đúng toàn bộ không bị gán điểm yếu.
+Lịch sử lưu cả phiên đang làm để tiếp tục. Tiến độ chỉ tính bài đã chốt: điểm trung bình mỗi phiên, tổng đã trả lời, tỷ lệ đúng trên toàn bộ câu kể cả bỏ trống, thời gian phiên trung bình mỗi câu, biểu đồ điểm và breakdown type/topic. CTA chọn dạng có tỷ lệ thấp từ dữ liệu thực. Phản hồi từng bài nêu số đúng/tổng, câu bỏ trống và thời gian xem passage ước lượng; bài đúng toàn bộ không bị gán điểm yếu.
 
 Reading dùng rate limit, logging và cấu hình chung. Mô hình hiện tại là một backend worker, truy vấn analytics trực tiếp; chưa thêm quota thương mại, queue, payment hoặc kỹ năng khác. Tác vụ AI vẫn đồng bộ; lỗi kết nối sau khi provider hoàn tất có thể phát sinh chi phí khi thử lại. Không dùng bài AI chưa duyệt làm đề thi có giá trị chứng nhận.
 
 Theo yêu cầu, không thêm hoặc chạy unit/integration/E2E test suite. Việc đưa module vào ứng dụng dùng TypeScript compilation, Python import/OpenAPI, validation seed khi nạp, migration và Docker production build/startup. Chưa xác minh đầu ra AI bằng lời gọi trả phí hoặc thao tác trình duyệt.
+
+
+## Refactor profile đa bậc
+
+Request tạo đề/phiên nhận `test_profile` (mặc định `VSTEP_3_5`), topic, mode và dạng câu; không nhận `difficulty`. Frontend và backend đã đổi cùng lúc; request JSON cũ gửi trường difficulty bị từ chối do schema strict. API lấy bank bỏ query difficulty. Bộ chọn, badge đề, lịch sử và thống kê không còn nhãn CEFR cũ; các DTO công khai cũng không trả internal_difficulty_band.
+
+Migration `c87e4a932b61` giữ cột difficulty cũ dưới tên ORM `legacy_difficulty`, thêm profile/band/blueprint version. Seed cập nhật riêng metadata cho tám bài gốc, không sửa answer key hoặc lịch sử. Đề AI legacy có band null vẫn dùng cho luyện riêng; cần metadata biên soạn hợp lệ trước khi tham gia Full Test mới. Phiên cũ tiếp tục với nội dung cũ; phiên mới dùng blueprint hiện hành. Bản mẫu có hai passage ở mỗi nhóm nội bộ, cho phép chọn bài chưa làm mà vẫn đủ cấu trúc.
+
+Generator Full Test nhận tổng số passage/câu, progression, vị trí, yêu cầu văn bản, dạng câu bắt buộc và các passage đã chọn. Frontend bổ sung từng bài theo trạng thái bank, backend cũng tự hoàn thiện blueprint nếu được gọi trực tiếp. Điểm luyện tập, autosave, deadline và quyền xem answer key giữ nguyên.

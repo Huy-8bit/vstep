@@ -21,7 +21,9 @@ class ReadingPassage(IdentityMixin, Base):
     __tablename__ = "reading_passages"
     title: Mapped[str] = mapped_column(String(300))
     topic: Mapped[str] = mapped_column(String(40), index=True)
-    difficulty: Mapped[str] = mapped_column(String(5), index=True)
+    legacy_difficulty: Mapped[str | None] = mapped_column("difficulty", String(5), index=True)
+    test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
+    internal_difficulty_band: Mapped[str | None] = mapped_column(String(20), index=True)
     content: Mapped[str] = mapped_column(Text)
     paragraphs: Mapped[list] = mapped_column(JSONB)
     word_count: Mapped[int] = mapped_column(Integer)
@@ -49,7 +51,10 @@ class ReadingQuestion(IdentityMixin, Base):
     explanation_vi: Mapped[str] = mapped_column(Text)
     option_explanations: Mapped[dict] = mapped_column(JSONB)
     evidence: Mapped[dict] = mapped_column(JSONB)
-    difficulty: Mapped[str] = mapped_column(String(5))
+    legacy_difficulty: Mapped[str | None] = mapped_column("difficulty", String(5))
+    test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
+
+    internal_difficulty_band: Mapped[str | None] = mapped_column(String(20))
 
 
 class ReadingExamSession(IdentityMixin, Base):
@@ -59,7 +64,9 @@ class ReadingExamSession(IdentityMixin, Base):
     )
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     mode: Mapped[str] = mapped_column(String(30))
-    difficulty: Mapped[str] = mapped_column(String(5))
+    legacy_difficulty: Mapped[str | None] = mapped_column("difficulty", String(5))
+    test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
+    blueprint_version: Mapped[str | None] = mapped_column(String(30))
     topic: Mapped[str] = mapped_column(String(40), default="random")
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

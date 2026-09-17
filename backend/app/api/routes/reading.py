@@ -9,12 +9,12 @@ from app.models.reading import ReadingPassage
 from app.schemas.reading import (
     ReadingAnswerUpdate,
     ReadingBatchUpdate,
-    ReadingDifficulty,
     ReadingGenerateRequest,
     ReadingMode,
     ReadingSessionCreate,
     VocabularyRequest,
 )
+from app.services.reading_blueprint import READING_BLUEPRINT
 from app.services.reading_exam_service import ReadingExamService
 from app.services.reading_progress_service import ReadingProgressService
 from app.services.reading_question_generator import ReadingQuestionGeneratorService
@@ -24,16 +24,18 @@ router = APIRouter(prefix="/reading", tags=["Reading"])
 
 
 @router.get("/bank")
-async def bank(db: DB, user: CurrentUser, difficulty: ReadingDifficulty = "B2", topic: str = "random"):
-    rows = await ReadingQuestionGeneratorService(db, OpenAILLMClient()).bank(difficulty, topic)
+async def bank(db: DB, user: CurrentUser, topic: str = "random"):
+    rows = await ReadingQuestionGeneratorService(db, OpenAILLMClient()).bank(topic)
     return {
         "ai_configured": bool(settings.openai_api_key),
+        "test_profile": "VSTEP_3_5",
+        "full_test_missing_passages": sum(p is None for p in READING_BLUEPRINT.select(rows)),
         "items": [
             {
                 "id": p.id,
                 "title": p.title,
                 "topic": p.topic,
-                "difficulty": p.difficulty,
+                "test_profile": p.test_profile,
                 "word_count": p.word_count,
                 "question_count": len(p.questions),
                 "question_types": [q.question_type for q in p.questions],

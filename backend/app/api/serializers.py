@@ -9,7 +9,7 @@ def question_view(q):
             "task_type",
             "question_type",
             "topic",
-            "difficulty",
+            "test_profile",
             "instruction",
             "requirements",
             "minimum_words",
@@ -48,6 +48,11 @@ def grading_view(g):
                 "improved_b2_version",
                 "ai_model",
                 "prompt_version",
+                "grader_version",
+                "analysis_prompt_version",
+                "calibration_prompt_version",
+                "criterion_evidence",
+                "analysis_snapshot",
                 "created_at",
             )
         },
@@ -101,6 +106,7 @@ def exam_view(e):
             for key in (
                 "id",
                 "mode",
+                "test_profile",
                 "started_at",
                 "expires_at",
                 "submitted_at",

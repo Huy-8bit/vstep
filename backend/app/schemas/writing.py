@@ -2,6 +2,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from app.common.test_profiles import TestProfile
+
 TASK1_TYPES = [
     "formal_email",
     "informal_email",
@@ -54,7 +56,7 @@ class QuestionRequest(StrictModel):
     task: Literal[1, 2]
     question_type: str = "random"
     topic: str = "random"
-    difficulty: Literal["B1", "B2", "C1"] = "B2"
+    test_profile: TestProfile = "VSTEP_3_5"
     source: Literal["AI", "SEED"] = "SEED"
     exclude_ids: list[str] = Field(default_factory=list, max_length=30)
 
@@ -73,7 +75,7 @@ class GeneratedQuestion(StrictModel):
     task: Literal[1, 2]
     question_type: str
     topic: str
-    difficulty: Literal["B1", "B2", "C1"]
+    test_profile: TestProfile = "VSTEP_3_5"
     instruction: str = Field(min_length=30, max_length=5000)
     requirements: list[str]
     minimum_words: Literal[120, 250]

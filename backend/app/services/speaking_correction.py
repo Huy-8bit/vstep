@@ -1,70 +1,114 @@
+from statistics import mean
+
 from app.core.config import settings
+from app.schemas.audio_assessment import AUDIO_SCORE_FIELDS
 from app.schemas.speaking import SpeakingGradingOutput
 
 
 class SpeakingCorrectionService:
-    """Apply evidence gates without making a second paid correction/grading call."""
+    """Text owns language feedback; validated audio owns every acoustic score."""
 
-    def finalize(self, result: SpeakingGradingOutput, answers: list[dict]):
-        by_sequence = {a["sequence_number"]: a for a in answers}
-        threshold = settings.pronunciation_confidence_threshold
+    def finalize(self, text_result, answers: list[dict]):
         recorded = [a for a in answers if a["audio_hash"]]
-        covered = {a["sequence_number"] for a in recorded if a["audio_analysis"].get("available")}
-        all_covered = bool(recorded) and len(covered) == len(recorded)
-        if not all_covered or result.pronunciation_confidence < threshold:
-            result.scores.pronunciation = None
-        if not all_covered or result.fluency_confidence < threshold:
-            result.scores.fluency = None
-        result.pronunciation_feedback = [
-            p
-            for p in result.pronunciation_feedback
-            if p.sequence_number in covered and p.confidence >= threshold
+        threshold = settings.audio_feedback_min_confidence
+        covered = [a for a in recorded if a["audio_analysis"].get("available")]
+
+        def aggregate(field):
+            values = [a["audio_analysis"].get(field) for a in recorded]
+            if not values or any(v is None for v in values):
+                return None
+            # Equal recording contribution; no invented VSTEP part weights.
+            return round(mean(values) * 2) / 2
+
+        subscores = {field: aggregate(field) for field in AUDIO_SCORE_FIELDS}
+        pronunciation, fluency = subscores["pronunciation_score"], subscores["fluency_score"]
+        data = text_result.model_dump()
+        data["scores"].update(pronunciation=pronunciation, fluency=fluency, overall=None)
+        for key in ("pronunciation", "fluency"):
+            data[f"{key}_confidence"] = min(
+                (a["audio_analysis"].get(f"{key}_confidence", 0) for a in recorded), default=0
+            )
+        data["pronunciation_feedback"] = []
+        data["fluency_feedback"] = []
+        data["other_errors"] = [
+            e for e in data["other_errors"] if e["category"] not in {"pronunciation", "fluency"}
         ]
-        for p in result.pronunciation_feedback:
-            if p.confidence < 0.9:
-                p.ipa = None
-        result.other_errors = [
-            e
-            for e in result.other_errors
-            if e.category not in {"pronunciation", "fluency"}
-            or (e.sequence_number in covered and e.confidence is not None and e.confidence >= threshold)
-        ]
-        # JSON transcription does not promise reliable word timestamps.
-        for sentence in result.sentence_corrections:
-            sentence.start_seconds = None
-        result.vocabulary_suggestions = [
-            v
-            for v in result.vocabulary_suggestions
-            if v.sequence_number in by_sequence and v.original in by_sequence[v.sequence_number]["transcript"]
-        ]
-        if not all_covered or result.fluency_confidence < threshold:
-            result.fluency_feedback = [
-                type(result.priority_improvements[0])(
-                    title_vi="Chưa đủ bằng chứng âm thanh",
-                    explanation_vi="Chưa thể đánh giá nhịp nói, ngập ngừng và phát âm cho toàn bộ bài. Số từ/phút chỉ là thông tin mô tả.",
-                    example="",
+        for answer in covered:
+            audio = answer["audio_analysis"]
+            sequence = answer["sequence_number"]
+            if audio.get("fluency_summary_vi"):
+                data["fluency_feedback"].append(
+                    {
+                        "title_vi": f"Câu {sequence + 1}",
+                        "explanation_vi": audio["fluency_summary_vi"],
+                        "example": "",
+                    }
                 )
-            ]
-        scores = result.scores
-        scores.overall = (
-            (scores.grammar + scores.vocabulary + scores.pronunciation + scores.fluency + scores.structures)
-            / 5
-            if scores.pronunciation is not None and scores.fluency is not None
-            else None
-        )
-        return {
+            for issue in audio.get("issues", []):
+                if issue["confidence"] < threshold:
+                    continue
+                category = "fluency" if issue["type"] in {"rhythm", "hesitation"} else "pronunciation"
+                data["other_errors"].append(
+                    {
+                        "sequence_number": sequence,
+                        "category": category,
+                        "subtype": issue["type"],
+                        "original": issue["target"],
+                        "corrected": "",
+                        "explanation_vi": issue["description_vi"],
+                        "severity": "minor",
+                        "confidence": issue["confidence"],
+                    }
+                )
+                if category == "pronunciation":
+                    data["pronunciation_feedback"].append(
+                        {
+                            "sequence_number": sequence,
+                            "word": issue["target"],
+                            "issue": "individual_sound"
+                            if issue["type"] == "word_pronunciation"
+                            else issue["type"],
+                            "feedback_vi": issue["description_vi"],
+                            "ipa": None,
+                            "suggestion": issue["suggestion_vi"],
+                            "confidence": issue["confidence"],
+                        }
+                    )
+        if fluency is None:
+            data["fluency_feedback"].append(
+                {
+                    "title_vi": "Chưa đủ bằng chứng âm thanh",
+                    "explanation_vi": "Chưa đủ audio đáng tin cậy để chấm độ trôi chảy cho toàn bộ bản ghi.",
+                    "example": "",
+                }
+            )
+        for correction in data["sentence_corrections"]:
+            correction["start_seconds"] = None
+        if pronunciation is not None and fluency is not None:
+            data["scores"]["overall"] = (
+                sum(
+                    data["scores"][key]
+                    for key in ("grammar", "vocabulary", "structures", "pronunciation", "fluency")
+                )
+                / 5
+            )
+        result = SpeakingGradingOutput.model_validate(data)
+        coverage = {
             "recordings": len(recorded),
             "analyzed": len(covered),
-            "complete": scores.overall is not None,
+            "complete": result.scores.overall is not None,
             "pronunciation_confidence": result.pronunciation_confidence,
             "fluency_confidence": result.fluency_confidence,
+            "subscores": subscores,
+            "aggregation": "Mean of recording scores, rounded to 0.5; all recorded answers must have reliable audio scores.",
+            "schema_version": "2.0.0",
         }
+        return result, coverage
 
 
 def speaking_level(score: float | None) -> str:
     if score is None:
         return "Chưa đủ dữ liệu"
-    # Resolve gaps in the product's half-point reference ranges by rounding for LEVEL ONLY.
     rounded = int(score * 2 + 0.5) / 2
     return (
         "C1 / Bậc 5"

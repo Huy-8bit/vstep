@@ -3,11 +3,11 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
+from app.common.test_profiles import ItemDifficultyBand, TestProfile
 from app.common.words import count_words
 from app.schemas.writing import StrictModel
 
 ReadingMode = Literal["FULL_TEST", "PASSAGE_PRACTICE", "QUICK_PRACTICE", "QUESTION_TYPE_PRACTICE"]
-ReadingDifficulty = Literal["B1", "B2", "C1"]
 ReadingType = Literal[
     "main_idea",
     "detail",
@@ -82,6 +82,7 @@ class Evidence(StrictModel):
 
 
 class GeneratedReadingQuestion(StrictModel):
+    internal_difficulty_band: ItemDifficultyBand
     question_number: int = Field(ge=1, le=10)
     question_type: ReadingType
     question_text: str = Field(min_length=10, max_length=1200)
@@ -95,7 +96,8 @@ class GeneratedReadingQuestion(StrictModel):
 class GeneratedReadingPassage(StrictModel):
     title: str = Field(min_length=5, max_length=300)
     topic: str
-    difficulty: ReadingDifficulty
+    test_profile: TestProfile = "VSTEP_3_5"
+    internal_difficulty_band: ItemDifficultyBand
     paragraphs: list[Paragraph] = Field(min_length=3, max_length=8)
     questions: list[GeneratedReadingQuestion] = Field(min_length=5, max_length=10)
 
@@ -126,6 +128,8 @@ class GeneratedReadingPassage(StrictModel):
             for letter, explanation in q.option_explanations.model_dump().items():
                 if explanation["is_correct"] != (letter == q.correct_answer):
                     raise ValueError("Exactly one correct explanation must match the answer key")
+        if len({q.internal_difficulty_band for q in self.questions}) < 2:
+            raise ValueError("A passage must include variation in item demands")
         distribution = Counter(q.correct_answer for q in self.questions)
         if len(distribution) < 3 or max(distribution.values()) > (len(self.questions) + 1) // 2:
             raise ValueError("Answer distribution is too predictable")
@@ -134,7 +138,7 @@ class GeneratedReadingPassage(StrictModel):
 
 class ReadingGenerateRequest(StrictModel):
     mode: ReadingMode = "PASSAGE_PRACTICE"
-    difficulty: ReadingDifficulty = "B2"
+    test_profile: TestProfile = "VSTEP_3_5"
     topic: str = "random"
     question_count: Literal[5, 10] = 10
     target_question_types: list[ReadingType] = Field(default_factory=list, max_length=10)
@@ -143,6 +147,8 @@ class ReadingGenerateRequest(StrictModel):
 
     @model_validator(mode="after")
     def topic_valid(self):
+        if self.mode == "FULL_TEST" and (self.question_count != 10 or self.target_question_types):
+            raise ValueError("Full-test passages follow the internal 4-passage/40-question blueprint")
         if self.topic != "random" and self.topic not in READING_TOPICS:
             raise ValueError("Invalid topic")
         return self
@@ -150,7 +156,7 @@ class ReadingGenerateRequest(StrictModel):
 
 class ReadingSessionCreate(StrictModel):
     mode: ReadingMode = "FULL_TEST"
-    difficulty: ReadingDifficulty = "B2"
+    test_profile: TestProfile = "VSTEP_3_5"
     topic: str = "random"
     target_question_type: ReadingType | None = None
     timed: bool = False

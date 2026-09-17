@@ -30,12 +30,17 @@ class ExamService:
                 raise AppError(422, "Đề đã chọn không phù hợp với chế độ luyện tập.")
         else:
             for task in tasks:
-                questions.append(await self.questions.generate(QuestionRequest(task=task), user_id))
+                questions.append(
+                    await self.questions.generate(
+                        QuestionRequest(task=task, test_profile=data.test_profile), user_id
+                    )
+                )
         now = utcnow()
         minutes = 60 if data.mode == "FULL_TEST" else (20 if tasks[0] == 1 else 40)
         exam = ExamSession(
             user_id=user_id,
             mode=data.mode,
+            test_profile=data.test_profile,
             started_at=now,
             expires_at=now + timedelta(minutes=minutes) if data.timed or data.mode == "FULL_TEST" else None,
         )

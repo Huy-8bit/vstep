@@ -1,11 +1,6 @@
-from app.prompts.task1_grader import COMMON_GRADER
+"""Task 2 context for the evidence stage; scoring is in writing_calibration.py."""
 
-TASK2_GRADER_PROMPT_VERSION = "1.0.0"
-TASK2_GRADER_PROMPT = (
-    COMMON_GRADER
-    + """
-TASK 2: assess every part of the question, a clear thesis/position, body paragraphs, topic sentences,
-supporting ideas and examples, logical progression, cohesion, conclusion, vocabulary range,
-grammar range and accuracy and minimum 250 words. It is an essay, not a letter.
-"""
-)
+TASK2_ANALYSIS_CONTEXT = """TASK 2: essay with minimum 250 words. Assess every question, thesis/position,
+body paragraph purpose, developed reasons and examples, logical progression and conclusion. Merely naming
+advantages or causes without explaining relationships is limited development. Examine sustained grammar
+control and lexical precision across the argument; length or formal connectors do not establish proficiency."""

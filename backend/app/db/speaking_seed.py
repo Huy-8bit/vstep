@@ -1,4 +1,4 @@
-"""Idempotent, original B2 practice prompts: 15 sets per VSTEP Speaking part."""
+"""Idempotent, original VSTEP.3-5 practice prompts: 15 sets per VSTEP Speaking part."""
 
 import asyncio
 
@@ -481,7 +481,7 @@ def speaking_seed_data():
         suggested_ideas=[],
         follow_up_questions=[],
         allow_own_idea=False,
-        difficulty="B2",
+        test_profile="VSTEP_3_5",
     )
     for code, first, questions, second, more in PART1:
         yield GeneratedSpeakingQuestion(

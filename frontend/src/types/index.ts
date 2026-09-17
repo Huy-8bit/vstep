@@ -1,3 +1,5 @@
+import type { WritingAssessmentMetadata } from "@/features/grading/writing-evidence";
+import type { TestProfile } from "@/lib/test-profile";
 export type Mode = "FULL_TEST" | "TASK1" | "TASK2";
 export type User = { id: string; email: string };
 export type Question = {
@@ -5,7 +7,7 @@ export type Question = {
   task_type: 1 | 2;
   question_type: string;
   topic: string;
-  difficulty: string;
+  test_profile: TestProfile;
   instruction: string;
   requirements: string[];
   minimum_words: number;
@@ -25,7 +27,7 @@ export type WritingError = {
   explanation_vi: string;
   severity: string;
 };
-export type Grading = {
+export type Grading = WritingAssessmentMetadata & {
   id: string;
   scores: {
     task_fulfillment: number;

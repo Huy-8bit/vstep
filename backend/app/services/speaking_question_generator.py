@@ -61,7 +61,7 @@ class SpeakingQuestionGeneratorService:
                 recent_ids.add(step["question_id"])
                 recent_topics.add(step["topic_code"])
         query = select(SpeakingQuestion).where(
-            SpeakingQuestion.part == request.part, SpeakingQuestion.difficulty == request.difficulty
+            SpeakingQuestion.part == request.part, SpeakingQuestion.test_profile == request.test_profile
         )
         if request.source == "SEED":
             query = query.where(SpeakingQuestion.source == "SEED")
@@ -79,7 +79,7 @@ class SpeakingQuestionGeneratorService:
                     return question
             raise AppError(
                 404,
-                "Chưa có đề mẫu với bộ lọc này. Chọn B2, chủ đề ngẫu nhiên hoặc sinh đề AI.",
+                "Chưa có đề mẫu với bộ lọc này. Chọn chủ đề ngẫu nhiên hoặc sinh đề AI.",
                 "no_seed_match",
             )
         candidates = [t for t in SPEAKING_TOPICS if t not in recent_topics] or SPEAKING_TOPICS
@@ -93,7 +93,7 @@ class SpeakingQuestionGeneratorService:
         payload = {
             "part": request.part,
             "topic": topic,
-            "difficulty": request.difficulty,
+            "test_profile": request.test_profile,
             "recent_questions": recent,
             "recent_topic_sets": [q.topic_sets for q in recent_rows if q.part == 1],
             "recent_situations": [q.situation for q in recent_rows if q.part == 2],

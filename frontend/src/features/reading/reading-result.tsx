@@ -142,9 +142,7 @@ function ResultView({ id }: { id: string }) {
     <div className="space-y-7">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="eyebrow">
-            {modes[session.mode].title} · {session.difficulty}
-          </p>
+          <p className="eyebrow">VSTEP.3–5 · {modes[session.mode].title}</p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight">
             Kết quả Reading
           </h1>

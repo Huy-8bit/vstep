@@ -25,8 +25,7 @@ export function ReadingPassage({
       aria-label="Bài đọc"
     >
       <p className="eyebrow">
-        {topics[passage.topic] || passage.topic} · {passage.difficulty} ·{" "}
-        {passage.word_count} từ
+        {topics[passage.topic] || passage.topic} · {passage.word_count} từ
       </p>
       <h2 className="mb-7 mt-3 text-2xl font-bold leading-relaxed">
         {passage.title}

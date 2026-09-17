@@ -5,6 +5,7 @@ import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { api } from "@/services/api";
+import { PronunciationHistory } from "./pronunciation-coach";
 import { SkillSwitch } from "./skill-switch";
 import { modes, topics, duration, scoreText, type SpeakingMode } from "./types";
 type HistoryItem = {
@@ -55,6 +56,9 @@ function History() {
   return (
     <>
       <SkillSwitch section="history" active="speaking" />
+      <div className="mb-7">
+        <PronunciationHistory />
+      </div>
       <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="eyebrow">Nhìn lại để tiến bộ</p>
@@ -102,7 +106,7 @@ function History() {
                     "Chủ đề",
                     "Audio",
                     "Điểm AI",
-                    "Mức tham khảo",
+                    "Mức AI ước tính",
                     "",
                   ].map((label, i) => (
                     <th key={i} className="px-5 py-4 font-medium">

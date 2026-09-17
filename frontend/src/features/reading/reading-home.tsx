@@ -13,6 +13,7 @@ import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
 import { api, post } from "@/services/api";
+import { TEST_PROFILE } from "@/lib/test-profile";
 import {
   modes,
   questionTypes,
@@ -45,7 +46,6 @@ function Setup({
 }) {
   const router = useRouter();
   const [mode, setMode] = useState<ReadingMode>(initialMode);
-  const [difficulty, setDifficulty] = useState("B2");
   const [topic, setTopic] = useState("random");
   const [target, setTarget] = useState(initialType);
   const [timed, setTimed] = useState(false);
@@ -59,12 +59,10 @@ function Setup({
   >(null);
   const loadBank = useCallback(async () => {
     const request = ++bankRequest.current;
-    const data = await api<Bank>(
-      `/reading/bank?difficulty=${difficulty}&topic=${topic}`,
-    );
+    const data = await api<Bank>(`/reading/bank?topic=${topic}`);
     if (request === bankRequest.current) setBank(data);
     return data;
-  }, [difficulty, topic]);
+  }, [topic]);
   useEffect(() => {
     setBank(null);
     setSelected("");
@@ -90,7 +88,7 @@ function Setup({
     try {
       const p = await post<ReadingPassage>("/reading/questions/generate", {
         mode,
-        difficulty,
+        test_profile: TEST_PROFILE,
         topic,
         question_count: count,
         target_question_types:
@@ -110,24 +108,30 @@ function Setup({
     setBusy("Đang chuẩn bị phiên Reading...");
     try {
       const needed = mode === "FULL_TEST" ? 4 : 1;
-      const missing = Math.max(0, needed - eligible.length);
+      const missing =
+        mode === "FULL_TEST"
+          ? (bank?.full_test_missing_passages ?? 4)
+          : Math.max(0, needed - eligible.length);
       if (missing && bank?.ai_configured && !selected) {
         for (let i = 0; i < missing; i++) {
           setBusy(`Đang bổ sung bài đọc ${i + 1}/${missing}...`);
           await post("/reading/questions/generate", {
             mode,
-            difficulty,
+            test_profile: TEST_PROFILE,
             topic,
             question_count: count,
             target_question_types:
               mode === "QUESTION_TYPE_PRACTICE" ? [target] : [],
           });
+          const updated = await loadBank();
+          if (mode === "FULL_TEST" && updated.full_test_missing_passages === 0)
+            break;
         }
         await loadBank();
       }
       const s = await post<ReadingSession>("/reading/sessions", {
         mode,
-        difficulty,
+        test_profile: TEST_PROFILE,
         topic,
         timed,
         target_question_type: mode === "QUESTION_TYPE_PRACTICE" ? target : null,
@@ -215,23 +219,13 @@ function Setup({
       <section className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="panel p-6 sm:p-8">
           <h2 className="text-xl font-bold">{modes[mode].title}</h2>
+          <p className="mt-3 text-xs font-medium text-teal-800">
+            VSTEP.3–5 · Một bài thi đánh giá nhiều bậc năng lực
+          </p>
           <p className="mt-2 text-sm leading-6 text-stone-500">
             {modes[mode].description}
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            <label className="text-xs font-semibold">
-              Độ khó
-              <select
-                className="field mt-2"
-                disabled={!!busy}
-                value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value)}
-              >
-                {["B1", "B2", "C1"].map((level) => (
-                  <option key={level}>{level}</option>
-                ))}
-              </select>
-            </label>
             <label className="text-xs font-semibold">
               Luyện theo chủ đề
               <select
@@ -303,11 +297,20 @@ function Setup({
               ? `${eligible.length} bài đọc phù hợp trong ngân hàng. ${mode === "QUESTION_TYPE_PRACTICE" ? "Số câu thực tế theo các câu cùng dạng hiện có, tối đa 5 câu." : "Đề có sẵn được dùng lại, ưu tiên bài bạn chưa làm."}`
               : "Đang tải ngân hàng đề..."}
           </p>
+          {bank &&
+            mode === "FULL_TEST" &&
+            bank.full_test_missing_passages > 0 && (
+              <p className="mt-3 text-xs leading-6 text-stone-500">
+                Cần bổ sung {bank.full_test_missing_passages} bài đọc để bộ lọc
+                này đủ cấu trúc thi thử và độ phủ dạng câu. Chọn chủ đề ngẫu
+                nhiên để dùng ngân hàng mẫu đầy đủ.
+              </p>
+            )}
           {bank && !bank.ai_configured && (
             <p className="mt-3 rounded-xl bg-stone-50 p-4 text-xs leading-6 text-stone-600">
               Đề mẫu, chấm điểm và giải thích đáp án hoạt động ngay. Tạo đề mới
               hoặc tra từ vựng bằng AI cần cấu hình OpenAI. Thi thử từ ngân hàng
-              mẫu có đủ 4 bài ở B2/chủ đề ngẫu nhiên.
+              mẫu có đủ cấu trúc VSTEP.3–5 khi chọn chủ đề ngẫu nhiên.
             </p>
           )}
           {error && <ErrorNotice message={error} />}

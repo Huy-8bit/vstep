@@ -142,8 +142,16 @@ class SpeakingGradingService:
                 for e in cached.errors
             ]
         else:
-            result = await self.llm.grade_speaking(payload, user_id)
-            coverage = SpeakingCorrectionService().finalize(result, source)
+            text_payload = {
+                "part": part,
+                "mode": payload["mode"],
+                "answers": [
+                    {key: a[key] for key in ("sequence_number", "part", "question", "transcript", "status")}
+                    for a in source
+                ],
+            }
+            text_result = await self.llm.grade_speaking(text_payload, user_id)
+            result, coverage = SpeakingCorrectionService().finalize(text_result, source)
             data = result.model_dump()
             values = {name: data[name] for name in FEEDBACK_FIELDS}
             values.update({f"{key}_score": value for key, value in data["scores"].items()})

@@ -1,3 +1,4 @@
+import type { TestProfile } from "@/lib/test-profile";
 export type ReadingMode =
   | "FULL_TEST"
   | "PASSAGE_PRACTICE"
@@ -76,7 +77,7 @@ export type ReadingPassage = {
   id: string;
   title: string;
   topic: string;
-  difficulty: string;
+  test_profile: TestProfile;
   paragraphs: { id: string; text: string }[];
   word_count: number;
   source: string;
@@ -94,7 +95,7 @@ export type ReadingAnswer = {
 export type ReadingSession = {
   id: string;
   mode: ReadingMode;
-  difficulty: string;
+  test_profile: TestProfile;
   topic: string;
   started_at: string;
   expires_at: string | null;
@@ -156,7 +157,6 @@ export type ReadingProgress = {
   average_time_per_question: number | null;
   question_types: Breakdown[];
   topics: Breakdown[];
-  difficulties: Breakdown[];
   weaknesses: Breakdown[];
   timeline: {
     id: string;
@@ -167,12 +167,14 @@ export type ReadingProgress = {
   }[];
 };
 export type Bank = {
+  test_profile: TestProfile;
+  full_test_missing_passages: number;
   ai_configured: boolean;
   items: {
     id: string;
     title: string;
     topic: string;
-    difficulty: string;
+    test_profile: TestProfile;
     word_count: number;
     question_count: number;
     question_types: string[];

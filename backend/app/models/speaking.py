@@ -19,7 +19,9 @@ class SpeakingQuestion(IdentityMixin, Base):
     options: Mapped[list] = mapped_column(JSONB, default=list)
     suggested_ideas: Mapped[list] = mapped_column(JSONB, default=list)
     follow_up_questions: Mapped[list] = mapped_column(JSONB, default=list)
-    difficulty: Mapped[str] = mapped_column(String(10), default="B2")
+    # Retained only to preserve historical data; never used for generation or public DTOs.
+    legacy_difficulty: Mapped[str | None] = mapped_column("difficulty", String(10))
+    test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
     source: Mapped[str] = mapped_column(String(10), default="SEED")
     fingerprint: Mapped[str] = mapped_column(String(64), unique=True)
     prompt_version: Mapped[str | None] = mapped_column(String(20))
@@ -29,6 +31,7 @@ class SpeakingExamSession(IdentityMixin, Base):
     __tablename__ = "speaking_exam_sessions"
     __table_args__ = (CheckConstraint("mode IN ('FULL_TEST', 'PART1', 'PART2', 'PART3', 'QUICK_PRACTICE')"),)
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
     mode: Mapped[str] = mapped_column(String(20))
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
