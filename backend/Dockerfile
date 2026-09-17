@@ -8,4 +8,4 @@ COPY . .
 RUN mkdir -p /app/data/audio && useradd -m appuser && chown -R appuser /app
 USER appuser
 EXPOSE 8000
-CMD ["sh", "-c", "alembic upgrade head && python -m app.db.seed && python -m app.db.speaking_seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "alembic upgrade head && python -m app.db.seed && python -m app.db.speaking_seed && python -m app.db.reading_seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"]

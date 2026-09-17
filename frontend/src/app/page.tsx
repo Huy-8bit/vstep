@@ -8,6 +8,7 @@ import {
   Check,
   PenLine,
   Mic,
+  BookOpenText,
   Sparkles,
   Target,
 } from "lucide-react";
@@ -41,8 +42,8 @@ export default function Home() {
             <span className="text-teal-800">một bước tiến.</span>
           </h1>
           <p className="mt-5 max-w-lg text-sm leading-7 text-stone-600 sm:text-base">
-            Luyện Writing và Speaking có định hướng. Nhận phản hồi chi tiết từ
-            AI, hiểu lỗi sai và tự tin hơn mỗi ngày.
+            Luyện Reading, Writing và Speaking có định hướng. Nhận phản hồi chi
+            tiết từ AI, hiểu lỗi sai và tự tin hơn mỗi ngày.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button asChild size="lg">
@@ -53,7 +54,7 @@ export default function Home() {
             </Button>
             <span className="flex items-center gap-2 text-xs text-stone-500">
               <Check size={15} className="text-teal-700" />
-              20 đề Writing · 45 đề Speaking
+              Writing · Speaking · Reading
             </span>
           </div>
         </div>
@@ -100,7 +101,7 @@ export default function Home() {
             <ArrowUpRight size={16} />
           </Link>
         </div>
-        <div className="mb-6 grid gap-5 md:grid-cols-2">
+        <div className="mb-6 grid gap-5 md:grid-cols-3">
           <div className="panel p-6">
             <PenLine className="mb-4 text-teal-700" />
             <h3 className="text-xl font-bold">Writing</h3>
@@ -124,6 +125,21 @@ export default function Home() {
               <Link href="/speaking?mode=PART1">Part 1</Link>
               <Link href="/speaking?mode=PART2">Part 2</Link>
               <Link href="/speaking?mode=PART3">Part 3</Link>
+            </div>
+          </div>
+          <div className="panel p-6">
+            <BookOpenText className="mb-4 text-teal-700" />
+            <h3 className="text-xl font-bold">Reading</h3>
+            <p className="mt-2 text-sm leading-6 text-stone-500">
+              Luyện đọc hiểu theo format VSTEP với 4 passages, câu hỏi trắc
+              nghiệm và giải thích chi tiết.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-4 text-sm font-semibold text-teal-800">
+              <Link href="/reading">Thi thử →</Link>
+              <Link href="/reading?mode=PASSAGE_PRACTICE">Luyện passage</Link>
+              <Link href="/reading?mode=QUESTION_TYPE_PRACTICE">
+                Theo dạng câu
+              </Link>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 # VSTEP Practice Platform
 
-Ứng dụng luyện VSTEP Writing và Speaking dành cho người Việt. Speaking gồm thi thử ba phần, luyện từng Part, ghi âm, nhận dạng giọng nói, chữa từng câu và theo dõi tiến độ. Writing gồm: thi thử hai Task, luyện riêng thư/email hoặc bài luận, lưu nháp, chấm và chữa bài bằng AI, lịch sử và biểu đồ tiến độ. Toàn bộ giao diện và giải thích bằng tiếng Việt; đề và bài viết bằng tiếng Anh.
+Ứng dụng luyện VSTEP Writing, Speaking và Reading dành cho người Việt. Reading có thi thử 4 bài đọc/40 câu/60 phút, luyện passage/dạng câu/chủ đề, chấm điểm ngay, giải thích từng phương án và bằng chứng trong bài. Speaking gồm thi thử ba phần, luyện từng Part, ghi âm, nhận dạng giọng nói, chữa từng câu và theo dõi tiến độ. Writing gồm: thi thử hai Task, luyện riêng thư/email hoặc bài luận, lưu nháp, chấm và chữa bài bằng AI, lịch sử và biểu đồ tiến độ. Toàn bộ giao diện và giải thích bằng tiếng Việt; đề và bài viết bằng tiếng Anh.
 
 ## Chạy bằng Docker
 
@@ -15,9 +15,9 @@ docker compose up --build
 - Backend: http://localhost:8000
 - Swagger: http://localhost:8000/docs
 
-Backend tự chạy Alembic và nạp **10 đề Task 1 + 10 đề Task 2 + 45 đề Speaking (15 mỗi Part)** khi khởi động. Seed có thể chạy lại an toàn. PostgreSQL lưu dữ liệu trong volume `postgres_data`; audio Speaking nằm trong volume `speaking_audio`. `docker compose down` giữ dữ liệu; không dùng `down -v` nếu cần giữ bài viết.
+Backend tự chạy Alembic và nạp **10 đề Task 1 + 10 đề Task 2 + 45 đề Speaking (15 mỗi Part) + 8 bài Reading (80 câu)** khi khởi động. Seed có thể chạy lại an toàn. PostgreSQL lưu dữ liệu trong volume `postgres_data`; audio Speaking nằm trong volume `speaking_audio`. `docker compose down` giữ dữ liệu; không dùng `down -v` nếu cần giữ bài viết.
 
-Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp bài, ghi âm và nghe lại trong Practice. Chấm AI và sinh đề AI yêu cầu key thật; khi thiếu key, ứng dụng báo **“Chưa cấu hình OpenAI API.”** và giữ bài đã nộp. Không có điểm giả lập trong ứng dụng.
+Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp bài, ghi âm và nghe lại trong Practice. Chấm AI và sinh đề AI yêu cầu key thật; khi thiếu key, ứng dụng báo **“Chưa cấu hình OpenAI API.”** và giữ bài đã nộp. Reading chấm đúng/sai bằng Python từ đáp án có sẵn và không cần gọi AI khi nộp. Không có điểm giả lập trong ứng dụng.
 
 ## Cấu hình
 
@@ -57,6 +57,7 @@ pip install -r requirements-dev.txt
 alembic upgrade head
 python -m app.db.seed
 python -m app.db.speaking_seed
+python -m app.db.reading_seed
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -92,7 +93,7 @@ backend/
 frontend/src/
   app/             # Các trang và proxy API cùng origin
   components/      # Layout + shadcn/ui primitives
-  features/        # Auth, exam, writing, grading, history, progress
+  features/        # Auth, exam, writing, speaking, reading, grading, history, progress
   hooks/           # Autosave, phục hồi nháp, giải quyết xung đột
   services/        # API client + refresh token
   lib/             # Helpers và nhãn tiếng Việt
@@ -118,6 +119,14 @@ docs/              # Ghi chú thiết kế ngắn
 Mở `/speaking` để bắt đầu. Có Full Test, Part 1/2/3 và Luyện nhanh; lịch sử và tiến độ có nút chuyển Writing/Speaking. Audio và transcript cùng được lưu; lỗi mạng cho phép tải lại bản ghi. Phát âm không được chấm từ transcript. Tổng điểm Speaking là trung bình năm tiêu chí 20%; chỉ có khi đủ dữ liệu audio.
 
 Xem [tài liệu Speaking đầy đủ](docs/speaking.md) cho endpoint, schema, cấu hình OpenAI, lưu trữ, recovery và các giới hạn.
+
+## Reading
+
+Mở `/reading`: Thi thử (4 passages/40 câu/60 phút), Luyện 1 Passage, Luyện nhanh và Luyện theo dạng câu hỏi; lọc B1/B2/C1 và chủ đề. Bộ mẫu gồm 2 B1, 4 B2, 2 C1, mỗi bài khoảng 500 từ/10 câu. Chọn **B2 + chủ đề ngẫu nhiên** để thi full ngay khi chưa có OpenAI key.
+
+Đáp án tự lưu, có dự phòng trên thiết bị, xử lý xung đột giữa tab và đồng hồ do backend quản lý. Sau nộp, xem điểm, giải thích đúng/sai từng lựa chọn, đoạn bằng chứng được tô sáng, lịch sử và biểu đồ tiến độ. Tạo đề mới và giải thích từ vựng theo ngữ cảnh dùng OpenAI; chấm điểm và analytics dùng Python/SQL. History/progress có nút chuyển Writing/Speaking/Reading.
+
+Xem [tài liệu Reading](docs/reading.md) cho API, schema, ngân hàng đề, cách lưu/nộp, quy đổi điểm luyện tập và giới hạn MVP.
 
 ## API chính
 

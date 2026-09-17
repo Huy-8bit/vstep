@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from app.schemas.reading import GeneratedReadingPassage, ReadingVocabulary
 from app.schemas.speaking import GeneratedSpeakingQuestion, SpeakingGradingOutput
 from app.schemas.writing import GeneratedQuestion, GradingOutput, ImprovedWriting
 
@@ -19,3 +20,9 @@ class LLMClient(ABC):
 
     @abstractmethod
     async def grade_speaking(self, payload: dict, user_id: str) -> SpeakingGradingOutput: ...
+
+    @abstractmethod
+    async def generate_reading(self, payload: dict, user_id: str) -> GeneratedReadingPassage: ...
+
+    @abstractmethod
+    async def explain_reading_vocabulary(self, payload: dict, user_id: str) -> ReadingVocabulary: ...

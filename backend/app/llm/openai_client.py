@@ -13,12 +13,15 @@ from app.db.session import SessionLocal
 from app.llm.base import LLMClient
 from app.models import AIUsageLog
 from app.prompts.question_generator import QUESTION_GENERATOR_PROMPT
+from app.prompts.reading_question_generator import READING_GENERATOR_PROMPT
+from app.prompts.reading_vocabulary_explanation import READING_VOCABULARY_PROMPT
 from app.prompts.speaking_grader import SPEAKING_GRADER_PROMPT
 from app.prompts.speaking_part1_generator import SPEAKING_PART1_GENERATOR
 from app.prompts.speaking_part2_generator import SPEAKING_PART2_GENERATOR
 from app.prompts.speaking_part3_generator import SPEAKING_PART3_GENERATOR
 from app.prompts.task1_grader import TASK1_GRADER_PROMPT
 from app.prompts.task2_grader import TASK2_GRADER_PROMPT
+from app.schemas.reading import GeneratedReadingPassage, ReadingVocabulary
 from app.schemas.speaking import GeneratedSpeakingQuestion, SpeakingGradingOutput
 from app.schemas.writing import GeneratedQuestion, GradingOutput, ImprovedWriting
 
@@ -178,4 +181,25 @@ class OpenAILLMClient(LLMClient):
 
         return await self._structured(
             SpeakingGradingOutput, SPEAKING_GRADER_PROMPT, payload, user_id, "speaking_grade", validate
+        )
+
+    async def generate_reading(self, payload: dict, user_id: str) -> GeneratedReadingPassage:
+        def validate(result):
+            if result.difficulty != payload["difficulty"] or result.topic != payload["topic"]:
+                raise ValueError("Reading topic or difficulty mismatch")
+            if len(result.questions) != payload["question_count"]:
+                raise ValueError("Reading question count mismatch")
+            targets = payload.get("target_question_types", [])
+            if targets and any(q.question_type not in targets for q in result.questions):
+                raise ValueError("Reading question type mismatch")
+            if result.title.casefold() in {t.casefold() for t in payload.get("recent_titles", [])}:
+                raise ValueError("Duplicate reading title")
+
+        return await self._structured(
+            GeneratedReadingPassage, READING_GENERATOR_PROMPT, payload, user_id, "reading_generate", validate
+        )
+
+    async def explain_reading_vocabulary(self, payload: dict, user_id: str) -> ReadingVocabulary:
+        return await self._structured(
+            ReadingVocabulary, READING_VOCABULARY_PROMPT, payload, user_id, "reading_vocabulary"
         )

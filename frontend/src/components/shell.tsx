@@ -30,7 +30,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [error, setError] = useState("");
-  if (pathname.startsWith("/exam/") || pathname.startsWith("/speaking/exam/"))
+  if (
+    pathname.startsWith("/exam/") ||
+    pathname.startsWith("/speaking/exam/") ||
+    pathname.startsWith("/reading/exam/")
+  )
     return <>{children}</>;
   return (
     <>
@@ -44,7 +48,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
             {[
               ["/", "Trang chủ"],
               ["/practice", "Writing"],
-              ["/speaking", "Luyện Nói"],
+              ["/speaking", "Speaking"],
+              ["/reading", "Reading"],
               ["/history", "Lịch sử"],
               ["/progress", "Tiến độ"],
               ["/settings", "Cài đặt"],
@@ -105,7 +110,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <footer className="mx-auto flex max-w-7xl flex-wrap justify-between gap-3 border-t border-stone-200 px-5 py-6 text-xs text-stone-500 sm:px-8">
-        <span>VSTEP Practice Platform · Luyện viết, luyện nói mỗi ngày.</span>
+        <span>VSTEP Practice Platform · Luyện đọc, viết và nói mỗi ngày.</span>
         <span>Công cụ luyện tập độc lập · Điểm AI mang tính tham khảo.</span>
       </footer>
     </>

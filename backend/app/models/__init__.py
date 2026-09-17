@@ -144,3 +144,5 @@ class AIUsageLog(IdentityMixin, Base):
     output_tokens: Mapped[int] = mapped_column(Integer, default=0)
     latency_ms: Mapped[int] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String(30))
+
+from app.models.reading import ReadingPassage, ReadingQuestion, ReadingExamSession, ReadingAnswer, ReadingResult  # noqa: F401, E402

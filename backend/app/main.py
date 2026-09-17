@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
-from app.api.routes import auth, progress, speaking, writing
+from app.api.routes import auth, progress, reading, speaking, writing
 from app.common.errors import AppError
 from app.core.config import settings
 from app.db.session import SessionLocal, engine
@@ -28,7 +28,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.frontend_url],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
+    allow_methods=["GET", "POST", "PATCH", "PUT", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
 hits: dict[str, deque] = defaultdict(deque)
@@ -61,7 +61,9 @@ async def request_guards(request: Request, call_next):
         if content_length > limit:
             return JSONResponse({"detail": "Nội dung quá dài."}, status_code=413)
         path = request.url.path
-        if path.endswith(("/login", "/register", "/grade", "/generate", "/transcribe", "/analyze", "/tts")):
+        if path.endswith(
+            ("/login", "/register", "/grade", "/generate", "/transcribe", "/analyze", "/tts", "/explain")
+        ):
             now = time.monotonic()
             # Bounded, single-worker MVP rate limiter; do not trust forwarded IP headers.
             for key in list(hits):
@@ -123,5 +125,5 @@ async def health():
     return {"status": "ok", "ai_configured": bool(settings.openai_api_key)}
 
 
-for router in (auth.router, writing.router, progress.router, speaking.router):
+for router in (auth.router, writing.router, progress.router, speaking.router, reading.router):
     app.include_router(router, prefix="/api/v1")
