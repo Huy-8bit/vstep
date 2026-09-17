@@ -7,6 +7,7 @@ import {
   ChartNoAxesCombined,
   Check,
   PenLine,
+  Mic,
   Sparkles,
   Target,
 } from "lucide-react";
@@ -35,13 +36,13 @@ export default function Home() {
             Dành cho hành trình chinh phục VSTEP
           </p>
           <h1 className="max-w-2xl text-4xl font-bold leading-[1.18] tracking-tight sm:text-5xl">
-            Mỗi bài viết,
+            Mỗi lần luyện,
             <br />
             <span className="text-teal-800">một bước tiến.</span>
           </h1>
           <p className="mt-5 max-w-lg text-sm leading-7 text-stone-600 sm:text-base">
-            Luyện Writing có định hướng. Nhận phản hồi chi tiết từ AI, hiểu lỗi
-            sai và viết tự tin hơn mỗi ngày.
+            Luyện Writing và Speaking có định hướng. Nhận phản hồi chi tiết từ
+            AI, hiểu lỗi sai và tự tin hơn mỗi ngày.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Button asChild size="lg">
@@ -52,7 +53,7 @@ export default function Home() {
             </Button>
             <span className="flex items-center gap-2 text-xs text-stone-500">
               <Check size={15} className="text-teal-700" />
-              Có sẵn 20 đề luyện tập
+              20 đề Writing · 45 đề Speaking
             </span>
           </div>
         </div>
@@ -88,7 +89,7 @@ export default function Home() {
           <div>
             <p className="eyebrow mb-2">Chọn nhịp luyện tập của bạn</p>
             <h2 className="text-2xl font-bold tracking-tight">
-              Hôm nay, bạn muốn luyện gì?
+              Bạn muốn luyện kỹ năng nào?
             </h2>
           </div>
           <Link
@@ -99,6 +100,34 @@ export default function Home() {
             <ArrowUpRight size={16} />
           </Link>
         </div>
+        <div className="mb-6 grid gap-5 md:grid-cols-2">
+          <div className="panel p-6">
+            <PenLine className="mb-4 text-teal-700" />
+            <h3 className="text-xl font-bold">Writing</h3>
+            <p className="mt-2 text-sm leading-6 text-stone-500">
+              Viết rõ ý. Hiểu từng lỗi. Hoàn thiện bài viết.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-4 text-sm font-semibold text-teal-800">
+              <Link href="/practice">Thi thử →</Link>
+              <Link href="/practice/task-1">Task 1</Link>
+              <Link href="/practice/task-2">Task 2</Link>
+            </div>
+          </div>
+          <div className="panel border-teal-200 bg-teal-50/50 p-6">
+            <Mic className="mb-4 text-teal-700" />
+            <h3 className="text-xl font-bold">Speaking</h3>
+            <p className="mt-2 text-sm leading-6 text-stone-500">
+              Nói tự nhiên. Nghe lại bản ghi. Cải thiện từng câu.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-4 text-sm font-semibold text-teal-800">
+              <Link href="/speaking">Thi thử →</Link>
+              <Link href="/speaking?mode=PART1">Part 1</Link>
+              <Link href="/speaking?mode=PART2">Part 2</Link>
+              <Link href="/speaking?mode=PART3">Part 3</Link>
+            </div>
+          </div>
+        </div>
+        <p className="eyebrow mb-4">Tiếp tục luyện Writing</p>
         <PracticeCards />
       </section>
       <section className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">

@@ -13,13 +13,14 @@ export function Brand() {
     <Link
       href="/"
       className="flex items-center gap-2.5"
-      aria-label="VSTEP Writing Lab - Trang chủ"
+      aria-label="VSTEP Practice Platform - Trang chủ"
     >
       <span className="flex size-9 items-center justify-center rounded-xl bg-teal-800 text-white">
         <BookOpen size={19} />
       </span>
       <span className="text-base font-bold tracking-tight">
-        VSTEP <span className="font-normal text-stone-500">Writing Lab</span>
+        VSTEP{" "}
+        <span className="font-normal text-stone-500">Practice Platform</span>
       </span>
     </Link>
   );
@@ -29,7 +30,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [error, setError] = useState("");
-  if (pathname.startsWith("/exam/")) return <>{children}</>;
+  if (pathname.startsWith("/exam/") || pathname.startsWith("/speaking/exam/"))
+    return <>{children}</>;
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-stone-200 bg-white/95 backdrop-blur-sm">
@@ -41,15 +43,17 @@ export function Shell({ children }: { children: React.ReactNode }) {
           >
             {[
               ["/", "Trang chủ"],
-              ["/practice", "Luyện thi"],
+              ["/practice", "Writing"],
+              ["/speaking", "Luyện Nói"],
               ["/history", "Lịch sử"],
               ["/progress", "Tiến độ"],
+              ["/settings", "Cài đặt"],
             ].map(([href, label]) => (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  "rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap",
+                  "rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap",
                   (href === "/" ? pathname === "/" : pathname.startsWith(href))
                     ? "bg-teal-50 text-teal-900"
                     : "text-stone-500 hover:bg-stone-50 hover:text-stone-900",
@@ -64,7 +68,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <>
                 <span
                   title={user.email}
-                  className="hidden max-w-36 truncate text-xs text-stone-500 lg:block"
+                  className="hidden max-w-24 truncate text-xs text-stone-500 lg:block"
                 >
                   {user.email}
                 </span>
@@ -101,7 +105,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <footer className="mx-auto flex max-w-7xl flex-wrap justify-between gap-3 border-t border-stone-200 px-5 py-6 text-xs text-stone-500 sm:px-8">
-        <span>VSTEP Writing Lab · Viết tốt hơn mỗi ngày.</span>
+        <span>VSTEP Practice Platform · Luyện viết, luyện nói mỗi ngày.</span>
         <span>Công cụ luyện tập độc lập · Điểm AI mang tính tham khảo.</span>
       </footer>
     </>

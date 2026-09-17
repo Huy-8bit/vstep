@@ -14,6 +14,9 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, IdentityMixin, UpdatedMixin, utcnow
+from app.models.speaking import (  # noqa: F401
+    SpeakingQuestion, SpeakingExamSession, SpeakingAnswer, SpeakingGrading, SpeakingError,
+)
 
 
 class User(IdentityMixin, UpdatedMixin, Base):

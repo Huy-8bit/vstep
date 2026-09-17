@@ -1,6 +1,6 @@
-# VSTEP Writing Lab
+# VSTEP Practice Platform
 
-Ứng dụng luyện VSTEP Writing dành cho người Việt: thi thử hai Task, luyện riêng thư/email hoặc bài luận, lưu nháp, chấm và chữa bài bằng AI, lịch sử và biểu đồ tiến độ. Toàn bộ giao diện và giải thích bằng tiếng Việt; đề và bài viết bằng tiếng Anh.
+Ứng dụng luyện VSTEP Writing và Speaking dành cho người Việt. Speaking gồm thi thử ba phần, luyện từng Part, ghi âm, nhận dạng giọng nói, chữa từng câu và theo dõi tiến độ. Writing gồm: thi thử hai Task, luyện riêng thư/email hoặc bài luận, lưu nháp, chấm và chữa bài bằng AI, lịch sử và biểu đồ tiến độ. Toàn bộ giao diện và giải thích bằng tiếng Việt; đề và bài viết bằng tiếng Anh.
 
 ## Chạy bằng Docker
 
@@ -15,9 +15,9 @@ docker compose up --build
 - Backend: http://localhost:8000
 - Swagger: http://localhost:8000/docs
 
-Backend tự chạy Alembic và nạp **10 đề Task 1 + 10 đề Task 2** khi khởi động. Seed có thể chạy lại an toàn. PostgreSQL lưu dữ liệu trong volume `postgres_data`. `docker compose down` giữ dữ liệu; không dùng `down -v` nếu cần giữ bài viết.
+Backend tự chạy Alembic và nạp **10 đề Task 1 + 10 đề Task 2 + 45 đề Speaking (15 mỗi Part)** khi khởi động. Seed có thể chạy lại an toàn. PostgreSQL lưu dữ liệu trong volume `postgres_data`; audio Speaking nằm trong volume `speaking_audio`. `docker compose down` giữ dữ liệu; không dùng `down -v` nếu cần giữ bài viết.
 
-Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp bài. Chấm AI và sinh đề AI yêu cầu key thật; khi thiếu key, ứng dụng báo **“Chưa cấu hình OpenAI API.”** và giữ bài đã nộp. Không có điểm giả lập trong ứng dụng.
+Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp bài, ghi âm và nghe lại trong Practice. Chấm AI và sinh đề AI yêu cầu key thật; khi thiếu key, ứng dụng báo **“Chưa cấu hình OpenAI API.”** và giữ bài đã nộp. Không có điểm giả lập trong ứng dụng.
 
 ## Cấu hình
 
@@ -28,6 +28,12 @@ Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp
 | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | Thông tin DB dùng trong Docker Compose |
 | `OPENAI_API_KEY` | Key chỉ đọc ở backend; để trống nếu chỉ dùng đề mẫu |
 | `OPENAI_MODEL` | Model hỗ trợ Responses API + Structured Outputs; ví dụ cấu hình `gpt-5.6` |
+| `OPENAI_TRANSCRIBE_MODEL` | Audio Transcriptions, mặc định `gpt-transcribe`; tùy quyền tài khoản |
+| `OPENAI_SPEAKING_AUDIO_MODEL` | Model nhận audio WAV qua Chat Completions; để trống thì chưa chấm phát âm/fluency/tổng điểm |
+| `OPENAI_TTS_MODEL`, `OPENAI_TTS_VOICE` | Đọc câu hỏi tùy chọn; bỏ trống model để dùng giọng trình duyệt |
+| `AUDIO_STORAGE_DIR` | Backend ngoài Docker: `data/audio`; Docker mount `/app/data/audio` |
+| `MAX_SPEAKING_AUDIO_MB`, `MAX_SPEAKING_AUDIO_SECONDS` | Mặc định 20 MB và 360 giây mỗi bản ghi |
+| `PRONUNCIATION_CONFIDENCE_THRESHOLD` | Mặc định 0.75; IPA chỉ khi confidence ≥0.9 |
 | `JWT_SECRET` | Secret ký JWT; thay giá trị phát triển trước khi triển khai production |
 | `JWT_ACCESS_EXPIRE_MINUTES` | Mặc định 15 phút |
 | `JWT_REFRESH_EXPIRE_DAYS` | Mặc định 7 ngày |
@@ -36,11 +42,11 @@ Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp
 
 Trong Compose, `DATABASE_URL` được tạo từ ba biến `POSTGRES_*` để trỏ đúng service `postgres`; URL `localhost` trong `.env` dành cho chạy backend trực tiếp. Nếu password chứa ký tự đặc biệt trong URL, cần URL-encode khi tự cấu hình.
 
-Đặt `OPENAI_API_KEY` và đổi `OPENAI_MODEL` nếu model mẫu không được cấp cho tài khoản của bạn. Sau khi sửa `.env`, chạy `docker compose up -d --force-recreate backend`. API key không có tiền tố `NEXT_PUBLIC_` và không được đưa vào frontend. Bài viết được gửi đến OpenAI sau khi nộp; request dùng `store=False`.
+Đặt `OPENAI_API_KEY` và đổi `OPENAI_MODEL` nếu model mẫu không được cấp cho tài khoản của bạn. Sau khi sửa `.env`, chạy `docker compose up -d --force-recreate backend`. API key không có tiền tố `NEXT_PUBLIC_` và không được đưa vào frontend. Bài viết và audio/transcript đã nộp được gửi đến OpenAI để xử lý; Responses request dùng `store=False`. Xem [cấu hình và luồng Speaking](docs/speaking.md).
 
 ## Chạy để phát triển
 
-Python **3.12+**, Node **22+**, PostgreSQL **16**. Terminal đầu:
+Python **3.12+**, Node **22+**, PostgreSQL **16**, **FFmpeg** trong PATH để xử lý audio. Terminal đầu:
 
 ```sh
 docker compose up -d postgres
@@ -50,6 +56,7 @@ source .venv/bin/activate
 pip install -r requirements-dev.txt
 alembic upgrade head
 python -m app.db.seed
+python -m app.db.speaking_seed
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -106,6 +113,12 @@ docs/              # Ghi chú thiết kế ngắn
 
 **Kết quả được AI ước tính nhằm phục vụ luyện tập và không phải điểm chính thức của kỳ thi VSTEP.**
 
+## Speaking
+
+Mở `/speaking` để bắt đầu. Có Full Test, Part 1/2/3 và Luyện nhanh; lịch sử và tiến độ có nút chuyển Writing/Speaking. Audio và transcript cùng được lưu; lỗi mạng cho phép tải lại bản ghi. Phát âm không được chấm từ transcript. Tổng điểm Speaking là trung bình năm tiêu chí 20%; chỉ có khi đủ dữ liệu audio.
+
+Xem [tài liệu Speaking đầy đủ](docs/speaking.md) cho endpoint, schema, cấu hình OpenAI, lưu trữ, recovery và các giới hạn.
+
 ## API chính
 
 Tất cả dưới `/api/v1`; Swagger mô tả body cụ thể. Auth dùng JWT cookie HttpOnly; frontend tự refresh khi access token hết hạn.
@@ -143,7 +156,7 @@ Integration tests cần PostgreSQL đã migrate + seed. Tests tạo tài khoản
 
 ## Giới hạn MVP
 
-Chạy một backend worker; rate limit đơn giản trong bộ nhớ theo IP/route. Khi scale nhiều worker cần rate limiter dùng shared storage và quota theo tài khoản. Chấm đồng bộ có thể chờ vài phút; nếu provider xử lý xong nhưng kết nối bị đứt trước khi lưu, lần thử lại có thể phát sinh phí. Bộ lọc đề mẫu chỉ có các tổ hợp đã seed; UI báo rõ nếu không có đề khớp. Không có phục hồi mật khẩu, xác minh email hoặc module ngoài Writing.
+Chạy một backend worker; rate limit đơn giản trong bộ nhớ theo IP/route. Khi scale nhiều worker cần rate limiter dùng shared storage và quota theo tài khoản. Chấm đồng bộ có thể chờ vài phút; nếu provider xử lý xong nhưng kết nối bị đứt trước khi lưu, lần thử lại có thể phát sinh phí. Bộ lọc đề mẫu chỉ có các tổ hợp đã seed; UI báo rõ nếu không có đề khớp. Không có phục hồi mật khẩu hoặc xác minh email. Speaking có giới hạn audio, xử lý đồng bộ và đánh giá phát âm phụ thuộc model audio thực sự được cấu hình.
 
 Trước production: HTTPS, secret mạnh, CORS đúng origin, backup PostgreSQL và giới hạn chi phí OpenAI. Bản Compose hiện tại dành cho local, các cổng chỉ bind `127.0.0.1`.
 

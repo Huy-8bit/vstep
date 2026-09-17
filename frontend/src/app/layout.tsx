@@ -4,11 +4,11 @@ import { Shell } from "@/components/shell";
 import "./globals.css";
 export const metadata: Metadata = {
   title: {
-    default: "VSTEP Writing Lab — Luyện viết, tiến bộ mỗi ngày",
-    template: "%s | VSTEP Writing Lab",
+    default: "VSTEP Practice Platform — Luyện viết và nói mỗi ngày",
+    template: "%s | VSTEP Practice Platform",
   },
   description:
-    "Luyện VSTEP Writing với đề thư, bài luận, thi thử 60 phút và nhận phản hồi AI bằng tiếng Việt.",
+    "Luyện VSTEP Writing và Speaking với đề mẫu, thi thử, ghi âm và phản hồi AI bằng tiếng Việt.",
 };
 export default function RootLayout({
   children,

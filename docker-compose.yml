@@ -22,10 +22,20 @@ services:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-vstep}:${POSTGRES_PASSWORD:-vstep_dev}@postgres:5432/${POSTGRES_DB:-vstep}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5.6}
+      OPENAI_TRANSCRIBE_MODEL: ${OPENAI_TRANSCRIBE_MODEL:-gpt-transcribe}
+      OPENAI_SPEAKING_AUDIO_MODEL: ${OPENAI_SPEAKING_AUDIO_MODEL:-}
+      OPENAI_TTS_MODEL: ${OPENAI_TTS_MODEL:-}
+      OPENAI_TTS_VOICE: ${OPENAI_TTS_VOICE:-alloy}
+      AUDIO_STORAGE_DIR: /app/data/audio
+      MAX_SPEAKING_AUDIO_MB: ${MAX_SPEAKING_AUDIO_MB:-20}
+      MAX_SPEAKING_AUDIO_SECONDS: ${MAX_SPEAKING_AUDIO_SECONDS:-360}
+      PRONUNCIATION_CONFIDENCE_THRESHOLD: ${PRONUNCIATION_CONFIDENCE_THRESHOLD:-0.75}
       JWT_SECRET: ${JWT_SECRET:-local-development-secret-change-before-production-2026}
       JWT_ACCESS_EXPIRE_MINUTES: ${JWT_ACCESS_EXPIRE_MINUTES:-15}
       JWT_REFRESH_EXPIRE_DAYS: ${JWT_REFRESH_EXPIRE_DAYS:-7}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+    volumes:
+      - speaking_audio:/app/data/audio
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
@@ -51,3 +61,4 @@ services:
         condition: service_healthy
 volumes:
   postgres_data:
+  speaking_audio:
