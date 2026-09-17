@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/services/api";
 import { categories, criteria, errorTypes, modes } from "@/lib/constants";
 import { DISCLAIMER, score } from "@/lib/utils";
+import { VocabularyProgressPanel } from "@/features/vocabulary/progress";
 import type { ErrorStat, Progress } from "@/types";
 
 function ErrorChart({ items, title }: { items: ErrorStat[]; title: string }) {
@@ -314,6 +315,7 @@ function Dashboard() {
           </div>
         </>
       )}
+      <VocabularyProgressPanel />
       <p className="text-xs leading-6 text-stone-400">{DISCLAIMER}</p>
     </div>
   );

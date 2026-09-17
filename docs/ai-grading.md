@@ -2,7 +2,7 @@
 
 `QuestionGeneratorService` và `WritingGradingService` phụ thuộc `LLMClient`. `OpenAILLMClient` dùng [Responses Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs) thông qua `AsyncOpenAI.responses.parse(text_format=PydanticModel)`. API key chỉ đọc từ backend settings, model đọc từ `OPENAI_MODEL`, không gắn model vào prompt/business logic.
 
-Prompt versions: `QUESTION_GENERATOR_PROMPT_VERSION`, `TASK1_GRADER_PROMPT_VERSION`, `TASK2_GRADER_PROMPT_VERSION`, hiện `1.0.0`. Thay rubric cần tăng version. Generated questions và grading lưu version.
+Writing generator/evidence/calibration/feedback và blueprint/validators hiện ở phiên bản `3.0.0`. Pipeline: evidence → calibration → feedback → Vocabulary Coach → correction. Giai đoạn sau không sửa điểm đã hiệu chỉnh; dữ liệu lịch sử chỉ đổi qua thao tác chấm lại có lưu revision. Chi tiết tại [sinh đề và hiệu chỉnh](vstep-generation.md).
 
 Output được validate bằng Pydantic, kiểm tra đúng task/metadata và trích dẫn lỗi có trong bài gốc. Invalid output retry tối đa một lần; timeout/API lỗi trả lỗi sạch, không xóa bài đã nộp. SDK retry mặc định bị tắt để kiểm soát số lần gọi. Model từ chối hoặc trả incomplete không được coi là bài chấm thành công.
 
@@ -14,6 +14,6 @@ Prompt xem answer/question như dữ liệu, không phải chỉ dẫn; hạn ch
 
 Cache SHA-256 trên đề/yêu cầu/loại, answer, model, version; chỉ reuse trong cùng tài khoản. Advisory lock theo user + hash, cùng row lock attempt, ngăn yêu cầu đồng thời gọi trùng. Usage ghi ở transaction riêng kể cả khi grading rollback. Nếu SDK không trả được usage do lỗi parse/network, token ghi 0 (không xác định), không diễn giải thành không tính phí.
 
-Mức B1/B2/C1 trên result dùng ngưỡng tham khảo riêng kỹ năng Writing (4/6/8), không xác nhận bậc VSTEP tổng thể. Đây là quy ước hiển thị luyện tập, không là rubric chính thức.
+Một Task Writing không có nhãn B1/B2/C1. Chỉ khi chấm đủ Task 1 + Task 2, giao diện có thể hiển thị “Năng lực Writing tham khảo” với ngưỡng sản phẩm 4/6/8,5, luôn kèm nhãn AI ước tính và không phải chứng nhận VSTEP.
 
 Không có key: đề mẫu vẫn dùng được; AI operations trả HTTP 503 `ai_not_configured`. Không tạo feedback giả để thay API thật.

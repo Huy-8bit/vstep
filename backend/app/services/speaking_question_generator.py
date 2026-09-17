@@ -12,6 +12,10 @@ from app.prompts.speaking_part1_generator import SPEAKING_PART1_PROMPT_VERSION
 from app.prompts.speaking_part2_generator import SPEAKING_PART2_PROMPT_VERSION
 from app.prompts.speaking_part3_generator import SPEAKING_PART3_PROMPT_VERSION
 from app.schemas.speaking import SPEAKING_TOPICS, SpeakingQuestionRequest
+from app.validators.quality import validate_quality
+from app.validators.questions import SpeakingQuestionValidator
+from app.vstep_reference.generation_examples import SPEAKING_STYLE_EXAMPLES
+from app.vstep_reference.speaking_blueprints import SPEAKING_BLUEPRINTS
 
 SPEAKING_VERSIONS = {
     1: SPEAKING_PART1_PROMPT_VERSION,
@@ -63,8 +67,12 @@ class SpeakingQuestionGeneratorService:
         query = select(SpeakingQuestion).where(
             SpeakingQuestion.part == request.part, SpeakingQuestion.test_profile == request.test_profile
         )
-        if request.source == "SEED":
-            query = query.where(SpeakingQuestion.source == "SEED")
+        if request.source != "AI":
+            query = query.where(
+                SpeakingQuestion.generation_diagnostics["quality_valid"].as_boolean().is_(True)
+            )
+            if request.source == "SEED":
+                query = query.where(SpeakingQuestion.source == "SEED")
             if request.topic != "random":
                 query = query.where(SpeakingQuestion.topic == request.topic)
             fresh = query.where(SpeakingQuestion.id.not_in(recent_ids))
@@ -98,12 +106,24 @@ class SpeakingQuestionGeneratorService:
             "recent_topic_sets": [q.topic_sets for q in recent_rows if q.part == 1],
             "recent_situations": [q.situation for q in recent_rows if q.part == 2],
             "recent_topics": list(recent_topics),
+            "blueprint": SPEAKING_BLUEPRINTS[request.part],
+            "style_example": SPEAKING_STYLE_EXAMPLES[request.part],
+            "recent_complete_prompts": [
+                " ".join([q.question_text, q.situation or "", *q.options, *q.suggested_ideas])
+                if q.part != 1
+                else " ".join(text for t in q.topic_sets for text in t["questions"])
+                for q in recent_rows
+            ],
         }
         generated = await self.llm.generate_speaking_question(payload, user_id)
+        SpeakingQuestionValidator().validate(generated, payload["recent_complete_prompts"])
+        diagnostics = await validate_quality(self.llm, "SPEAKING", generated.model_dump(), user_id)
+        diagnostics["source_blueprint"] = SPEAKING_BLUEPRINTS[request.part]["id"]
         data = generated.model_dump(exclude={"allow_own_idea"})
         question = SpeakingQuestion(
             **data,
             source="AI",
+            generation_diagnostics=diagnostics,
             fingerprint=speaking_fingerprint(data),
             prompt_version=SPEAKING_VERSIONS[request.part],
         )

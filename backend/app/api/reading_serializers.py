@@ -10,6 +10,7 @@ def reading_question_view(question, number=None):
         "question_type": question.question_type,
         "question_text": question.question_text,
         "options": question.options,
+        "placement": question.placement,
     }
 
 

@@ -8,6 +8,18 @@ from app.schemas.writing_assessment import WritingAnalysis, WritingCalibration, 
 
 class LLMClient(ABC):
     @abstractmethod
+    async def writing_corrections(self, payload: dict, user_id: str): ...
+
+    @abstractmethod
+    async def vocabulary_coach(self, payload: dict, user_id: str): ...
+
+    @abstractmethod
+    async def assess_vocabulary_usage(self, payload: dict, user_id: str): ...
+
+    @abstractmethod
+    async def review_question_quality(self, payload: dict, user_id: str): ...
+
+    @abstractmethod
     async def generate_question(self, payload: dict, user_id: str) -> GeneratedQuestion: ...
 
     @abstractmethod

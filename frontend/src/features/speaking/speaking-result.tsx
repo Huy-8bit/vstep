@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
+import { VocabularyRecommendations } from "@/features/vocabulary/recommendations";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { api, post } from "@/services/api";
@@ -381,6 +382,7 @@ function Result({ id }: { id: string }) {
               ["content", "Nội dung"],
               ["grammar", "Ngữ pháp"],
               ["vocabulary", "Từ vựng"],
+              ["coach", "Từ vựng nên học"],
               ["pronunciation", "Phát âm"],
               ["fluency", "Độ trôi chảy"],
               ["structure", "Mạch lạc"],
@@ -487,6 +489,14 @@ function Result({ id }: { id: string }) {
               ))}
               {!g.vocabulary_suggestions.filter(match).length && <NoItems />}
             </section>
+          </TabsContent>
+          <TabsContent value="coach">
+            <VocabularyRecommendations
+              source={{
+                source_skill: "SPEAKING",
+                source_attempt_id: session.id,
+              }}
+            />
           </TabsContent>
           <TabsContent value="pronunciation">
             <section className="panel space-y-4 p-6">

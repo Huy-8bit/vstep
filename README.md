@@ -185,3 +185,11 @@ Writing phân tích bài gốc trước, tổng hợp số lỗi/cấu trúc b�
 Mở `/speaking/pronunciation` hoặc bấm **Luyện từ này / Luyện câu này** từ kết quả Speaking: nghe mẫu OpenAI TTS → ghi âm → phân tích audio → luyện lại. Mỗi lượt có bản ghi riêng, điểm, ngày luyện và phản hồi; `/speaking/history` và `/speaking/progress` hiển thị lịch sử/tiến bộ. Pronunciation và Fluency chỉ lấy từ audio model; text model chỉ chấm ngữ pháp, từ vựng, mạch lạc. Điểm thiếu bằng chứng là `null`.
 
 Migration mới `e41b6d0a9f22` bổ sung bằng chứng Writing, lịch sử phiên bản, bảng mẫu hiệu chỉnh của giáo viên và bảng lượt luyện phát âm. Docker tự áp dụng khi khởi động; giữ nguyên project name và các volume hiện có. Tên biến audio cũ vẫn được nhận như alias, nhưng nên chuyển `.env` sang các tên trong `.env.example`. Đặt `OPENAI_AUDIO_MODEL=gpt-audio`, `AUDIO_ANALYSIS_ENABLED=true`, `OPENAI_TTS_MODEL=gpt-4o-mini-tts` để bật toàn bộ coach, cùng API key hợp lệ.
+
+## VSTEP reference & Vocabulary Coach
+
+Generator/validator v3 dùng blueprint chung và ngân hàng đã kiểm tra. Writing có stimulus email/letter và luận; từng Task không suy ra bậc. Reading ghép toàn đề 1.900–2.050 từ theo heuristic sản phẩm và có đủ 13 dạng câu.
+
+Trang `/vocabulary` lưu cụm từ từ kết quả Writing/Speaking/Reading, năm dạng ôn chủ động, lịch ôn, mức ghi nhớ, lỗi lặp và tiến độ liên kỹ năng. Gợi ý mới/đặt câu dùng AI; không trả gợi ý trước khi nộp. Migration bổ sung `f729a310c058` giữ dữ liệu lịch sử.
+
+Xem [generation](docs/vstep-generation.md) và [Vocabulary Coach](docs/vocabulary-coach.md).

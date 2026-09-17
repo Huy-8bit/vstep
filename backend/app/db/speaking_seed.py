@@ -8,6 +8,8 @@ from app.db.session import SessionLocal, engine
 from app.models.speaking import SpeakingQuestion
 from app.schemas.speaking import GeneratedSpeakingQuestion
 from app.services.speaking_question_generator import speaking_fingerprint
+from app.validators.questions import SpeakingQuestionValidator
+from app.vstep_reference.speaking_blueprints import SPEAKING_BLUEPRINTS
 
 # Each Part 1 set has two familiar topics and six short questions.
 PART1 = [
@@ -527,11 +529,29 @@ def speaking_seed_data():
 async def seed():
     async with SessionLocal() as db:
         for question in speaking_seed_data():
+            SpeakingQuestionValidator().validate(question)
+            diagnostics = {
+                "generator_version": "3.0.0",
+                "validator_version": "3.0.0",
+                "source_blueprint": SPEAKING_BLUEPRINTS[question.part]["id"],
+                "generation_model": None,
+                "format_valid": True,
+                "quality_valid": True,
+                "quality_method": "authored_synthetic_seed",
+                "validation_notes": ["Original conversational prompts with editorial structure."],
+            }
             data = question.model_dump(exclude={"allow_own_idea"})
             await db.execute(
                 insert(SpeakingQuestion)
-                .values(**data, source="SEED", fingerprint=speaking_fingerprint(data))
-                .on_conflict_do_nothing(index_elements=["fingerprint"])
+                .values(
+                    **data,
+                    source="SEED",
+                    fingerprint=speaking_fingerprint(data),
+                    generation_diagnostics=diagnostics,
+                )
+                .on_conflict_do_update(
+                    index_elements=["fingerprint"], set_={"generation_diagnostics": diagnostics}
+                )
             )
         await db.commit()
     await engine.dispose()

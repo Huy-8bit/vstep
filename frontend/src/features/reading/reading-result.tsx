@@ -6,6 +6,10 @@ import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice, Loading } from "@/components/feedback";
 import { api, post } from "@/services/api";
+import { SuggestionCard } from "@/features/vocabulary/learning-card";
+import { VocabularyRecommendations } from "@/features/vocabulary/recommendations";
+import type { Batch } from "@/features/vocabulary/types";
+import { ReadingPlacement } from "./reading-placement";
 import { ReadingPassage } from "./reading-passage";
 import { draftKey, type Draft } from "./use-reading-autosave";
 import {
@@ -15,7 +19,6 @@ import {
   options,
   questionTypes,
   type ReadingResult as Result,
-  type Vocabulary,
 } from "./types";
 export function ReadingResult({ id }: { id: string }) {
   return (
@@ -38,7 +41,7 @@ function ResultView({ id }: { id: string }) {
   >([]);
   const [term, setTerm] = useState("");
   const [paragraph, setParagraph] = useState("p1");
-  const [vocab, setVocab] = useState<Vocabulary | null>(null);
+  const [vocab, setVocab] = useState<Batch | null>(null);
   const [vocabError, setVocabError] = useState("");
   const [vocabBusy, setVocabBusy] = useState(false);
   const vocabRequest = useRef(0);
@@ -110,8 +113,9 @@ function ResultView({ id }: { id: string }) {
     setVocabBusy(true);
     setVocabError("");
     try {
-      const response = await post<Vocabulary>("/reading/vocabulary/explain", {
-        session_id: id,
+      const response = await post<Batch>("/vocabulary/recommendations", {
+        source_skill: "READING",
+        source_attempt_id: id,
         passage_id: passage.id,
         paragraph_id: paragraph,
         term,
@@ -336,6 +340,7 @@ function ResultView({ id }: { id: string }) {
                 <h3 className="mt-3 text-lg font-semibold leading-8">
                   {question.question_text}
                 </h3>
+                <ReadingPlacement question={question} passage={passage} />
                 <div className="my-5 flex flex-wrap gap-3 text-sm">
                   <span className="rounded-lg border border-stone-200 bg-white px-3 py-2">
                     Bạn chọn:{" "}
@@ -442,22 +447,15 @@ function ResultView({ id }: { id: string }) {
                       : "Giải thích trong ngữ cảnh"}
                   </Button>
                   {vocabError && <ErrorNotice message={vocabError} />}
-                  {vocab && (
-                    <div className="mt-5 space-y-3 rounded-lg bg-teal-50 p-4 text-sm leading-7">
-                      <p className="font-bold text-teal-900">
-                        {vocab.term}{" "}
-                        <span className="font-normal text-stone-500">
-                          ({vocab.part_of_speech})
-                        </span>
-                      </p>
-                      <p>{vocab.meaning_vi}</p>
-                      <p>{vocab.meaning_in_context}</p>
-                      <p className="italic">{vocab.example}</p>
-                      <p className="text-xs">
-                        Từ gần nghĩa:{" "}
-                        {vocab.synonyms.join(", ") ||
-                          "Không có từ thay thế phù hợp trong ngữ cảnh này."}
-                      </p>
+                  {vocab?.batch_id && (
+                    <div className="mt-5">
+                      {vocab.items.map((item) => (
+                        <SuggestionCard
+                          key={`${vocab.batch_id}:${item.index}`}
+                          batchId={vocab.batch_id!}
+                          item={item}
+                        />
+                      ))}
                     </div>
                   )}
                 </section>
@@ -470,6 +468,16 @@ function ResultView({ id }: { id: string }) {
           </p>
         )}
       </section>
+      {passage && (
+        <VocabularyRecommendations
+          key={passage.id}
+          source={{
+            source_skill: "READING",
+            source_attempt_id: id,
+            passage_id: passage.id,
+          }}
+        />
+      )}
       <p className="text-xs leading-6 text-stone-500">
         {disclaimer} Thời gian xem từng câu được ước lượng từ lúc cửa sổ đang
         hoạt động, không phải phép đo chính xác thời gian suy nghĩ.

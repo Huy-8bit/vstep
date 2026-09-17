@@ -30,13 +30,30 @@ export function QuestionCard({ question }: { question: Question }) {
           VSTEP.3–5 · {question.source === "AI" ? "Đề AI" : "Đề mẫu"}
         </span>
       </div>
+      <p lang="en" className="mb-4 text-sm italic text-stone-500">
+        You should spend about {question.task_type === 1 ? 20 : 40} minutes on
+        this task.
+      </p>
       <p
         lang="en"
         className="font-serif text-xl leading-relaxed text-stone-800"
       >
         {question.instruction}
       </p>
-      {question.requirements.length > 0 && (
+      {question.stimulus && (
+        <blockquote
+          lang="en"
+          className="my-6 whitespace-pre-wrap rounded-xl border border-stone-200 bg-stone-50 p-5 font-serif text-lg leading-8 text-stone-700"
+        >
+          {question.stimulus}
+        </blockquote>
+      )}
+      {question.response_instruction && (
+        <p lang="en" className="mt-5 text-[15px] leading-7 text-stone-800">
+          {question.response_instruction}
+        </p>
+      )}
+      {!question.stimulus && question.requirements.length > 0 && (
         <ul
           lang="en"
           className="mt-5 list-disc space-y-3 pl-5 text-[15px] leading-7 text-stone-600"
@@ -57,7 +74,7 @@ function Setup({ task }: { task: 1 | 2 }) {
   const router = useRouter();
   const [questionType, setQuestionType] = useState("random");
   const [topic, setTopic] = useState("random");
-  const [source, setSource] = useState<"SEED" | "AI">("SEED");
+  const [source, setSource] = useState<"BANK" | "AI">("BANK");
   const [timed, setTimed] = useState(false);
   const [question, setQuestion] = useState<Question | null>(null);
   const [seen, setSeen] = useState<string[]>([]);
@@ -123,11 +140,11 @@ function Setup({ task }: { task: 1 | 2 }) {
                 disabled={!!busy}
                 value={source}
                 onChange={(e) => {
-                  setSource(e.target.value as "SEED" | "AI");
+                  setSource(e.target.value as "BANK" | "AI");
                   setQuestion(null);
                 }}
               >
-                <option value="SEED">Bộ đề mẫu có sẵn</option>
+                <option value="BANK">Ngân hàng đề đã kiểm tra</option>
                 <option value="AI">Sinh đề mới bằng AI</option>
               </select>
             </div>
@@ -260,7 +277,7 @@ export function PracticeSetup({ task }: { task: 1 | 2 }) {
 }
 export function FullTestStart() {
   const router = useRouter();
-  const [source, setSource] = useState("SEED");
+  const [source, setSource] = useState("BANK");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   async function start() {
@@ -313,7 +330,7 @@ export function FullTestStart() {
             onChange={(e) => setSource(e.target.value)}
             disabled={busy}
           >
-            <option value="SEED">Đề mẫu ngẫu nhiên</option>
+            <option value="BANK">Ngân hàng đề đã kiểm tra</option>
             <option value="AI">Sinh cả hai đề bằng AI</option>
           </select>
           <Button disabled={busy} onClick={start}>

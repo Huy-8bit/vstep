@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, model_validator
 
 from app.common.test_profiles import TestProfile
 
@@ -39,6 +39,9 @@ TOPICS = [
     "culture",
     "city_life",
     "crime",
+    "community",
+    "leisure",
+    "public_services",
     "shopping",
     "sports",
     "young_people",
@@ -57,7 +60,7 @@ class QuestionRequest(StrictModel):
     question_type: str = "random"
     topic: str = "random"
     test_profile: TestProfile = "VSTEP_3_5"
-    source: Literal["AI", "SEED"] = "SEED"
+    source: Literal["AI", "SEED", "BANK"] = "BANK"
     exclude_ids: list[str] = Field(default_factory=list, max_length=30)
 
     @model_validator(mode="after")
@@ -77,7 +80,15 @@ class GeneratedQuestion(StrictModel):
     topic: str
     test_profile: TestProfile = "VSTEP_3_5"
     instruction: str = Field(min_length=30, max_length=5000)
-    requirements: list[str]
+    stimulus: str = Field(min_length=100, max_length=1800)
+    response_instruction: str = Field(min_length=20, max_length=1200)
+    genre: Literal["email", "letter", "essay"]
+    register: Literal["informal", "semi-formal", "formal"] = Field(...)
+    recipient_relationship: str
+    purpose: str
+    requirements: list[str] = Field(
+        validation_alias=AliasChoices("communicative_requirements", "requirements")
+    )
     minimum_words: Literal[120, 250]
 
     @model_validator(mode="after")
@@ -87,8 +98,8 @@ class GeneratedQuestion(StrictModel):
             raise ValueError("Invalid VSTEP question metadata")
         if self.minimum_words != (120 if self.task == 1 else 250):
             raise ValueError("Invalid minimum words")
-        if self.task == 1 and len(self.requirements) != 3:
-            raise ValueError("Task 1 must include three requirements")
+        if self.task == 1 and not 2 <= len(self.requirements) <= 4:
+            raise ValueError("Task 1 must include two to four requirements")
         return self
 
 

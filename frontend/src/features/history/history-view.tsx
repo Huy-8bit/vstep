@@ -58,6 +58,11 @@ function History() {
         </Button>
       </div>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <p className="mb-5 text-sm">
+          <Link href="/vocabulary" className="font-semibold text-teal-700">
+            Từ vựng đã lưu & lịch sử ôn →
+          </Link>
+        </p>
         <div className="flex items-center gap-2 text-sm font-semibold">
           <FileClock size={17} className="text-teal-700" />
           {data?.total ?? 0} bài viết

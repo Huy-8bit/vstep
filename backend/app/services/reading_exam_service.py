@@ -8,6 +8,7 @@ from app.models.reading import ReadingAnswer, ReadingExamSession, ReadingPassage
 from app.services.reading_blueprint import READING_BLUEPRINT
 from app.services.reading_question_generator import ReadingQuestionGeneratorService
 from app.services.reading_scoring_service import ReadingScoringService
+from app.vstep_reference.specification import OFFICIAL_FORMAT
 
 
 async def owned_reading_session(db, session_id, user_id, lock=False):
@@ -30,12 +31,21 @@ class ReadingExamService:
         selected = await ReadingQuestionGeneratorService(self.db, self.llm).select(data, user_id)
         now = utcnow()
         selected_topics = {p.topic for p, _ in selected}
-        minutes = 60 if data.mode == "FULL_TEST" else 15 if data.mode == "PASSAGE_PRACTICE" else 8
+        minutes = (
+            OFFICIAL_FORMAT["reading"]["minutes"]
+            if data.mode == "FULL_TEST"
+            else 15
+            if data.mode == "PASSAGE_PRACTICE"
+            else 8
+        )
         session = ReadingExamSession(
             user_id=user_id,
             mode=data.mode,
             test_profile=data.test_profile,
             blueprint_version=READING_BLUEPRINT.version if data.mode == "FULL_TEST" else None,
+            blueprint_diagnostics=READING_BLUEPRINT.diagnostics(list({p.id: p for p, _ in selected}.values()))
+            if data.mode == "FULL_TEST"
+            else {},
             topic=next(iter(selected_topics)) if len(selected_topics) == 1 else "random",
             started_at=now,
             expires_at=now + timedelta(minutes=minutes) if data.mode == "FULL_TEST" or data.timed else None,

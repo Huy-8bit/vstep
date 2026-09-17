@@ -82,6 +82,16 @@ async def calibrate_attempt(attempt_id: str, db: DB, user: CurrentUser, upgrade:
     return await WritingGradingService(db, get_llm()).calibrate(attempt_id, user.id, upgrade)
 
 
+@router.post("/attempts/{attempt_id}/feedback")
+async def prepare_feedback(attempt_id: str, db: DB, user: CurrentUser, upgrade: bool = False):
+    return await WritingGradingService(db, get_llm()).prepare_feedback(attempt_id, user.id, upgrade)
+
+
+@router.post("/attempts/{attempt_id}/vocabulary")
+async def prepare_vocabulary(attempt_id: str, db: DB, user: CurrentUser, upgrade: bool = False):
+    return await WritingGradingService(db, get_llm()).prepare_vocabulary(attempt_id, user.id, upgrade)
+
+
 @router.post("/attempts/{attempt_id}/regrade")
 async def regrade_attempt(attempt_id: str, db: DB, user: CurrentUser):
     return attempt_view(await WritingGradingService(db, get_llm()).grade(attempt_id, user.id, upgrade=True))

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { ErrorNotice, Loading } from "@/components/feedback";
 import { api } from "@/services/api";
+import { ReadingPlacement } from "./reading-placement";
 import { ReadingPassage } from "./reading-passage";
 import { useReadingAutosave } from "./use-reading-autosave";
 import { duration, options, questionTypes, type ReadingSession } from "./types";
@@ -65,7 +66,7 @@ function Workspace({ session }: { session: ReadingSession }) {
   const [clockOffset] = useState(
     () => Date.parse(session.server_now) - Date.now(),
   );
-  const [now, setNow] = useState(Date.now() + clockOffset);
+  const [now, setNow] = useState(() => Date.now() + clockOffset);
   const submitLock = useRef(false);
   const expiredRetry = useRef(0);
   const questionsRoot = useRef<HTMLDivElement>(null);
@@ -318,6 +319,7 @@ function Workspace({ session }: { session: ReadingSession }) {
               <span className="mr-2 text-teal-800">{index + 1}.</span>
               {question.question_text}
             </legend>
+            <ReadingPlacement question={question} passage={passage} />
             <div className="space-y-3">
               {options.map((letter) => (
                 <label

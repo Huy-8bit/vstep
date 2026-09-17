@@ -25,6 +25,7 @@ class SpeakingQuestion(IdentityMixin, Base):
     source: Mapped[str] = mapped_column(String(10), default="SEED")
     fingerprint: Mapped[str] = mapped_column(String(64), unique=True)
     prompt_version: Mapped[str | None] = mapped_column(String(20))
+    generation_diagnostics: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
 
 
 class SpeakingExamSession(IdentityMixin, Base):

@@ -119,7 +119,20 @@ def speaking_session_view(session):
             )
         },
         "server_now": utcnow(),
-        "suggested_duration_seconds": 720 if session.mode == "FULL_TEST" else None,
+        "suggested_duration_seconds": sum(
+            (
+                settings.speaking_part1_seconds,
+                settings.speaking_part2_seconds,
+                settings.speaking_part3_seconds,
+            )
+        )
+        if session.mode == "FULL_TEST"
+        else None,
+        "part_timings": {
+            "1": settings.speaking_part1_seconds,
+            "2": settings.speaking_part2_seconds,
+            "3": settings.speaking_part3_seconds,
+        },
         "total_questions": len(session.question_set),
         "current_question": session.question_set[current] if current < len(session.question_set) else None,
         "visible_questions": visible,

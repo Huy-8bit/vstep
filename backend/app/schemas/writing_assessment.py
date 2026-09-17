@@ -9,8 +9,9 @@ from app.schemas.writing import (
     StrictModel,
     VocabularySuggestion,
 )
+from app.vstep_reference.scoring_reference import WRITING_CRITERIA
 
-CRITERIA = ("task_fulfillment", "organization", "vocabulary", "grammar")
+CRITERIA = WRITING_CRITERIA
 
 
 class WritingEvidence(StrictModel):
@@ -96,6 +97,9 @@ class WritingFeedback(StrictModel):
     structure_feedback: list[Improvement]
     task_fulfillment_feedback: list[Improvement]
     vocabulary_suggestions: list[VocabularySuggestion]
+
+
+class WritingCorrections(StrictModel):
     sentence_feedback: list[SentenceFeedback]
     corrected_version: str
     improved_b2_version: str

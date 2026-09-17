@@ -45,7 +45,10 @@ export const questionTypes: Record<string, string> = {
   negative_detail: "Negative Detail / Except",
   sentence_meaning: "Sentence Meaning",
   organization: "Organization",
-  tone: "Tone / Attitude",
+  tone: "Tone",
+  attitude: "Author’s Attitude",
+  sentence_insertion: "Sentence Insertion",
+  paragraph_completion: "Paragraph / Passage Completion",
 };
 export const topics: Record<string, string> = {
   random: "Chủ đề ngẫu nhiên",
@@ -72,6 +75,11 @@ export type ReadingQuestion = {
   question_type: string;
   question_text: string;
   options: Record<Option, string>;
+  placement: {
+    paragraph_id: string;
+    sentence_to_insert: string | null;
+    positions: { label: Option; after_text: string }[];
+  } | null;
 };
 export type ReadingPassage = {
   id: string;

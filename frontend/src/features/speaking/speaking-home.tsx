@@ -30,7 +30,7 @@ export function SpeakingHome({
 function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
   const router = useRouter();
   const [mode, setMode] = useState<SpeakingMode>(initialMode);
-  const [source, setSource] = useState("SEED");
+  const [source, setSource] = useState("BANK");
   const [topic, setTopic] = useState("random");
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
@@ -166,7 +166,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
                   setPreview(null);
                 }}
               >
-                <option value="SEED">Đề mẫu có sẵn</option>
+                <option value="BANK">Ngân hàng đề đã kiểm tra</option>
                 <option value="AI">Sinh đề với AI</option>
               </select>
             </label>
@@ -189,7 +189,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
               </select>
             </label>
           </div>
-          {source === "SEED" && (
+          {source === "BANK" && (
             <p className="mt-3 text-xs leading-5 text-stone-500">
               45 đề mẫu VSTEP.3–5. Chọn chủ đề ngẫu nhiên để dùng toàn bộ ngân
               hàng đề.

@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
-from app.api.routes import auth, progress, pronunciation, reading, speaking, writing
+from app.api.routes import auth, progress, pronunciation, reading, speaking, vocabulary, writing
 from app.common.errors import AppError
 from app.core.config import settings
 from app.db.session import SessionLocal, engine
@@ -73,6 +73,10 @@ async def request_guards(request: Request, call_next):
                 "/explain",
                 "/regrade",
                 "/calibrate",
+                "/feedback",
+                "/vocabulary",
+                "/recommendations",
+                "/answer",
             )
         ):
             now = time.monotonic()
@@ -143,5 +147,6 @@ for router in (
     speaking.router,
     pronunciation.router,
     reading.router,
+    vocabulary.router,
 ):
     app.include_router(router, prefix="/api/v1")

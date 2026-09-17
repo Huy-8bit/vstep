@@ -10,6 +10,12 @@ export type Question = {
   test_profile: TestProfile;
   instruction: string;
   requirements: string[];
+  stimulus: string | null;
+  response_instruction: string | null;
+  genre: string | null;
+  register: string | null;
+  recipient_relationship: string | null;
+  purpose: string | null;
   minimum_words: number;
   source: "SEED" | "AI";
 };
@@ -57,6 +63,7 @@ export type Grading = WritingAssessmentMetadata & {
   improved_b2_version: string;
   ai_model: string;
   prompt_version: string;
+  current_grader_version: string;
 };
 export type Attempt = {
   id: string;
@@ -84,6 +91,7 @@ export type Exam = {
   status: string;
   server_now: string;
   overall_score: number | null;
+  writing_reference_level: string | null;
   attempts: Attempt[];
 };
 export type AttemptDetail = Attempt & { exam: Exam };

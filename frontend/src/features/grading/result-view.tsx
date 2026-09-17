@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
+import { VocabularyRecommendations } from "@/features/vocabulary/recommendations";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { QuestionCard } from "@/features/writing/practice-setup";
@@ -110,7 +111,15 @@ function ErrorList({ errors }: { errors: WritingError[] }) {
   );
 }
 
-function Feedback({ grading, answer }: { grading: Grading; answer: string }) {
+function Feedback({
+  grading,
+  answer,
+  attemptId,
+}: {
+  grading: Grading;
+  answer: string;
+  attemptId: string;
+}) {
   const [showAll, setShowAll] = useState(false);
   return (
     <Tabs defaultValue="overview">
@@ -119,6 +128,7 @@ function Feedback({ grading, answer }: { grading: Grading; answer: string }) {
           ["overview", "Tổng quan"],
           ["grammar", "Ngữ pháp"],
           ["vocabulary", "Từ vựng"],
+          ["coach", "Từ vựng nên học"],
           ["sentences", "Chữa từng câu"],
           ["corrected", "Bài đã sửa"],
           ["improved", "Bài tham khảo B2"],
@@ -250,6 +260,11 @@ function Feedback({ grading, answer }: { grading: Grading; answer: string }) {
               e.category,
             ),
           )}
+        />
+      </TabsContent>
+      <TabsContent value="coach">
+        <VocabularyRecommendations
+          source={{ source_skill: "WRITING", source_attempt_id: attemptId }}
         />
       </TabsContent>
       <TabsContent value="sentences">
@@ -393,7 +408,11 @@ function Result({ id }: { id: string }) {
               setStage("Đang rà soát mức điểm và bằng chứng");
               await post(`/attempts/${attempt.id}/calibrate${suffix}`);
             }
-            setStage("Đã chốt điểm · Đang viết hướng dẫn sửa bài");
+            setStage("Đã chốt điểm · Đang viết phản hồi học tập");
+            await post(`/attempts/${attempt.id}/feedback${suffix}`);
+            setStage("Đang chọn cụm từ hữu ích từ bài viết");
+            await post(`/attempts/${attempt.id}/vocabulary${suffix}`);
+            setStage("Đang sửa câu và chuẩn bị bài tham khảo");
             await post(
               `/attempts/${attempt.id}/${upgrade ? "regrade" : "grade"}`,
             );
@@ -452,15 +471,6 @@ function Result({ id }: { id: string }) {
       </EmptyState>
     );
   const g = data.grading;
-  const level = g
-    ? g.scores.overall >= 8
-      ? "C1"
-      : g.scores.overall >= 6
-        ? "B2"
-        : g.scores.overall >= 4
-          ? "B1"
-          : "Dưới B1"
-    : "";
   return (
     <div className="space-y-7">
       <div>
@@ -504,6 +514,13 @@ function Result({ id }: { id: string }) {
                 : `${score(data.exam.overall_score)} / 10`}
             </p>
           </div>
+          {data.exam.writing_reference_level && (
+            <p className="max-w-sm text-xs leading-6 text-stone-500">
+              Năng lực Writing tham khảo:{" "}
+              <strong>{data.exam.writing_reference_level}</strong>. Điểm AI ước
+              tính, không phải chứng nhận VSTEP.
+            </p>
+          )}
           <div className="flex gap-3">
             {data.exam.attempts.map((a) => (
               <Button
@@ -563,12 +580,9 @@ function Result({ id }: { id: string }) {
                   / 10
                 </span>
               </p>
-              <span className="rounded-md bg-white/10 px-3 py-1.5 text-xs">
-                Mức năng lực AI ước tính: {level}
-              </span>
-              <p className="mt-4 text-[11px] leading-5 text-teal-100/70">
-                Ước lượng riêng kỹ năng viết, không dùng để xác nhận bậc VSTEP
-                tổng thể.
+              <p className="mt-4 text-xs leading-6 text-teal-100">
+                Đây là điểm luyện tập cho nhiệm vụ này, không phải kết quả xác
+                định bậc VSTEP.
               </p>
             </div>
             <div className="panel p-6 sm:p-7">
@@ -613,7 +627,7 @@ function Result({ id }: { id: string }) {
                 Hiệu chỉnh {g.calibration_prompt_version || "—"}
               </p>
             </div>
-            {g.grader_version !== "2.0.0" && (
+            {g.grader_version !== g.current_grader_version && (
               <Button
                 variant="outline"
                 disabled={grading}
@@ -628,7 +642,12 @@ function Result({ id }: { id: string }) {
             key={`${data.id}:${g.grader_version}`}
             attemptId={data.id}
           />
-          <Feedback key={data.id} grading={g} answer={data.answer} />
+          <Feedback
+            key={data.id}
+            grading={g}
+            answer={data.answer}
+            attemptId={data.id}
+          />
         </>
       ) : !grading && !error ? (
         <Button onClick={() => grade(data)}>

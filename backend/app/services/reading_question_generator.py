@@ -12,6 +12,9 @@ from app.models.reading import ReadingExamSession, ReadingPassage, ReadingQuesti
 from app.prompts.reading_question_generator import READING_GENERATOR_PROMPT_VERSION
 from app.schemas.reading import READING_TOPICS, ReadingGenerateRequest
 from app.services.reading_blueprint import READING_BLUEPRINT
+from app.validators.quality import ReadingQuestionQualityValidator
+from app.validators.questions import reject_near_duplicate
+from app.vstep_reference.reading_blueprints import READING_TAXONOMY
 
 
 def passage_from_generated(data, source="AI"):
@@ -28,6 +31,16 @@ def passage_from_generated(data, source="AI"):
         fingerprint=hashlib.sha256(content.strip().casefold().encode()).hexdigest(),
         prompt_version=READING_GENERATOR_PROMPT_VERSION,
         vocabulary_cache={},
+        generation_diagnostics={
+            "generator_version": "3.0.0",
+            "validator_version": "3.0.0",
+            "generation_model": None,
+            "format_valid": True,
+            "quality_valid": source == "SEED",
+            "quality_method": "authored_synthetic_seed" if source == "SEED" else "pending",
+            "source_blueprint": "reading_3.0.0",
+            "validation_notes": [],
+        },
     )
     passage.questions = [
         ReadingQuestion(**q.model_dump(), test_profile=data.test_profile) for q in data.questions
@@ -40,7 +53,10 @@ class ReadingQuestionGeneratorService:
         self.db, self.llm = db, llm
 
     async def bank(self, topic="random"):
-        query = select(ReadingPassage).where(ReadingPassage.test_profile == VSTEP_3_5)
+        query = select(ReadingPassage).where(
+            ReadingPassage.test_profile == VSTEP_3_5,
+            ReadingPassage.generation_diagnostics["quality_valid"].as_boolean().is_(True),
+        )
         if topic != "random":
             query = query.where(ReadingPassage.topic == topic)
         return list(await self.db.scalars(query))
@@ -57,7 +73,7 @@ class ReadingQuestionGeneratorService:
 
     async def generate(self, request: ReadingGenerateRequest, user_id, *, slot=None, plan=None):
         # Only this service chooses internal item targets. Public requests never carry proficiency levels.
-        bank = await self.ordered_bank(request.topic, user_id)
+        bank = await self.ordered_bank("random" if request.mode == "FULL_TEST" else request.topic, user_id)
         if request.mode == "FULL_TEST":
             plan = plan if plan is not None else READING_BLUEPRINT.select(bank)
             if slot is None:
@@ -88,12 +104,45 @@ class ReadingQuestionGeneratorService:
         )[:20]
         payload["internal_difficulty_band"] = band
         payload["generation_context"] = generation_context
-        if request.topic == "random":
+        payload["taxonomy"] = READING_TAXONOMY
+        if request.topic == "random" or request.mode == "FULL_TEST":
             payload["topic"] = random.choice(
                 [t for t in READING_TOPICS if t not in payload["recent_topics"]] or READING_TOPICS
             )
         generated = await self.llm.generate_reading(payload, user_id)
+        reject_near_duplicate(" ".join(p.text for p in generated.paragraphs), [p.content for p in bank[:30]])
+        diagnostics = await ReadingQuestionQualityValidator().validate(self.llm, generated, user_id)
+        diagnostics["source_blueprint"] = (
+            "reading_full_3.0.0" if request.mode == "FULL_TEST" else "reading_practice_3.0.0"
+        )
         passage = passage_from_generated(generated)
+        passage.generation_diagnostics = diagnostics
+        if request.mode == "FULL_TEST":
+            if not READING_BLUEPRINT.accepts(passage, slot):
+                raise AppError(
+                    502,
+                    "Bài đọc chưa phù hợp vị trí trong đề; chưa lưu vào ngân hàng.",
+                    "reading_slot_invalid",
+                )
+            lower, upper = generation_context["passage_word_range"]
+            if not lower <= passage.word_count <= upper:
+                raise AppError(
+                    502,
+                    "Bài đọc chưa khớp tổng độ dài của đề; chưa lưu vào ngân hàng.",
+                    "reading_word_budget",
+                )
+            candidate_plan = list(plan)
+            candidate_plan[slot.position - 1] = passage
+            # Pending ORM object needs a stable identity for global uniqueness checks.
+            from uuid import uuid4
+
+            passage.id = str(uuid4())
+            if all(candidate_plan) and not READING_BLUEPRINT.complete(candidate_plan):
+                raise AppError(
+                    502,
+                    "Bộ đề chưa cân bằng số từ, chủ đề hoặc dạng câu; chưa lưu bài vừa sinh.",
+                    "reading_global_balance",
+                )
         self.db.add(passage)
         try:
             await self.db.commit()
@@ -103,7 +152,7 @@ class ReadingQuestionGeneratorService:
         return passage
 
     async def select(self, data, user_id):
-        bank = await self.ordered_bank(data.topic, user_id)
+        bank = await self.ordered_bank("random" if data.mode == "FULL_TEST" else data.topic, user_id)
         if data.mode == "FULL_TEST":
             plan = READING_BLUEPRINT.select(bank)
             missing = [
@@ -117,15 +166,19 @@ class ReadingQuestionGeneratorService:
                 )
             for slot, i in missing:
                 plan[i] = await self.generate(
-                    ReadingGenerateRequest(
-                        mode="FULL_TEST", test_profile=data.test_profile, topic=data.topic
-                    ),
+                    ReadingGenerateRequest(mode="FULL_TEST", test_profile=data.test_profile, topic="random"),
                     user_id,
                     slot=slot,
                     plan=plan,
                 )
                 if not READING_BLUEPRINT.accepts(plan[i], slot):
                     raise AppError(502, "Đề AI chưa đáp ứng cấu trúc bài thi Reading. Hãy tạo lại.")
+            if not READING_BLUEPRINT.complete(plan):
+                raise AppError(
+                    409,
+                    "Ngân hàng chưa ghép được đề có 1900–2050 từ và đủ độ đa dạng. Hãy bổ sung đề hoặc chọn chủ đề ngẫu nhiên.",
+                    "reading_global_balance",
+                )
             return [(p, q) for p in plan for q in p.questions]
         if data.passage_id:
             bank = [p for p in bank if p.id == data.passage_id]

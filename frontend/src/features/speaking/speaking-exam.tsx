@@ -1,4 +1,5 @@
 "use client";
+import { IdeaMap } from "./idea-map";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -34,7 +35,7 @@ export function SpeakingExam({ id }: { id: string }) {
 function Exam({ id }: { id: string }) {
   const [session, setSession] = useState<SpeakingSession | null>(null);
   const [error, setError] = useState("");
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   const router = useRouter();
   const load = useCallback(async () => {
     try {
@@ -404,6 +405,13 @@ function RecordingQuestion({
           <h1 className="mt-4 text-2xl font-semibold leading-relaxed sm:text-3xl">
             {question.question_text}
           </h1>
+          <p className="mt-3 text-xs text-stone-500">
+            Thời lượng tham khảo cho Part {question.part}:{" "}
+            {Math.round(
+              (session.part_timings?.[String(question.part)] || 0) / 60,
+            )}{" "}
+            phút (thiết lập của ứng dụng).
+          </p>
           {!!question.options.length && (
             <div className="mt-7 grid gap-3 sm:grid-cols-3">
               {question.options.map((option, i) => (
@@ -421,20 +429,10 @@ function RecordingQuestion({
           )}
           {!!question.suggested_ideas.length && (
             <div className="mt-6">
-              <p className="mb-3 text-xs font-semibold text-stone-500">
-                SUGGESTED IDEAS
-              </p>
-              <ul className="grid gap-3 sm:grid-cols-2">
-                {[...question.suggested_ideas, "Your own idea"].map((idea) => (
-                  <li
-                    key={idea}
-                    className="flex items-center gap-3 rounded-xl bg-stone-50 px-4 py-3 text-sm"
-                  >
-                    <span className="size-1.5 shrink-0 rounded-full bg-teal-600" />
-                    {idea}
-                  </li>
-                ))}
-              </ul>
+              <IdeaMap
+                topic={question.question_text}
+                ideas={question.suggested_ideas}
+              />
               <p className="mt-4 text-xs text-stone-500">
                 Câu hỏi follow-up xuất hiện sau khi bạn hoàn thành bài nói
                 chính.

@@ -15,6 +15,11 @@ class WritingGradingRevision(IdentityMixin, Base):
 
 class WritingCalibrationSample(IdentityMixin, Base):
     __tablename__ = "writing_calibration_samples"
+    question_id: Mapped[str | None] = mapped_column(
+        ForeignKey("writing_questions.id", ondelete="SET NULL", name="fk_writing_calibration_question")
+    )
+    task_type: Mapped[int | None] = mapped_column(Integer)
+    notes: Mapped[str | None] = mapped_column(Text)
     question: Mapped[str] = mapped_column(Text)
     answer: Mapped[str] = mapped_column(Text)
     human_task_score: Mapped[float | None] = mapped_column(Float)

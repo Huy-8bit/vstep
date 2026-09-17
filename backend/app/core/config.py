@@ -16,6 +16,10 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("OPENAI_AUDIO_MODEL", "OPENAI_SPEAKING_AUDIO_MODEL"),
     )
     audio_analysis_enabled: bool = True
+    speaking_part1_seconds: int = Field(default=180, ge=60, le=600)
+    speaking_part2_seconds: int = Field(default=240, ge=60, le=600)
+    speaking_part3_seconds: int = Field(default=300, ge=60, le=900)
+    vocabulary_review_days: str = "1,3,7,14,30"
     openai_tts_model: str = "gpt-4o-mini-tts"
     openai_tts_voice: str = "alloy"
     audio_storage_dir: str = "data/audio"
@@ -39,6 +43,14 @@ class Settings(BaseSettings):
     )
     openai_grading_temperature: float | None = Field(default=None, ge=0, le=0.3)
     writing_calibration_admin_emails: str = ""
+
+    @field_validator("vocabulary_review_days")
+    @classmethod
+    def validate_review_schedule(cls, value):
+        days = [int(v.strip()) for v in value.split(",")]
+        if not days or any(d < 1 or d > 365 for d in days) or days != sorted(set(days)):
+            raise ValueError("Vocabulary review days must be ascending distinct days between 1 and 365")
+        return value
 
     @field_validator("openai_grading_temperature", mode="before")
     @classmethod

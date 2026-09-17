@@ -37,7 +37,7 @@ def validate_analysis(result: WritingAnalysis, payload):
             raise ValueError("Error does not quote the corresponding original sentence")
 
 
-class WritingAnalysisService:
+class WritingEvidenceAnalysisService:
     def __init__(self, llm):
         self.llm = llm
 
@@ -83,3 +83,6 @@ class WritingAnalysisService:
                 "note_vi": "Số lỗi/cấu trúc được tổng hợp từ phân tích AI đã đối chiếu trích dẫn. Mật độ tính trên 100 từ; không phải bộ dò lỗi hoàn hảo hay công thức trừ điểm. Số câu có thể gồm lời chào/kết thư.",
             },
         }
+
+
+WritingAnalysisService = WritingEvidenceAnalysisService

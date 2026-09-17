@@ -10,6 +10,7 @@ from app.repositories.writing import owned_attempt, owned_exam
 from app.schemas.api import AnswerUpdate, ExamCreate, ExamSubmit
 from app.schemas.writing import QuestionRequest
 from app.services.question_generator import QuestionGeneratorService
+from app.vstep_reference.specification import OFFICIAL_FORMAT, SIMULATOR_HEURISTICS
 
 
 class ExamService:
@@ -26,7 +27,9 @@ class ExamService:
                     select(WritingQuestion).where(WritingQuestion.id.in_(data.question_ids))
                 )
             )
-            if sorted(q.task_type for q in questions) != tasks:
+            if sorted(q.task_type for q in questions) != tasks or any(
+                not q.generation_diagnostics.get("quality_valid") for q in questions
+            ):
                 raise AppError(422, "Đề đã chọn không phù hợp với chế độ luyện tập.")
         else:
             for task in tasks:
@@ -36,7 +39,11 @@ class ExamService:
                     )
                 )
         now = utcnow()
-        minutes = 60 if data.mode == "FULL_TEST" else (20 if tasks[0] == 1 else 40)
+        minutes = (
+            OFFICIAL_FORMAT["writing"]["minutes"]
+            if data.mode == "FULL_TEST"
+            else SIMULATOR_HEURISTICS["writing_task_minutes"][tasks[0]]
+        )
         exam = ExamSession(
             user_id=user_id,
             mode=data.mode,

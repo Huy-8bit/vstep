@@ -3,8 +3,10 @@ import asyncio
 from sqlalchemy.dialects.postgresql import insert
 
 from app.db.session import SessionLocal, engine
+from app.db.writing_reference_seed import seed_diagnostics, seed_questions
 from app.models import WritingQuestion
 from app.services.question_generator import question_fingerprint
+from app.validators.questions import WritingQuestionValidator
 
 # Original practice material, not reproduced official exam papers.
 TASK1 = [
@@ -184,6 +186,21 @@ async def seed():
                     .values(**values)
                     .on_conflict_do_nothing(index_elements=["fingerprint"])
                 )
+        for question in seed_questions():
+            WritingQuestionValidator().validate(question)
+            values = question.model_dump(exclude={"task"})
+            await db.execute(
+                insert(WritingQuestion)
+                .values(
+                    task_type=question.task,
+                    **values,
+                    source="SEED",
+                    fingerprint=question_fingerprint(question.instruction + " " + question.stimulus),
+                    prompt_version="3.0.0",
+                    generation_diagnostics=seed_diagnostics(question.task),
+                )
+                .on_conflict_do_nothing(index_elements=["fingerprint"])
+            )
         await db.commit()
     await engine.dispose()
 

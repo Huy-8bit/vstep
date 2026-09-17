@@ -17,8 +17,8 @@ export const modes: Record<
     title: "Luyện Part 1",
     subtitle: "Social Interaction",
     description:
-      "Trả lời một câu hỏi quen thuộc, nhận phản hồi và luyện câu tiếp theo.",
-    time: "1–2 phút / câu",
+      "Trò chuyện về hai chủ đề quen thuộc qua 3–6 câu hỏi, nhận phản hồi sau mỗi câu.",
+    time: "Khoảng 3 phút · Hai chủ đề",
   },
   PART2: {
     title: "Luyện Part 2",
@@ -206,6 +206,7 @@ export type SpeakingSession = {
   grading: SpeakingGrading | null;
   server_now: string;
   suggested_duration_seconds: number | null;
+  part_timings: Record<string, number>;
   limits: { max_audio_mb: number; max_audio_seconds: number };
   audio_analysis_configured: boolean;
   tts_configured: boolean;

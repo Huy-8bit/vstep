@@ -46,7 +46,8 @@ function Setup({
 }) {
   const router = useRouter();
   const [mode, setMode] = useState<ReadingMode>(initialMode);
-  const [topic, setTopic] = useState("random");
+  const [practiceTopic, setTopic] = useState("random");
+  const topic = mode === "FULL_TEST" ? "random" : practiceTopic;
   const [target, setTarget] = useState(initialType);
   const [timed, setTimed] = useState(false);
   const [bank, setBank] = useState<Bank | null>(null);
@@ -226,21 +227,23 @@ function Setup({
             {modes[mode].description}
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            <label className="text-xs font-semibold">
-              Luyện theo chủ đề
-              <select
-                className="field mt-2"
-                disabled={!!busy}
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-              >
-                {Object.entries(topics).map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {mode !== "FULL_TEST" && (
+              <label className="text-xs font-semibold">
+                Luyện theo chủ đề
+                <select
+                  className="field mt-2"
+                  disabled={!!busy}
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                >
+                  {Object.entries(topics).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             {mode === "QUESTION_TYPE_PRACTICE" && (
               <label className="text-xs font-semibold sm:col-span-2">
                 Dạng câu hỏi

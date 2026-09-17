@@ -19,6 +19,9 @@ ReadingType = Literal[
     "sentence_meaning",
     "organization",
     "tone",
+    "attitude",
+    "sentence_insertion",
+    "paragraph_completion",
 ]
 Option = Literal["A", "B", "C", "D"]
 READING_TOPICS = [
@@ -49,6 +52,9 @@ READING_TYPES = [
     "sentence_meaning",
     "organization",
     "tone",
+    "attitude",
+    "sentence_insertion",
+    "paragraph_completion",
 ]
 
 
@@ -81,6 +87,17 @@ class Evidence(StrictModel):
     quote: str = Field(min_length=5, max_length=1800)
 
 
+class InsertionPosition(StrictModel):
+    label: Option
+    after_text: str = Field(min_length=5, max_length=600)
+
+
+class ReadingPlacement(StrictModel):
+    paragraph_id: str
+    sentence_to_insert: str | None
+    positions: list[InsertionPosition]
+
+
 class GeneratedReadingQuestion(StrictModel):
     internal_difficulty_band: ItemDifficultyBand
     question_number: int = Field(ge=1, le=10)
@@ -91,6 +108,7 @@ class GeneratedReadingQuestion(StrictModel):
     explanation_vi: str = Field(min_length=10, max_length=2000)
     option_explanations: OptionExplanations
     evidence: Evidence
+    placement: ReadingPlacement | None = None
 
 
 class GeneratedReadingPassage(StrictModel):
@@ -122,6 +140,25 @@ class GeneratedReadingPassage(StrictModel):
                 or q.evidence.quote not in paragraphs[q.evidence.paragraph_id]
             ):
                 raise ValueError("Evidence must quote an exact substring in its paragraph")
+            if q.question_type == "sentence_insertion":
+                placement = q.placement
+                if (
+                    not placement
+                    or not placement.sentence_to_insert
+                    or placement.paragraph_id not in paragraphs
+                ):
+                    raise ValueError("Insertion requires a sentence and a known paragraph")
+                if [p.label for p in placement.positions] != list("ABCD"):
+                    raise ValueError("Insertion needs four labelled positions")
+                paragraph = paragraphs[placement.paragraph_id]
+                ends = [paragraph.find(p.after_text) + len(p.after_text) for p in placement.positions]
+                if any(
+                    p.after_text not in paragraph or paragraph.count(p.after_text) != 1
+                    for p in placement.positions
+                ) or ends != sorted(set(ends)):
+                    raise ValueError("Insertion positions must be unique ordered exact text anchors")
+            elif q.placement is not None:
+                raise ValueError("Placement metadata belongs only to sentence insertion items")
             options = q.options.model_dump()
             if len({v.strip().casefold() for v in options.values()}) != 4:
                 raise ValueError("Options must differ")

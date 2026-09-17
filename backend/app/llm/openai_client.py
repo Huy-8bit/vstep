@@ -21,18 +21,54 @@ from app.prompts.speaking_part2_generator import SPEAKING_PART2_GENERATOR
 from app.prompts.speaking_part3_generator import SPEAKING_PART3_GENERATOR
 from app.prompts.task1_grader import TASK1_ANALYSIS_CONTEXT
 from app.prompts.task2_grader import TASK2_ANALYSIS_CONTEXT
-from app.prompts.writing_analysis import WRITING_ANALYSIS_PROMPT, WRITING_FEEDBACK_PROMPT
+from app.prompts.vocabulary_coach import VOCABULARY_COACH_PROMPT, VOCABULARY_USAGE_PROMPT
+from app.prompts.writing_analysis import (
+    WRITING_ANALYSIS_PROMPT,
+    WRITING_CORRECTION_PROMPT,
+    WRITING_FEEDBACK_PROMPT,
+)
 from app.prompts.writing_calibration import CALIBRATION_ANCHORS, WRITING_CALIBRATION_PROMPT
+from app.schemas.generation_quality import QuestionQualityReview
 from app.schemas.reading import GeneratedReadingPassage, ReadingVocabulary
 from app.schemas.speaking import GeneratedSpeakingQuestion, SpeakingTextGradingOutput
+from app.schemas.vocabulary_coach import VocabularyCoachOutput, VocabularyUsageAssessment
 from app.schemas.writing import GeneratedQuestion, ImprovedWriting
-from app.schemas.writing_assessment import WritingAnalysis, WritingCalibration, WritingFeedback
+from app.schemas.writing_assessment import (
+    WritingAnalysis,
+    WritingCalibration,
+    WritingCorrections,
+    WritingFeedback,
+)
+from app.validators.quality import QUALITY_PROMPT
+from app.validators.questions import SpeakingQuestionValidator, WritingQuestionValidator
 
 T = TypeVar("T", bound=BaseModel)
 logger = logging.getLogger(__name__)
 
 
 class OpenAILLMClient(LLMClient):
+    async def vocabulary_coach(self, payload, user_id):
+        from app.services.vocabulary_coach_service import validate_recommendations
+
+        return await self._structured(
+            VocabularyCoachOutput,
+            VOCABULARY_COACH_PROMPT,
+            payload,
+            user_id,
+            "vocabulary_coach",
+            lambda result: validate_recommendations(result, payload),
+        )
+
+    async def assess_vocabulary_usage(self, payload, user_id):
+        return await self._structured(
+            VocabularyUsageAssessment, VOCABULARY_USAGE_PROMPT, payload, user_id, "vocabulary_usage"
+        )
+
+    async def review_question_quality(self, payload, user_id):
+        return await self._structured(
+            QuestionQualityReview, QUALITY_PROMPT, payload, user_id, "question_quality"
+        )
+
     async def _structured(
         self,
         schema: type[T],
@@ -133,6 +169,7 @@ class OpenAILLMClient(LLMClient):
                 for key in ("task", "question_type", "topic", "test_profile")
             ):
                 raise ValueError("Question does not match request")
+            WritingQuestionValidator().validate(result, payload.get("recent_prompts", []))
             if result.instruction.strip() in payload.get("recent_prompts", []):
                 raise ValueError("Repeated question")
 
@@ -173,12 +210,22 @@ class OpenAILLMClient(LLMClient):
 
     async def writing_feedback(self, payload, user_id):
         def validate(result):
+            for item in result.vocabulary_suggestions:
+                if item.original and item.original not in payload["user_answer"]:
+                    raise ValueError("Vocabulary feedback must quote the original answer")
+
+        return await self._structured(
+            WritingFeedback, WRITING_FEEDBACK_PROMPT, payload, user_id, "writing_feedback", validate
+        )
+
+    async def writing_corrections(self, payload, user_id):
+        def validate(result):
             for item in result.sentence_feedback:
                 if item.original and item.original not in payload["user_answer"]:
                     raise ValueError("Invented original sentence")
 
         return await self._structured(
-            WritingFeedback, WRITING_FEEDBACK_PROMPT, payload, user_id, "writing_feedback", validate
+            WritingCorrections, WRITING_CORRECTION_PROMPT, payload, user_id, "writing_corrections", validate
         )
 
     async def improve_writing(self, payload: dict, user_id: str) -> ImprovedWriting:
@@ -189,6 +236,7 @@ class OpenAILLMClient(LLMClient):
         def validate(result):
             if any(getattr(result, key) != payload[key] for key in ("part", "topic", "test_profile")):
                 raise ValueError("Speaking question does not match request")
+            SpeakingQuestionValidator().validate(result, payload.get("recent_complete_prompts", []))
             if result.part == 3 and result.question_text in payload.get("recent_questions", []):
                 raise ValueError("Duplicate question")
 
@@ -223,7 +271,15 @@ class OpenAILLMClient(LLMClient):
                 for key in ("test_profile", "topic", "internal_difficulty_band")
             ):
                 raise ValueError("Reading profile or internal generation context mismatch")
-            required = payload.get("generation_context", {}).get("required_question_types", [])
+            context = payload.get("generation_context", {})
+            word_range = context.get("passage_word_range")
+            if word_range:
+                from app.common.words import count_words
+
+                words = count_words("\n\n".join(p.text for p in result.paragraphs))
+                if not word_range[0] <= words <= word_range[1]:
+                    raise ValueError("Reading passage does not fit the remaining global word budget")
+            required = context.get("required_question_types", [])
             if not set(required).issubset({q.question_type for q in result.questions}):
                 raise ValueError("Reading blueprint skill coverage is incomplete")
             if len(result.questions) != payload["question_count"]:

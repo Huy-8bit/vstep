@@ -18,7 +18,9 @@ from app.prompts.writing_calibration import WRITING_CALIBRATION_PROMPT_VERSION
 from app.repositories.writing import owned_attempt
 from app.schemas.writing_assessment import CRITERIA
 from app.services.speech_transcription_service import speech_lock
-from app.services.writing_analysis_service import WritingAnalysisService
+from app.services.vocabulary_coach_service import VocabularyCoachService
+from app.services.writing_analysis_service import WritingEvidenceAnalysisService
+from app.services.writing_feedback_service import CorrectionService, WritingFeedbackService
 from app.services.writing_score_calibration_service import WritingScoreCalibrationService
 
 JSON_FIELDS = (
@@ -62,7 +64,13 @@ class WritingGradingService:
         return {
             "task": q.task_type,
             "question_type": q.question_type,
-            "question": q.instruction,
+            "question": "\n\n".join(filter(None, [q.instruction, q.stimulus, q.response_instruction])),
+            "communicative_context": {
+                "register": q.register,
+                "recipient_relationship": q.recipient_relationship,
+                "purpose": q.purpose,
+                "genre": q.genre,
+            },
             "requirements": q.requirements,
             "minimum_words": q.minimum_words,
             "user_answer": attempt.answer,
@@ -115,7 +123,7 @@ class WritingGradingService:
                     "consistency_flags": [],
                 }
             else:
-                work["analysis"] = await WritingAnalysisService(self.llm).analyze(payload, user_id)
+                work["analysis"] = await WritingEvidenceAnalysisService(self.llm).analyze(payload, user_id)
             attempt.grading_work = work
         await self.db.commit()
         return {"stage": "analyzed", "reviewed": bool(work.get("calibration", {}).get("reviewed"))}
@@ -136,10 +144,54 @@ class WritingGradingService:
         await self.db.commit()
         return {"stage": "calibrated", "reviewed": work["calibration"]["reviewed"]}
 
-    async def grade(self, attempt_id, user_id, upgrade=False):
+    async def prepare_feedback(self, attempt_id, user_id, upgrade=False):
         state = await self.calibrate(attempt_id, user_id, upgrade)
         if not state["reviewed"]:
             await self.calibrate(attempt_id, user_id, upgrade)
+        attempt = await self._locked(attempt_id, user_id)
+        if self._preserve(attempt, upgrade):
+            await self.db.commit()
+            return {"stage": "complete"}
+        payload, work = self._work(attempt)
+        if not work.get("feedback"):
+            feedback = await WritingFeedbackService(self.llm).feedback(
+                {
+                    **payload,
+                    "analysis": work["analysis"],
+                    "calibrated_assessment": work["calibration"]["assessment"],
+                },
+                user_id,
+            )
+            work["feedback"] = feedback.model_dump()
+            attempt.grading_work = work
+        await self.db.commit()
+        return {"stage": "feedback_ready"}
+
+    async def prepare_vocabulary(self, attempt_id, user_id, upgrade=False):
+        await self.prepare_feedback(attempt_id, user_id, upgrade)
+        attempt = await self._locked(attempt_id, user_id)
+        if self._preserve(attempt, upgrade):
+            await self.db.commit()
+            return {"stage": "complete"}
+        _, work = self._work(attempt)
+        if not work.get("vocabulary_status"):
+            try:
+                batch = await VocabularyCoachService(self.db, self.llm).prepare_writing(
+                    attempt, work, user_id
+                )
+                work["vocabulary_status"] = "ready"
+                work["vocabulary_batch_id"] = batch["batch_id"]
+            except AppError as exc:
+                # Learning suggestions cannot change or prevent publication of calibrated scores.
+                work["vocabulary_status"] = "deferred"
+                work["vocabulary_error_code"] = exc.code
+            attempt = await self._locked(attempt_id, user_id)
+            attempt.grading_work = work
+        await self.db.commit()
+        return {"stage": "vocabulary_" + work["vocabulary_status"]}
+
+    async def grade(self, attempt_id, user_id, upgrade=False):
+        await self.prepare_vocabulary(attempt_id, user_id, upgrade)
         attempt = await self._locked(attempt_id, user_id)
         if self._preserve(attempt, upgrade):
             await self.db.commit()
@@ -174,10 +226,10 @@ class WritingGradingService:
             ]
         else:
             # Feedback is generated only after scores are fixed and cannot change those scores.
-            feedback = await self.llm.writing_feedback(
+            corrections = await CorrectionService(self.llm).correct(
                 {**payload, "analysis": work["analysis"], "calibrated_assessment": assessment}, user_id
             )
-            values = feedback.model_dump()
+            values = {**work["feedback"], **corrections.model_dump()}
             values.update({f"{key}_score": assessment[key]["score"] for key in CRITERIA})
             values.update(
                 overall_score=sum(assessment[key]["score"] for key in CRITERIA) / 4,

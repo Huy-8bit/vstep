@@ -3,6 +3,7 @@ from statistics import mean
 from app.core.config import settings
 from app.schemas.audio_assessment import AUDIO_SCORE_FIELDS
 from app.schemas.speaking import SpeakingGradingOutput
+from app.vstep_reference.scoring_reference import SPEAKING_CRITERIA
 
 
 class SpeakingCorrectionService:
@@ -85,12 +86,8 @@ class SpeakingCorrectionService:
         for correction in data["sentence_corrections"]:
             correction["start_seconds"] = None
         if pronunciation is not None and fluency is not None:
-            data["scores"]["overall"] = (
-                sum(
-                    data["scores"][key]
-                    for key in ("grammar", "vocabulary", "structures", "pronunciation", "fluency")
-                )
-                / 5
+            data["scores"]["overall"] = sum(data["scores"][key] for key in SPEAKING_CRITERIA) / len(
+                SPEAKING_CRITERIA
             )
         result = SpeakingGradingOutput.model_validate(data)
         coverage = {

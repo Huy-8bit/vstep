@@ -30,6 +30,7 @@ class ReadingPassage(IdentityMixin, Base):
     source: Mapped[str] = mapped_column(String(20), default="SEED")
     fingerprint: Mapped[str] = mapped_column(String(64), unique=True)
     prompt_version: Mapped[str | None] = mapped_column(String(30))
+    generation_diagnostics: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
     vocabulary_cache: Mapped[dict] = mapped_column(JSONB, default=dict)
     questions: Mapped[list["ReadingQuestion"]] = relationship(
         lazy="selectin", order_by="ReadingQuestion.question_number", cascade="all, delete-orphan"
@@ -51,6 +52,7 @@ class ReadingQuestion(IdentityMixin, Base):
     explanation_vi: Mapped[str] = mapped_column(Text)
     option_explanations: Mapped[dict] = mapped_column(JSONB)
     evidence: Mapped[dict] = mapped_column(JSONB)
+    placement: Mapped[dict | None] = mapped_column(JSONB)
     legacy_difficulty: Mapped[str | None] = mapped_column("difficulty", String(5))
     test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
 
@@ -67,6 +69,7 @@ class ReadingExamSession(IdentityMixin, Base):
     legacy_difficulty: Mapped[str | None] = mapped_column("difficulty", String(5))
     test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
     blueprint_version: Mapped[str | None] = mapped_column(String(30))
+    blueprint_diagnostics: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
     topic: Mapped[str] = mapped_column(String(40), default="random")
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

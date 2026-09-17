@@ -37,7 +37,7 @@ class SpeakingQuestionRequest(StrictModel):
     part: Literal[1, 2, 3]
     topic: str = "random"
     test_profile: TestProfile = "VSTEP_3_5"
-    source: Literal["AI", "SEED"] = "SEED"
+    source: Literal["AI", "SEED", "BANK"] = "BANK"
     recent_question_ids: list[str] = Field(default_factory=list, max_length=45)
     recent_topics: list[str] = Field(default_factory=list, max_length=15)
 
@@ -98,7 +98,7 @@ class GeneratedSpeakingQuestion(StrictModel):
 
 class SpeakingSessionCreate(StrictModel):
     mode: SpeakingMode
-    source: Literal["AI", "SEED"] = "SEED"
+    source: Literal["AI", "SEED", "BANK"] = "BANK"
     topic: str = "random"
     test_profile: TestProfile = "VSTEP_3_5"
     question_id: str | None = None

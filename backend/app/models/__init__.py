@@ -55,6 +55,13 @@ class WritingQuestion(IdentityMixin, Base):
     source: Mapped[str] = mapped_column(String(10), default="SEED")
     fingerprint: Mapped[str] = mapped_column(String(64), unique=True)
     prompt_version: Mapped[str | None] = mapped_column(String(20))
+    generation_diagnostics: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
+    stimulus: Mapped[str | None] = mapped_column(Text)
+    response_instruction: Mapped[str | None] = mapped_column(Text)
+    genre: Mapped[str | None] = mapped_column(String(20))
+    register: Mapped[str | None] = mapped_column(String(20))
+    recipient_relationship: Mapped[str | None] = mapped_column(String(50))
+    purpose: Mapped[str | None] = mapped_column(String(100))
 
 
 class ExamSession(IdentityMixin, Base):
@@ -170,4 +177,10 @@ from app.models.reading import (  # noqa: F401, E402
     ReadingPassage,
     ReadingQuestion,
     ReadingResult,
+)
+from app.models.vocabulary import (  # noqa: F401, E402
+    UserVocabularyItem,
+    VocabularyItemSource,
+    VocabularyRecommendationBatch,
+    VocabularyReview,
 )

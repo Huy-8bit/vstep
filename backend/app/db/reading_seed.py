@@ -4,6 +4,7 @@ import asyncio
 
 from sqlalchemy import select
 
+from app.db.reading_additional_seed import additional_articles
 from app.db.session import SessionLocal, engine
 from app.models.reading import ReadingPassage
 from app.schemas.reading import GeneratedReadingPassage
@@ -1762,6 +1763,9 @@ article(
 )
 
 
+ARTICLES.extend(additional_articles())
+
+
 async def seed():
     async with SessionLocal() as db:
         for raw in ARTICLES:
@@ -1772,6 +1776,7 @@ async def seed():
             )
             if existing:
                 # Refresh editorial metadata only; preserve IDs, content, answer keys and old attempts.
+                existing.generation_diagnostics = passage.generation_diagnostics
                 existing.test_profile = generated.test_profile
                 existing.internal_difficulty_band = generated.internal_difficulty_band
                 metadata = {q.question_number: q.internal_difficulty_band for q in generated.questions}

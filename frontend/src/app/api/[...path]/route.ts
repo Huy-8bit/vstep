@@ -66,7 +66,7 @@ async function proxy(
         headers,
         body: body as BodyInit | undefined,
         cache: "no-store",
-        signal: AbortSignal.timeout(330000),
+        signal: AbortSignal.timeout(660000),
         redirect: "manual",
       },
     );

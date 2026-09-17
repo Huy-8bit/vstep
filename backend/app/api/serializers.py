@@ -1,8 +1,10 @@
 from app.db.base import utcnow
+from app.prompts.writing_analysis import WRITING_GRADER_VERSION
+from app.vstep_reference.scoring_reference import writing_reference_level
 
 
 def question_view(q):
-    return {
+    view = {
         key: getattr(q, key)
         for key in (
             "id",
@@ -11,12 +13,20 @@ def question_view(q):
             "topic",
             "test_profile",
             "instruction",
-            "requirements",
+            "stimulus",
+            "response_instruction",
+            "genre",
+            "register",
+            "recipient_relationship",
+            "purpose",
             "minimum_words",
             "source",
             "created_at",
         )
     }
+
+    view["requirements"] = q.requirements if not q.stimulus else []
+    return view
 
 
 def grading_view(g):
@@ -24,6 +34,8 @@ def grading_view(g):
         return None
     return {
         "id": g.id,
+        "current_grader_version": WRITING_GRADER_VERSION,
+        "calibration_version": g.calibration_prompt_version,
         "scores": {
             key: getattr(g, f"{key}_score")
             for key in (
@@ -115,5 +127,6 @@ def exam_view(e):
         },
         "server_now": utcnow(),
         "overall_score": overall,
+        "writing_reference_level": writing_reference_level(overall),
         "attempts": [attempt_view(a) for a in e.attempts],
     }

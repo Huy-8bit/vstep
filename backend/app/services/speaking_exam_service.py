@@ -87,7 +87,7 @@ class SpeakingExamService:
         for part in parts:
             if data.question_id:
                 q = await self.db.get(SpeakingQuestion, data.question_id)
-                if not q or q.part != part:
+                if not q or q.part != part or not q.generation_diagnostics.get("quality_valid"):
                     raise AppError(422, "Đề không khớp phần Speaking đã chọn.")
             else:
                 q = await SpeakingQuestionGeneratorService(self.db, self.llm).generate(
@@ -97,7 +97,7 @@ class SpeakingExamService:
                     user_id,
                 )
             steps.extend(question_steps(q))
-        if data.mode in {"PART1", "QUICK_PRACTICE"}:
+        if data.mode == "QUICK_PRACTICE":
             steps = [random.choice(steps)]
         for index, step in enumerate(steps):
             step["sequence_number"] = index
