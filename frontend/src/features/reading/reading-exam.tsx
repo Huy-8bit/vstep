@@ -297,7 +297,7 @@ function Workspace({ session }: { session: ReadingSession }) {
           <div className="mb-5 flex items-center justify-between gap-3">
             <p className="eyebrow">
               Passage {passageIndex + 1} ·{" "}
-              {questionTypes[question.question_type]}
+              {questionTypes[question.question_type] || "Câu hỏi từ đề riêng"}
             </p>
             <button
               disabled={busy || expired}
@@ -315,10 +315,16 @@ function Workspace({ session }: { session: ReadingSession }) {
             </button>
           </div>
           <fieldset disabled={busy || expired}>
-            <legend className="mb-6 text-lg font-semibold leading-8">
+            <legend className="mb-6 whitespace-pre-wrap text-lg font-semibold leading-8">
               <span className="mr-2 text-teal-800">{index + 1}.</span>
               {question.question_text}
             </legend>
+            {question.source_question_number &&
+              question.source_question_number !== index + 1 && (
+                <p className="mb-4 text-xs text-stone-500">
+                  Số câu trong nguồn: {question.source_question_number}
+                </p>
+              )}
             <ReadingPlacement question={question} passage={passage} />
             <div className="space-y-3">
               {options.map((letter) => (

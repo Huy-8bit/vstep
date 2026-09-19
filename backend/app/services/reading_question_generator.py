@@ -53,7 +53,7 @@ class ReadingQuestionGeneratorService:
         self.db, self.llm = db, llm
 
     async def bank(self, topic="random"):
-        query = select(ReadingPassage).where(
+        query = select(ReadingPassage).where(ReadingPassage.owner_id.is_(None)).where(
             ReadingPassage.test_profile == VSTEP_3_5,
             ReadingPassage.generation_diagnostics["quality_valid"].as_boolean().is_(True),
         )
@@ -92,7 +92,7 @@ class ReadingQuestionGeneratorService:
         )
         ids = {pid for group in recent_sessions for pid in group}
         recent = list(
-            await self.db.scalars(select(ReadingPassage).where(ReadingPassage.id.in_(ids)).limit(20))
+            await self.db.scalars(select(ReadingPassage).where(ReadingPassage.owner_id.is_(None)).where(ReadingPassage.id.in_(ids)).limit(20))
         )
         payload = request.model_dump()
         companions = [p for p in (plan or []) if p]

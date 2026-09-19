@@ -64,7 +64,7 @@ class SpeakingQuestionGeneratorService:
             for step in question_set:
                 recent_ids.add(step["question_id"])
                 recent_topics.add(step["topic_code"])
-        query = select(SpeakingQuestion).where(
+        query = select(SpeakingQuestion).where(SpeakingQuestion.owner_id.is_(None)).where(
             SpeakingQuestion.part == request.part, SpeakingQuestion.test_profile == request.test_profile
         )
         if request.source != "AI":
@@ -94,7 +94,7 @@ class SpeakingQuestionGeneratorService:
         topic = random.choice(candidates) if request.topic == "random" else request.topic
         recent_rows = list(
             await self.db.scalars(
-                select(SpeakingQuestion).where(SpeakingQuestion.id.in_(recent_ids)).limit(30)
+                select(SpeakingQuestion).where(SpeakingQuestion.owner_id.is_(None)).where(SpeakingQuestion.id.in_(recent_ids)).limit(30)
             )
         )
         recent = [q.question_text for q in recent_rows]

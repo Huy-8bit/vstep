@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { VocabularyRecommendations } from "@/features/vocabulary/recommendations";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
+import { LibraryOrigin } from "@/features/library/practice-link";
 import { api, post } from "@/services/api";
 import { AudioAssessmentPanel } from "./audio-assessment-panel";
 import { coachLink } from "./pronunciation-types";
@@ -149,6 +150,7 @@ function Result({ id }: { id: string }) {
   };
   return (
     <div className="space-y-7">
+      <LibraryOrigin value={session} retry />
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="eyebrow">{modes[session.mode].title}</p>

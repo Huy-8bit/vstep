@@ -30,7 +30,14 @@ async function proxy(
       (path[2] === "pronunciation" &&
         path[3] === "practices" &&
         path[5] === "audio"));
-  const limit = audioUpload ? 25 * 1024 * 1024 : 100000;
+  const library = path[1] === "my-questions";
+  const limit = audioUpload
+    ? 25 * 1024 * 1024
+    : library && path[2] === "assets"
+      ? 21 * 1024 * 1024
+      : library
+        ? 2 * 1024 * 1024
+        : 100000;
   if (Number(request.headers.get("content-length") || 0) > limit)
     return Response.json(
       { detail: "Bản ghi vượt giới hạn tải lên." },
@@ -102,3 +109,5 @@ async function proxy(
   }
 }
 export { proxy as GET, proxy as POST, proxy as PATCH, proxy as PUT };
+
+export const DELETE = proxy;

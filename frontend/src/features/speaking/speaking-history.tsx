@@ -4,11 +4,13 @@ import Link from "next/link";
 import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
+import { LibraryOrigin } from "@/features/library/practice-link";
+import type { LibraryMetadata } from "@/features/library/types";
 import { api } from "@/services/api";
 import { PronunciationHistory } from "./pronunciation-coach";
 import { SkillSwitch } from "./skill-switch";
 import { modes, topics, duration, scoreText, type SpeakingMode } from "./types";
-type HistoryItem = {
+type HistoryItem = LibraryMetadata & {
   id: string;
   mode: SpeakingMode;
   status: string;
@@ -132,6 +134,7 @@ function History() {
                     </td>
                     <td className="px-5 py-5 font-semibold">
                       {modes[item.mode].title}
+                      <LibraryOrigin value={item} />
                       <p className="mt-1 text-xs font-normal text-stone-500">
                         Part {item.parts.join(" · ")}
                       </p>

@@ -1,3 +1,4 @@
+from app.api.library_metadata import library_metadata
 from app.core.config import settings
 from app.db.base import utcnow
 
@@ -105,6 +106,7 @@ def speaking_session_view(session):
     current = session.current_sequence
     visible = session.question_set if session.status != "IN_PROGRESS" else session.question_set[: current + 1]
     return {
+        **library_metadata(session),
         **{
             key: getattr(session, key)
             for key in (

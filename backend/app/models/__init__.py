@@ -14,6 +14,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, IdentityMixin, UpdatedMixin, utcnow
+from app.models.library import LibrarySessionMixin, PrivateQuestionMixin
 from app.models.speaking import (  # noqa: F401
     SpeakingAnswer,
     SpeakingError,
@@ -37,11 +38,11 @@ class AuthSession(IdentityMixin, Base):
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
-class WritingQuestion(IdentityMixin, Base):
+class WritingQuestion(PrivateQuestionMixin, IdentityMixin, Base):
     __tablename__ = "writing_questions"
     __table_args__ = (
         CheckConstraint("task_type IN (1, 2)"),
-        CheckConstraint("(task_type = 1 AND minimum_words = 120) OR (task_type = 2 AND minimum_words = 250)"),
+        CheckConstraint("minimum_words > 0"),
     )
     task_type: Mapped[int] = mapped_column(Integer, index=True)
     question_type: Mapped[str] = mapped_column(String(50))
@@ -64,7 +65,7 @@ class WritingQuestion(IdentityMixin, Base):
     purpose: Mapped[str | None] = mapped_column(String(100))
 
 
-class ExamSession(IdentityMixin, Base):
+class ExamSession(LibrarySessionMixin, IdentityMixin, Base):
     __tablename__ = "exam_sessions"
     __table_args__ = (CheckConstraint("mode IN ('FULL_TEST', 'TASK1', 'TASK2')"),)
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
@@ -170,6 +171,12 @@ from app.models.assessment import (  # noqa: F401, E402
     PronunciationPractice,
     WritingCalibrationSample,
     WritingGradingRevision,
+)
+from app.models.library import (  # noqa: E402,F401
+    LibraryQuestion,
+    LibraryRevision,
+    QuestionCollection,
+    QuestionImportFile,
 )
 from app.models.reading import (  # noqa: F401, E402
     ReadingAnswer,

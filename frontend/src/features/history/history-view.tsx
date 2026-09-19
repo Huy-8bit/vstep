@@ -5,6 +5,7 @@ import { ArrowRight, FileClock, Plus } from "lucide-react";
 import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
+import { LibraryOrigin } from "@/features/library/practice-link";
 import { api } from "@/services/api";
 import { modes, topics } from "@/lib/constants";
 import { formatDate, score } from "@/lib/utils";
@@ -144,7 +145,8 @@ function History() {
                       </p>
                     </td>
                     <td className="px-5 py-5 text-stone-500">
-                      {topics[a.question.topic]}
+                      {topics[a.question.topic] || a.question.topic}
+                      <LibraryOrigin value={a.question} />
                     </td>
                     <td className="px-5 py-5 text-stone-500">{a.word_count}</td>
                     <td className="px-5 py-5">

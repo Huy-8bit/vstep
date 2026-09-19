@@ -5,9 +5,11 @@ import { RequireAuth } from "@/features/auth/auth-provider";
 import { SkillSwitch } from "@/features/speaking/skill-switch";
 import { Button } from "@/components/ui/button";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
+import { LibraryOrigin } from "@/features/library/practice-link";
+import type { LibraryMetadata } from "@/features/library/types";
 import { api } from "@/services/api";
 import { modes, topics, duration, type ReadingMode } from "./types";
-type Item = {
+type Item = LibraryMetadata & {
   id: string;
   mode: ReadingMode;
   topic: string;
@@ -128,6 +130,7 @@ function History() {
                     </td>
                     <td className="px-5 py-5 font-semibold">
                       {modes[row.mode].title}
+                      <LibraryOrigin value={row} />
                       <p className="mt-1 text-xs font-normal text-stone-400">
                         {row.status === "IN_PROGRESS"
                           ? "Đang làm"
@@ -140,7 +143,7 @@ function History() {
                       <p className="text-stone-500">
                         {row.topic === "random"
                           ? "Nhiều chủ đề"
-                          : topics[row.topic]}
+                          : topics[row.topic] || row.topic}
                       </p>
                     </td>
                     <td className="px-5 py-5">

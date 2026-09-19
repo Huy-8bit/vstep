@@ -1,8 +1,14 @@
+import type { LibraryMetadata } from "@/features/library/types";
 import type { WritingAssessmentMetadata } from "@/features/grading/writing-evidence";
 import type { TestProfile } from "@/lib/test-profile";
 export type Mode = "FULL_TEST" | "TASK1" | "TASK2";
 export type User = { id: string; email: string };
-export type Question = {
+export type Question = LibraryMetadata & {
+  presentation?: {
+    practice_asset_ids?: string[];
+    show_imported_requirements?: boolean;
+    stimulus_type?: string;
+  };
   id: string;
   task_type: 1 | 2;
   question_type: string;
@@ -17,7 +23,7 @@ export type Question = {
   recipient_relationship: string | null;
   purpose: string | null;
   minimum_words: number;
-  source: "SEED" | "AI";
+  source: "SEED" | "AI" | "CUSTOM";
 };
 export type Improvement = {
   title_vi: string;
@@ -82,7 +88,7 @@ export type Attempt = {
   grading: Grading | null;
   mode?: Mode;
 };
-export type Exam = {
+export type Exam = LibraryMetadata & {
   id: string;
   mode: Mode;
   started_at: string;

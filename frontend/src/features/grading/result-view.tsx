@@ -20,6 +20,7 @@ import { VocabularyRecommendations } from "@/features/vocabulary/recommendations
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { QuestionCard } from "@/features/writing/practice-setup";
+import { LibraryOrigin } from "@/features/library/practice-link";
 import { api, post } from "@/services/api";
 import { categories, criteria, topics } from "@/lib/constants";
 import { cn, DISCLAIMER, formatDate, score } from "@/lib/utils";
@@ -501,6 +502,7 @@ function Result({ id }: { id: string }) {
           </Button>
         </div>
       </div>
+      <LibraryOrigin value={data.question} retry />
       <LocalRecovery attempt={data} />
       {data.exam.mode === "FULL_TEST" && (
         <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">

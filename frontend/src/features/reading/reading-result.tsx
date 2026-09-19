@@ -5,6 +5,8 @@ import { CheckCircle2, Circle, Search, XCircle } from "lucide-react";
 import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice, Loading } from "@/components/feedback";
+import { LibraryOrigin } from "@/features/library/practice-link";
+import { keyLabels } from "@/features/library/types";
 import { api, post } from "@/services/api";
 import { SuggestionCard } from "@/features/vocabulary/learning-card";
 import { VocabularyRecommendations } from "@/features/vocabulary/recommendations";
@@ -88,7 +90,9 @@ function ResultView({ id }: { id: string }) {
           ? q.is_correct === true
           : filter === "incorrect"
             ? q.is_correct === false
-            : q.selected_answer === null),
+            : filter === "unscored"
+              ? !q.has_trusted_key
+              : q.selected_answer === null),
     ) || [];
   const question = filtered.find((q) => q.id === selected) || filtered[0];
   const passage = data?.session.passages.find(
@@ -159,6 +163,21 @@ function ResultView({ id }: { id: string }) {
           <Link href={`/reading?mode=${session.mode}`}>Luyện bài khác →</Link>
         </Button>
       </div>
+      <LibraryOrigin value={session} retry />
+      {result.unscored_count > 0 && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900">
+          <strong>Không thể tính điểm chính xác vì đáp án chưa đầy đủ.</strong>
+          <p className="mt-2">
+            {result.scorable_count}/{session.question_count} câu có đáp án được
+            xác nhận. {result.unscored_count} câu chưa chấm được; lựa chọn của
+            bạn vẫn được lưu.
+          </p>
+          <p className="mt-2">
+            Bổ sung đáp án trong Đề của tôi rồi luyện lại. Kết quả lượt này giữ
+            nguyên.
+          </p>
+        </div>
+      )}
       <section className="grid gap-5 rounded-2xl bg-teal-900 p-7 text-white sm:grid-cols-4">
         <div>
           <p className="text-xs text-teal-100">Câu trả lời đúng</p>
@@ -166,18 +185,20 @@ function ResultView({ id }: { id: string }) {
             {result.correct_count}
             <span className="text-xl font-normal text-teal-200">
               {" "}
-              / {session.question_count}
+              / {result.scorable_count}
             </span>
           </p>
         </div>
         <div>
           <p className="text-xs text-teal-100">Tỷ lệ đúng</p>
-          <p className="mt-3 text-4xl font-bold">{result.accuracy}%</p>
+          <p className="mt-3 text-4xl font-bold">
+            {result.accuracy === null ? "—" : `${result.accuracy}%`}
+          </p>
         </div>
         <div>
           <p className="text-xs text-teal-100">Điểm luyện tập tham khảo</p>
           <p className="mt-3 text-4xl font-bold">
-            {result.score.toFixed(2)}
+            {result.score?.toFixed(2) ?? "—"}
             <span className="text-xl font-normal text-teal-200"> / 10</span>
           </p>
         </div>
@@ -218,7 +239,7 @@ function ResultView({ id }: { id: string }) {
               <p className="eyebrow">Passage {i + 1}</p>
               <p className="mt-2 text-sm font-semibold">{p.title}</p>
               <p className="mt-3 text-xl font-bold text-teal-800">
-                {row.correct} / {row.total}
+                {row.correct} / {row.scorable_count ?? row.total}
               </p>
               <p className="mt-2 text-xs text-stone-400">
                 Đang xem câu hỏi: ~{duration(row.time_spent_seconds)}
@@ -234,13 +255,13 @@ function ResultView({ id }: { id: string }) {
             <div key={i}>
               <h3 className="text-sm font-semibold">
                 {item.question_type
-                  ? `${item.kind === "strength" ? "Làm tốt hơn ở" : "Ưu tiên luyện"} ${questionTypes[item.question_type]}`
+                  ? `${item.kind === "strength" ? "Làm tốt hơn ở" : "Ưu tiên luyện"} ${questionTypes[item.question_type] || "câu hỏi từ đề riêng"}`
                   : item.title_vi}
               </h3>
               <p className="mt-2 text-sm leading-6 text-stone-500">
                 {item.explanation_vi}
               </p>
-              {item.question_type && (
+              {item.question_type && questionTypes[item.question_type] && (
                 <Link
                   className="mt-3 inline-block text-xs font-semibold text-teal-800"
                   href={`/reading?mode=QUESTION_TYPE_PRACTICE&type=${item.question_type}`}
@@ -268,6 +289,9 @@ function ResultView({ id }: { id: string }) {
                 <option value="incorrect">
                   Sai ({result.incorrect_count})
                 </option>
+                <option value="unscored">
+                  Chưa chấm được ({result.unscored_count})
+                </option>
                 <option value="unanswered">
                   Bỏ trống ({result.unanswered_count})
                 </option>
@@ -278,7 +302,7 @@ function ResultView({ id }: { id: string }) {
             {filtered.map((q) => (
               <button
                 key={q.id}
-                aria-label={`Câu ${q.question_number}: ${q.is_correct === true ? "đúng" : q.is_correct === false ? "sai" : "bỏ trống"}`}
+                aria-label={`Câu ${q.question_number}: ${q.is_correct === true ? "đúng" : q.is_correct === false ? "sai" : q.selected_answer ? "chưa có đáp án" : "bỏ trống"}`}
                 onClick={() => {
                   setSelected(q.id);
                   setHighlight(null);
@@ -335,9 +359,10 @@ function ResultView({ id }: { id: string }) {
               >
                 <p className="eyebrow">
                   Câu {question.question_number} ·{" "}
-                  {questionTypes[question.question_type]}
+                  {questionTypes[question.question_type] ||
+                    question.question_type}
                 </p>
-                <h3 className="mt-3 text-lg font-semibold leading-8">
+                <h3 className="mt-3 whitespace-pre-wrap text-lg font-semibold leading-8">
                   {question.question_text}
                 </h3>
                 <ReadingPlacement question={question} passage={passage} />
@@ -349,7 +374,8 @@ function ResultView({ id }: { id: string }) {
                     </strong>
                   </span>
                   <span className="rounded-lg bg-teal-100 px-3 py-2 text-teal-900">
-                    Đáp án đúng: <strong>{question.correct_answer}</strong>
+                    {keyLabels[question.answer_key_source]}:{" "}
+                    <strong>{question.correct_answer || "—"}</strong>
                   </span>
                   <span
                     className={`rounded-lg px-3 py-2 font-semibold ${question.is_correct === true ? "text-teal-800" : question.is_correct === false ? "text-red-700" : "text-stone-500"}`}
@@ -358,53 +384,64 @@ function ResultView({ id }: { id: string }) {
                       ? "✓ Chính xác"
                       : question.is_correct === false
                         ? "✕ Chưa đúng"
-                        : "○ Bỏ trống"}
+                        : question.selected_answer
+                          ? "○ Chưa chấm được"
+                          : "○ Bỏ trống"}
                   </span>
                 </div>
                 <p className="mb-5 text-sm leading-7 text-stone-600">
-                  {question.explanation_vi}
+                  {question.explanation_vi
+                    ? `${question.explanation_source === "imported" ? "Giải thích từ đề / ghi chú: " : "Giải thích AI: "}${question.explanation_vi}`
+                    : "Nguồn chưa cung cấp giải thích cho câu này."}
                 </p>
                 <div className="space-y-3">
                   {options.map((letter) => (
                     <article
                       key={letter}
-                      className={`rounded-xl border p-4 ${letter === question.correct_answer ? "border-teal-200 bg-teal-50" : "border-stone-200 bg-white"}`}
+                      className={`rounded-xl border p-4 ${question.has_trusted_key && letter === question.correct_answer ? "border-teal-200 bg-teal-50" : "border-stone-200 bg-white"}`}
                     >
                       <p className="text-sm font-semibold leading-6">
                         {letter}. {question.options[letter]}{" "}
                         <span
-                          className={`ml-1 text-xs ${letter === question.correct_answer ? "text-teal-700" : "text-stone-400"}`}
+                          className={`ml-1 text-xs ${question.has_trusted_key && letter === question.correct_answer ? "text-teal-700" : "text-stone-400"}`}
                         >
-                          ({letter === question.correct_answer ? "Đúng" : "Sai"}
+                          (
+                          {!question.has_trusted_key
+                            ? "Chưa xác định"
+                            : letter === question.correct_answer
+                              ? "Đúng"
+                              : "Sai"}
                           )
                         </span>
                       </p>
                       <p className="mt-2 text-sm leading-7 text-stone-500">
-                        {question.option_explanations[letter].explanation_vi}
+                        {question.option_explanations[letter]?.explanation_vi}
                       </p>
                     </article>
                   ))}
                 </div>
-                <section className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-5">
-                  <h4 className="text-sm font-bold">
-                    Bằng chứng trong bài · Paragraph{" "}
-                    {question.evidence.paragraph_id.slice(1)}
-                  </h4>
-                  <blockquote className="my-3 text-sm leading-7 text-stone-600">
-                    “{question.evidence.quote}”
-                  </blockquote>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      setHighlight(question.evidence.paragraph_id);
-                      setJump((j) => j + 1);
-                      setMobile("passage");
-                    }}
-                  >
-                    Xem trong bài →
-                  </Button>
-                </section>
+                {question.evidence && (
+                  <section className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-5">
+                    <h4 className="text-sm font-bold">
+                      Bằng chứng trong bài · Paragraph{" "}
+                      {question.evidence.paragraph_id.slice(1)}
+                    </h4>
+                    <blockquote className="my-3 text-sm leading-7 text-stone-600">
+                      “{question.evidence.quote}”
+                    </blockquote>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setHighlight(question.evidence?.paragraph_id || null);
+                        setJump((j) => j + 1);
+                        setMobile("passage");
+                      }}
+                    >
+                      Xem trong bài →
+                    </Button>
+                  </section>
+                )}
                 <section className="mt-6 rounded-xl border border-stone-200 bg-white p-5">
                   <h4 className="font-bold">Giải thích từ vựng</h4>
                   <p className="mt-2 text-xs leading-6 text-stone-500">

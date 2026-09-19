@@ -1,3 +1,4 @@
+import type { LibraryMetadata } from "@/features/library/types";
 import type { AudioAssessment } from "./pronunciation-types";
 import type { TestProfile } from "@/lib/test-profile";
 export type SpeakingMode =
@@ -95,6 +96,8 @@ export type SpeakingQuestion = {
   source: string;
 };
 export type Step = {
+  optional_context?: string;
+  practice_asset_ids?: string[];
   sequence_number: number;
   question_id: string;
   part: number;
@@ -191,7 +194,7 @@ export type SpeakingAnswer = {
   audio_analysis: AudioAssessment | null;
   grading: SpeakingGrading | null;
 };
-export type SpeakingSession = {
+export type SpeakingSession = LibraryMetadata & {
   id: string;
   mode: SpeakingMode;
   started_at: string;

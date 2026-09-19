@@ -138,36 +138,119 @@ async def test_real_sdk_structured_retry_cache_and_progress(client, monkeypatch)
             "explanation_vi": "Thêm ví dụ cụ thể.",
             "example": "For example, students can practise daily.",
         }
-        result = {
-            "task": payload["task"],
-            "word_count": 999,
-            "scores": {"task_fulfillment": 7, "organization": 6, "vocabulary": 6, "grammar": 5, "overall": 9},
-            "summary_vi": "Bài cần phát triển thêm.",
-            "strengths": ["Có quan điểm rõ."],
-            "priority_improvements": [improvement] * 3,
-            "structure_feedback": [improvement],
-            "task_fulfillment_feedback": [improvement],
-            "errors": [
-                {
-                    "category": "grammar",
-                    "subtype": "verb_tense",
-                    "original": "I have went",
-                    "corrected": "I went",
-                    "explanation_vi": "Dùng thì quá khứ đơn.",
-                    "severity": "major",
-                }
-            ],
-            "vocabulary_suggestions": [],
-            "sentence_feedback": [
-                {
-                    "original": payload["user_answer"],
-                    "corrected": "I went there yesterday.",
-                    "explanation_vi": "Dùng thì quá khứ đơn.",
-                }
-            ],
-            "corrected_version": "I went there yesterday.",
-            "improved_b2_version": "I visited the place yesterday.",
+        # The SDK fixture follows the current evidence -> calibration -> feedback pipeline.
+        schema = body["text"]["format"]["name"]
+        evidence = {
+            "positive_evidence": [],
+            "negative_evidence": [],
+            "assessment_vi": "Bằng chứng giới hạn trong bài thử.",
         }
+        criteria = ("task_fulfillment", "organization", "vocabulary", "grammar")
+        if schema == "WritingAnalysis":
+            result = {
+                "task": payload["task"],
+                "task_coverage": [
+                    {"requirement": requirement, "coverage": "missing", "evidence": []}
+                    for requirement in (payload["requirements"] or [payload["instruction"]])
+                ],
+                "idea_development": "basic",
+                "cohesion": "basic",
+                "lexical_range": "basic",
+                "criteria": {key: evidence for key in criteria},
+                "sentences": [
+                    {
+                        "sentence_id": sentence["sentence_id"],
+                        "structure": "simple",
+                        "relative_clauses": 0,
+                        "conditionals": 0,
+                        "subordination": 0,
+                        "control": "partly_controlled",
+                    }
+                    for sentence in payload["sentences"]
+                ],
+                "errors": [
+                    {
+                        "sentence_id": 1,
+                        "primary_criterion": "grammar",
+                        "category": "grammar",
+                        "subtype": "verb_tense",
+                        "original": "I have went",
+                        "corrected": "I went",
+                        "explanation_vi": "Dùng thì quá khứ đơn.",
+                        "severity": "major",
+                    }
+                ],
+                "relevance_vi": "Bài thử rất ngắn.",
+                "register_vi": "Chưa đủ bằng chứng về văn phong.",
+            }
+        elif schema == "WritingCalibration":
+            result = {
+                key: {
+                    **evidence,
+                    "initial_score": 6,
+                    "score": 6,
+                    "score_justification_vi": "Điểm cố định chỉ để kiểm tra luồng dữ liệu trong test SDK.",
+                    "consistency_review_vi": "Bằng chứng được giữ nguyên qua bước hiệu chỉnh điểm trong test.",
+                    "high_score_justification_vi": "",
+                }
+                for key in criteria
+            }
+            result["calibration_summary_vi"] = "Kết quả xác định để kiểm tra SDK, không phải chấm bài thật."
+        elif schema == "WritingFeedback":
+            result = {
+                "summary_vi": "Bài cần phát triển thêm.",
+                "strengths": ["Có một ý ngắn."],
+                "priority_improvements": [improvement] * 3,
+                "structure_feedback": [improvement],
+                "task_fulfillment_feedback": [improvement],
+                "vocabulary_suggestions": [],
+            }
+        elif schema == "WritingCorrections":
+            result = {
+                "sentence_feedback": [
+                    {
+                        "original": payload["user_answer"],
+                        "corrected": "I went there yesterday.",
+                        "explanation_vi": "Dùng thì quá khứ đơn.",
+                    }
+                ],
+                "corrected_version": "I went there yesterday.",
+                "improved_b2_version": "I visited the place yesterday.",
+            }
+        elif schema == "VocabularyCoachOutput":
+            result = {
+                "items": [
+                    {
+                        "headword": phrase,
+                        "phrase": phrase,
+                        "part_of_speech": "noun phrase",
+                        "meaning_vi": "Cụm từ hữu ích trong học tập",
+                        "meaning_in_context_vi": "Dùng khi mô tả việc học ngôn ngữ",
+                        "register": "neutral",
+                        "collocations": [phrase],
+                        "common_patterns": [phrase],
+                        "user_original": "",
+                        "better_version": "",
+                        "example_sentence": f"Students benefit from {phrase}.",
+                        "why_learn_this_vi": "Cụm từ dùng được khi thảo luận chủ đề giáo dục.",
+                        "source_type": "TOPIC",
+                        "issue_type": "lexical_gap",
+                        "priority": "MEDIUM",
+                        "natural_options": [phrase],
+                        "collocation_distractors": ["option one", "option two", "option three"],
+                        "accepted_phrases": [phrase],
+                    }
+                    for phrase in (
+                        "daily practice",
+                        "regular feedback",
+                        "language skills",
+                        "study habits",
+                        "clear goals",
+                    )
+                ]
+            }
+        else:
+            raise AssertionError(f"Unhandled current SDK schema: {schema}")
         # First response is invalid; the adapter must retry once, not crash or use regex.
         output = "{}" if len(calls) == 1 else json.dumps(result, ensure_ascii=False)
         return httpx.Response(
@@ -211,11 +294,11 @@ async def test_real_sdk_structured_retry_cache_and_progress(client, monkeypatch)
     # Concurrent identical requests must share one saved result.
     results = await asyncio.gather(*(client.post(f"/api/v1/attempts/{a['id']}/grade") for _ in range(2)))
     assert all(r.status_code == 200 for r in results), [r.text for r in results]
-    assert len(calls) == 2
+    assert len(calls) == 6
     assert results[0].json()["grading"]["scores"]["overall"] == 6
     assert results[0].json()["word_count"] == 5
     assert (await client.post(f"/api/v1/attempts/{b['id']}/grade")).status_code == 200
-    assert len(calls) == 3
+    assert len(calls) == 11
     assert (await client.get(f"/api/v1/exams/{e['id']}")).json()["overall_score"] == 6
     duplicate = await client.post(
         "/api/v1/exams", json={"mode": "TASK1", "question_ids": [a["question"]["id"]]}
@@ -225,18 +308,19 @@ async def test_real_sdk_structured_retry_cache_and_progress(client, monkeypatch)
         f"/api/v1/attempts/{dup['id']}/submit", json={"answer": "I have went there yesterday.", "revision": 0}
     )
     assert (await client.post(f"/api/v1/attempts/{dup['id']}/grade")).status_code == 200
-    assert len(calls) == 3  # Same question+answer+model+prompt cached across attempts.
+    # Reusing a question+answer preserves evidence/calibration/correction; feedback and
+    # vocabulary can be attached independently to the new attempt.
+    schemas = [call["text"]["format"]["name"] for call in calls]
+    assert schemas.count("WritingAnalysis") == 3  # Two tasks plus the one invalid response.
+    assert schemas.count("WritingCalibration") == schemas.count("WritingCorrections") == 2
     summary = (await client.get("/api/v1/progress/summary")).json()
     assert summary["graded_attempts"] == 3 and summary["average_writing_score"] == 6
     errors = (await client.get("/api/v1/progress/errors")).json()
     assert errors[0]["count"] == 3
     async with SessionLocal() as db:
-        assert (
-            await db.scalar(
-                select(func.count()).select_from(AIUsageLog).where(AIUsageLog.user_id == client.test_user_id)
-            )
-            == 3
-        )
+        assert await db.scalar(
+            select(func.count()).select_from(AIUsageLog).where(AIUsageLog.user_id == client.test_user_id)
+        ) == len(calls)
 
 
 async def test_seed_format_and_filter(client):
@@ -254,7 +338,8 @@ async def test_seed_format_and_filter(client):
         "/api/v1/questions/generate", json={"task": 1, "question_type": "formal_email", "source": "SEED"}
     )
     assert r.status_code == 200
-    assert r.json()["minimum_words"] == 120 and len(r.json()["requirements"]) == 3
+    assert r.json()["minimum_words"] == 120 and r.json()["stimulus"] and r.json()["response_instruction"]
+    assert r.json()["requirements"] == []  # Current generated Task 1 requirements are inside the stimulus.
     assert (
         await client.post("/api/v1/questions/generate", json={"task": 1, "question_type": "opinion"})
     ).status_code == 422

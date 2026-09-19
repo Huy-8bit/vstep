@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     vocabulary_review_days: str = "1,3,7,14,30"
     openai_tts_model: str = "gpt-4o-mini-tts"
     openai_tts_voice: str = "alloy"
+    question_import_storage_dir: str = "data/question_imports"
     audio_storage_dir: str = "data/audio"
     max_speaking_audio_mb: int = Field(
         default=20,

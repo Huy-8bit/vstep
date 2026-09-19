@@ -15,9 +15,10 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, IdentityMixin, UpdatedMixin, utcnow
+from app.models.library import LibrarySessionMixin, PrivateQuestionMixin
 
 
-class ReadingPassage(IdentityMixin, Base):
+class ReadingPassage(PrivateQuestionMixin, IdentityMixin, Base):
     __tablename__ = "reading_passages"
     title: Mapped[str] = mapped_column(String(300))
     topic: Mapped[str] = mapped_column(String(40), index=True)
@@ -48,10 +49,11 @@ class ReadingQuestion(IdentityMixin, Base):
     question_type: Mapped[str] = mapped_column(String(40), index=True)
     question_text: Mapped[str] = mapped_column(Text)
     options: Mapped[dict] = mapped_column(JSONB)
-    correct_answer: Mapped[str] = mapped_column(String(1))
-    explanation_vi: Mapped[str] = mapped_column(Text)
+    correct_answer: Mapped[str | None] = mapped_column(String(1))
+    answer_key_source: Mapped[str] = mapped_column(String(20), default="provided", server_default="provided")
+    explanation_vi: Mapped[str | None] = mapped_column(Text)
     option_explanations: Mapped[dict] = mapped_column(JSONB)
-    evidence: Mapped[dict] = mapped_column(JSONB)
+    evidence: Mapped[dict | None] = mapped_column(JSONB)
     placement: Mapped[dict | None] = mapped_column(JSONB)
     legacy_difficulty: Mapped[str | None] = mapped_column("difficulty", String(5))
     test_profile: Mapped[str] = mapped_column(String(20), default="VSTEP_3_5", server_default="VSTEP_3_5")
@@ -59,7 +61,7 @@ class ReadingQuestion(IdentityMixin, Base):
     internal_difficulty_band: Mapped[str | None] = mapped_column(String(20))
 
 
-class ReadingExamSession(IdentityMixin, Base):
+class ReadingExamSession(LibrarySessionMixin, IdentityMixin, Base):
     __tablename__ = "reading_exam_sessions"
     __table_args__ = (
         CheckConstraint("mode IN ('FULL_TEST','PASSAGE_PRACTICE','QUICK_PRACTICE','QUESTION_TYPE_PRACTICE')"),
@@ -113,8 +115,10 @@ class ReadingResult(IdentityMixin, Base):
     correct_count: Mapped[int] = mapped_column(Integer)
     incorrect_count: Mapped[int] = mapped_column(Integer)
     unanswered_count: Mapped[int] = mapped_column(Integer)
-    accuracy: Mapped[float] = mapped_column(Float)
-    score: Mapped[float] = mapped_column(Float)
+    accuracy: Mapped[float | None] = mapped_column(Float)
+    score: Mapped[float | None] = mapped_column(Float)
+    scorable_count: Mapped[int] = mapped_column(Integer, default=0)
+    unscored_count: Mapped[int] = mapped_column(Integer, default=0)
     duration_seconds: Mapped[int] = mapped_column(Integer)
     question_type_breakdown: Mapped[list] = mapped_column(JSONB)
     passage_breakdown: Mapped[list] = mapped_column(JSONB)

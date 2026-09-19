@@ -32,7 +32,7 @@ async def generate(data: QuestionRequest, db: DB, user: CurrentUser):
 @router.get("/questions/{question_id}")
 async def question(question_id: str, db: DB, user: CurrentUser):
     q = await db.get(WritingQuestion, question_id)
-    if not q:
+    if not q or q.owner_id not in (None, user.id):
         raise AppError(404, "Không tìm thấy đề bài.")
     return question_view(q)
 

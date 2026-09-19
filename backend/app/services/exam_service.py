@@ -18,7 +18,7 @@ class ExamService:
         self.db = db
         self.questions = QuestionGeneratorService(db, llm)
 
-    async def create(self, data: ExamCreate, user_id: str):
+    async def create(self, data: ExamCreate, user_id: str, *, library=None):
         tasks = [1, 2] if data.mode == "FULL_TEST" else [1 if data.mode == "TASK1" else 2]
         questions = []
         if data.question_ids:
@@ -28,7 +28,7 @@ class ExamService:
                 )
             )
             if sorted(q.task_type for q in questions) != tasks or any(
-                not q.generation_diagnostics.get("quality_valid") for q in questions
+                q.owner_id not in (None, user_id) or (q.owner_id is None and not q.generation_diagnostics.get("quality_valid")) for q in questions
             ):
                 raise AppError(422, "Đề đã chọn không phù hợp với chế độ luyện tập.")
         else:
@@ -44,7 +44,10 @@ class ExamService:
             if data.mode == "FULL_TEST"
             else SIMULATOR_HEURISTICS["writing_task_minutes"][tasks[0]]
         )
+        if library is None and questions and questions[0].library_question_id:
+            library = {"library_question_id": questions[0].library_question_id, "library_revision": questions[0].library_revision, "library_title": questions[0].library_title}
         exam = ExamSession(
+            **(library or {}),
             user_id=user_id,
             mode=data.mode,
             test_profile=data.test_profile,

@@ -11,6 +11,7 @@ import {
 import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
+import { PracticeAssets } from "@/features/library/practice-assets";
 import { post } from "@/services/api";
 import { TEST_PROFILE } from "@/lib/test-profile";
 import { topics, task1Types, task2Types } from "@/lib/constants";
@@ -27,7 +28,12 @@ export function QuestionCard({ question }: { question: Question }) {
           {topics[question.topic] || question.topic}
         </span>
         <span className="rounded-md bg-stone-100 px-2.5 py-1 text-xs text-stone-500">
-          VSTEP.3–5 · {question.source === "AI" ? "Đề AI" : "Đề mẫu"}
+          VSTEP.3–5 ·{" "}
+          {question.source === "CUSTOM"
+            ? "Đề của tôi"
+            : question.source === "AI"
+              ? "Đề AI"
+              : "Đề mẫu"}
         </span>
       </div>
       <p lang="en" className="mb-4 text-sm italic text-stone-500">
@@ -36,10 +42,11 @@ export function QuestionCard({ question }: { question: Question }) {
       </p>
       <p
         lang="en"
-        className="font-serif text-xl leading-relaxed text-stone-800"
+        className="whitespace-pre-wrap font-serif text-xl leading-relaxed text-stone-800"
       >
         {question.instruction}
       </p>
+      <PracticeAssets ids={question.presentation?.practice_asset_ids} />
       {question.stimulus && (
         <blockquote
           lang="en"
@@ -53,16 +60,18 @@ export function QuestionCard({ question }: { question: Question }) {
           {question.response_instruction}
         </p>
       )}
-      {!question.stimulus && question.requirements.length > 0 && (
-        <ul
-          lang="en"
-          className="mt-5 list-disc space-y-3 pl-5 text-[15px] leading-7 text-stone-600"
-        >
-          {question.requirements.map((r) => (
-            <li key={r}>{r}</li>
-          ))}
-        </ul>
-      )}
+      {(!question.stimulus ||
+        question.presentation?.show_imported_requirements) &&
+        question.requirements.length > 0 && (
+          <ul
+            lang="en"
+            className="mt-5 list-disc space-y-3 pl-5 text-[15px] leading-7 text-stone-600"
+          >
+            {question.requirements.map((r) => (
+              <li key={r}>{r}</li>
+            ))}
+          </ul>
+        )}
       <p lang="en" className="mt-6 text-sm italic text-stone-500">
         Write at least {question.minimum_words} words.
       </p>

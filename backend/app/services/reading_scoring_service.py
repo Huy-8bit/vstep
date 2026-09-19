@@ -8,9 +8,14 @@ def practice_score(correct: int, total: int) -> float:
     return round(correct / total * 10, 2) if total else 0
 
 
+def trusted_key(question):
+    return question.correct_answer in ("A", "B", "C", "D") and getattr(question, "answer_key_source", "provided") in ("provided", "user_confirmed")
+
+
 def breakdown(items):
     result = []
     for key, answers in items.items():
+        scorable = sum(trusted_key(a.question) for a in answers)
         correct = sum(a.is_correct is True for a in answers)
         answered = sum(a.selected_answer is not None for a in answers)
         result.append(
@@ -19,7 +24,9 @@ def breakdown(items):
                 "total": len(answers),
                 "correct": correct,
                 "answered": answered,
-                "accuracy": round(correct / len(answers) * 100, 1),
+                "scorable_count": scorable,
+                "unscored_count": len(answers) - scorable,
+                "accuracy": round(correct / scorable * 100, 1) if scorable else None,
                 "time_spent_seconds": sum(a.time_spent_seconds for a in answers),
             }
         )
@@ -37,14 +44,14 @@ def strategy_feedback(types, passages, unanswered):
                 "question_type": None,
             }
         )
-    ranked = sorted(types, key=lambda row: (row["accuracy"], -row["total"]))
+    ranked = sorted((row for row in types if row["accuracy"] is not None), key=lambda row: (row["accuracy"], -row["total"]))
     if ranked and ranked[0]["accuracy"] < 100:
         weak = ranked[0]
         feedback.append(
             {
                 "kind": "weakness",
                 "title_vi": f"Ưu tiên luyện {weak['key']}",
-                "explanation_vi": f"Bạn đúng {weak['correct']}/{weak['total']} câu dạng này ({weak['accuracy']}%). Đọc lại bằng chứng và so sánh từng phương án gây nhiễu.",
+                "explanation_vi": f"Bạn đúng {weak['correct']}/{weak.get('scorable_count', weak['total'])} câu dạng này ({weak['accuracy']}%). Đọc lại bằng chứng và so sánh từng phương án gây nhiễu.",
                 "question_type": weak["key"],
             }
         )
@@ -54,11 +61,11 @@ def strategy_feedback(types, passages, unanswered):
                 {
                     "kind": "strength",
                     "title_vi": f"Kết quả tốt hơn ở dạng {strong['key']}",
-                    "explanation_vi": f"Bạn đúng {strong['correct']}/{strong['total']} câu. Tiếp tục áp dụng cách xác định thông tin trong bài cho các dạng còn lại.",
+                    "explanation_vi": f"Bạn đúng {strong['correct']}/{strong.get('scorable_count', strong['total'])} câu. Tiếp tục áp dụng cách xác định thông tin trong bài cho các dạng còn lại.",
                     "question_type": strong["key"],
                 }
             )
-    elif ranked:
+    elif ranked and all(row.get("unscored_count", 0) == 0 for row in types):
         feedback.append(
             {
                 "kind": "strength",
@@ -93,22 +100,26 @@ class ReadingScoringService:
         for answer in session.answers:
             answer.is_correct = (
                 None
-                if answer.selected_answer is None
+                if answer.selected_answer is None or not trusted_key(answer.question)
                 else answer.selected_answer == answer.question.correct_answer
             )
             types[answer.question.question_type].append(answer)
             passages[answer.question.passage_id].append(answer)
         correct = sum(a.is_correct is True for a in session.answers)
         incorrect = sum(a.is_correct is False for a in session.answers)
-        unanswered = session.question_count - correct - incorrect
+        unanswered = sum(a.selected_answer is None for a in session.answers)
+        scorable = sum(trusted_key(a.question) for a in session.answers)
+        complete = scorable == session.question_count
         by_type, by_passage = breakdown(types), breakdown(passages)
         session.status, session.submitted_at = ("EXPIRED" if expired else "SUBMITTED"), submitted
         session.result = ReadingResult(
             correct_count=correct,
             incorrect_count=incorrect,
             unanswered_count=unanswered,
-            accuracy=round(correct / session.question_count * 100, 1),
-            score=practice_score(correct, session.question_count),
+            accuracy=round(correct / session.question_count * 100, 1) if complete else None,
+            score=practice_score(correct, session.question_count) if complete else None,
+            scorable_count=scorable,
+            unscored_count=session.question_count - scorable,
             duration_seconds=max(0, int((submitted - session.started_at).total_seconds())),
             question_type_breakdown=by_type,
             passage_breakdown=by_passage,

@@ -56,7 +56,7 @@ async def generate(data: ReadingGenerateRequest, db: DB, user: CurrentUser):
 @router.get("/passages/{passage_id}")
 async def passage(passage_id: str, db: DB, user: CurrentUser):
     row = await db.get(ReadingPassage, passage_id)
-    if not row:
+    if not row or row.owner_id not in (None, user.id):
         raise AppError(404, "Không tìm thấy bài đọc.")
     return reading_passage_view(row)
 

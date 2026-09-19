@@ -26,7 +26,7 @@ class QuestionGeneratorService:
     async def generate(self, request: QuestionRequest, user_id: str) -> WritingQuestion:
         recent = list(
             await self.db.scalars(
-                select(WritingQuestion)
+                select(WritingQuestion).where(WritingQuestion.owner_id.is_(None))
                 .join(WritingAttempt)
                 .where(WritingAttempt.user_id == user_id, WritingQuestion.task_type == request.task)
                 .order_by(WritingAttempt.created_at.desc())
@@ -36,7 +36,7 @@ class QuestionGeneratorService:
         ids = set(request.exclude_ids) | {q.id for q in recent}
         recent_topics = {q.topic for q in recent[:6]}
         if request.source != "AI":
-            query = select(WritingQuestion).where(
+            query = select(WritingQuestion).where(WritingQuestion.owner_id.is_(None)).where(
                 WritingQuestion.task_type == request.task,
                 WritingQuestion.test_profile == request.test_profile,
                 WritingQuestion.generation_diagnostics["quality_valid"].as_boolean().is_(True),
@@ -69,7 +69,7 @@ class QuestionGeneratorService:
             payload["topic"] = random.choice([t for t in TOPICS if t not in recent_topics] or TOPICS)
         bank_recent = list(
             await self.db.scalars(
-                select(WritingQuestion)
+                select(WritingQuestion).where(WritingQuestion.owner_id.is_(None))
                 .where(WritingQuestion.task_type == request.task)
                 .order_by(WritingQuestion.created_at.desc())
                 .limit(15)

@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
-from app.api.routes import auth, progress, pronunciation, reading, speaking, vocabulary, writing
+from app.api.routes import auth, library, progress, pronunciation, reading, speaking, vocabulary, writing
 from app.common.errors import AppError
 from app.core.config import settings
 from app.db.session import SessionLocal, engine
@@ -28,7 +28,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.frontend_url],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PATCH", "PUT", "OPTIONS"],
+    allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
 hits: dict[str, deque] = defaultdict(deque)
@@ -49,11 +49,22 @@ async def request_guards(request: Request, call_next):
         audio_upload = request.url.path.startswith(
             ("/api/v1/speaking/answers/", "/api/v1/speaking/pronunciation/practices/")
         ) and request.url.path.endswith("/audio")
-        if audio_upload and not request.headers.get("content-length"):
+        library_upload = request.url.path == "/api/v1/my-questions/assets"
+        if (audio_upload or library_upload) and not request.headers.get("content-length"):
             return JSONResponse(
-                {"detail": "Upload audio cần Content-Length.", "code": "length_required"}, status_code=411
+                {"detail": "Upload tệp cần Content-Length.", "code": "length_required"}, status_code=411
             )
-        limit = settings.max_speaking_audio_mb * 1024 * 1024 + 65536 if audio_upload else 100000
+        limit = (
+            settings.max_speaking_audio_mb * 1024 * 1024 + 65536
+            if audio_upload
+            else (
+                21 * 1024 * 1024
+                if request.url.path == "/api/v1/my-questions/assets"
+                else 2 * 1024 * 1024
+                if request.url.path.startswith("/api/v1/my-questions")
+                else 100000
+            )
+        )
         try:
             content_length = int(request.headers.get("content-length", "0"))
         except ValueError:
@@ -63,6 +74,8 @@ async def request_guards(request: Request, call_next):
         path = request.url.path
         if path.endswith(
             (
+                "/parse",
+                "/assets",
                 "/login",
                 "/register",
                 "/grade",
@@ -113,7 +126,9 @@ async def app_error(request: Request, exc: AppError):
 async def validation_error(request: Request, exc: RequestValidationError):
     return JSONResponse(
         {
-            "detail": "Dữ liệu không hợp lệ. Kiểm tra email, mật khẩu (8–128 ký tự) và các lựa chọn.",
+            "detail": "Đề chưa hợp lệ. Kiểm tra nội dung, số câu, lựa chọn và các trường đang nhập."
+            if request.url.path.startswith("/api/v1/my-questions")
+            else "Dữ liệu không hợp lệ. Kiểm tra email, mật khẩu (8–128 ký tự) và các lựa chọn.",
             "code": "validation_error",
             "fields": [".".join(str(x) for x in e["loc"]) for e in exc.errors()],
         },
@@ -148,5 +163,6 @@ for router in (
     pronunciation.router,
     reading.router,
     vocabulary.router,
+    library.router,
 ):
     app.include_router(router, prefix="/api/v1")

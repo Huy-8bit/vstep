@@ -3,6 +3,7 @@ export class ApiError extends Error {
     message: string,
     public status: number,
     public code = "",
+    public details: Record<string, unknown> = {},
   ) {
     super(message);
   }
@@ -79,6 +80,7 @@ export async function api<T>(
         : "Yêu cầu chưa thực hiện được. Vui lòng thử lại.",
       response.status,
       data.code,
+      data,
     );
   return data as T;
 }

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { PracticeAssets } from "@/features/library/practice-assets";
 import { topics, type ReadingPassage as Passage } from "./types";
 export function ReadingPassage({
   passage,
@@ -30,6 +31,7 @@ export function ReadingPassage({
       <h2 className="mb-7 mt-3 text-2xl font-bold leading-relaxed">
         {passage.title}
       </h2>
+      <PracticeAssets ids={passage.practice_asset_ids} />
       <div className="space-y-6">
         {passage.paragraphs.map((p, i) => (
           <div
@@ -42,7 +44,7 @@ export function ReadingPassage({
               {highlight === p.id ? " · Bằng chứng" : ""}
             </p>
             <p
-              className="text-[17px] leading-[1.95] text-stone-700"
+              className="whitespace-pre-wrap text-[17px] leading-[1.95] text-stone-700"
               onMouseUp={() => {
                 if (!onTerm) return;
                 const selection = window.getSelection();

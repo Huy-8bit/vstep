@@ -47,6 +47,20 @@ logger = logging.getLogger(__name__)
 
 
 class OpenAILLMClient(LLMClient):
+    async def parse_library_question(self, payload, user_id, media=None):
+        from app.prompts.question_import import QUESTION_IMPORT_PROMPT
+        from app.schemas.library import ParsedImport
+
+        return await self._structured(
+            ParsedImport,
+            QUESTION_IMPORT_PROMPT,
+            payload,
+            user_id,
+            "question_import",
+            media=media,
+            max_output_tokens=28000,
+        )
+
     async def vocabulary_coach(self, payload, user_id):
         from app.services.vocabulary_coach_service import validate_recommendations
 
@@ -77,10 +91,17 @@ class OpenAILLMClient(LLMClient):
         user_id: str,
         operation: str,
         validate: Callable[[T], None] | None = None,
+        *,
+        media: list | None = None,
+        max_output_tokens: int = 14000,
     ) -> T:
         if not settings.openai_api_key:
             raise AppError(503, "Chưa cấu hình OpenAI API.", "ai_not_configured")
-        async with AsyncOpenAI(api_key=settings.openai_api_key, timeout=150, max_retries=0) as client:
+        async with AsyncOpenAI(
+            api_key=settings.openai_api_key,
+            timeout=240 if operation == "question_import" else 150,
+            max_retries=0,
+        ) as client:
             for attempt in range(2):
                 started = time.monotonic()
                 response = None
@@ -92,11 +113,21 @@ class OpenAILLMClient(LLMClient):
                             {"role": "system", "content": prompt},
                             {
                                 "role": "user",
-                                "content": json.dumps(payload, ensure_ascii=False),
+                                "content": (
+                                    [
+                                        {
+                                            "type": "input_text",
+                                            "text": json.dumps(payload, ensure_ascii=False),
+                                        },
+                                        *media,
+                                    ]
+                                    if media
+                                    else json.dumps(payload, ensure_ascii=False)
+                                ),
                             },
                         ],
                         text_format=schema,
-                        max_output_tokens=14000,
+                        max_output_tokens=max_output_tokens,
                         store=False,
                         **(
                             {"temperature": settings.openai_grading_temperature}
@@ -117,14 +148,18 @@ class OpenAILLMClient(LLMClient):
                     if attempt == 1:
                         raise AppError(
                             502,
-                            "AI chưa trả kết quả hợp lệ. Bài đã được lưu, bạn có thể thử lại.",
+                            "AI chưa nhận diện được cấu trúc hợp lệ. Chưa lưu đề; hãy thử lại hoặc nhập thủ công."
+                            if operation == "question_import"
+                            else "AI chưa trả kết quả hợp lệ. Bài đã được lưu, bạn có thể thử lại.",
                             "ai_invalid_output",
                         ) from None
                 except APITimeoutError:
                     status = "timeout"
                     raise AppError(
                         504,
-                        "AI phản hồi quá lâu. Bài đã được lưu, vui lòng thử chấm lại.",
+                        "AI đọc đề quá lâu. Chưa lưu đề; bạn có thể phân tích lại nguồn đang nhập."
+                        if operation == "question_import"
+                        else "AI phản hồi quá lâu. Bài đã được lưu, vui lòng thử chấm lại.",
                         "ai_timeout",
                     ) from None
                 except APIConnectionError:

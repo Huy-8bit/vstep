@@ -1,3 +1,4 @@
+from app.api.library_metadata import library_metadata
 from app.db.base import utcnow
 from app.prompts.writing_analysis import WRITING_GRADER_VERSION
 from app.vstep_reference.scoring_reference import writing_reference_level
@@ -25,7 +26,9 @@ def question_view(q):
         )
     }
 
-    view["requirements"] = q.requirements if not q.stimulus else []
+    view["requirements"] = q.requirements if not q.stimulus or q.owner_id else []
+    view.update(library_metadata(q))
+    view["presentation"] = q.presentation or {}
     return view
 
 
@@ -113,6 +116,7 @@ def exam_view(e):
         (grades[1] + grades[2] * 2) / 3 if e.mode == "FULL_TEST" and 1 in grades and 2 in grades else None
     )
     return {
+        **library_metadata(e),
         **{
             key: getattr(e, key)
             for key in (

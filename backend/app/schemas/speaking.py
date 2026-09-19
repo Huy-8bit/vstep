@@ -111,7 +111,7 @@ class SpeakingSessionCreate(StrictModel):
 
 
 class SpeakingAnswerCreate(StrictModel):
-    sequence_number: int = Field(ge=0, le=15)
+    sequence_number: int = Field(ge=0, le=120)
 
 
 class SpeakingAdvance(SpeakingAnswerCreate):

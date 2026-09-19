@@ -3,6 +3,7 @@ from statistics import mean
 
 from sqlalchemy import func, select
 
+from app.api.library_metadata import library_metadata
 from app.models.speaking import SpeakingExamSession, SpeakingGrading
 from app.services.speaking_grading_service import SCORE_FIELDS
 
@@ -23,6 +24,7 @@ class SpeakingProgressService:
             "total": total,
             "items": [
                 {
+                    **library_metadata(s),
                     "id": s.id,
                     "mode": s.mode,
                     "status": s.status,

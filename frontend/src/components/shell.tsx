@@ -50,6 +50,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               ["/practice", "Writing"],
               ["/speaking", "Speaking"],
               ["/reading", "Reading"],
+              ["/my-questions", "Đề của tôi"],
               ["/vocabulary", "Từ vựng"],
               ["/history", "Lịch sử"],
               ["/progress", "Tiến độ"],

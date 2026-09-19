@@ -1,3 +1,4 @@
+import type { LibraryMetadata } from "@/features/library/types";
 import type { TestProfile } from "@/lib/test-profile";
 export type ReadingMode =
   | "FULL_TEST"
@@ -72,6 +73,7 @@ export type ReadingQuestion = {
   id: string;
   passage_id: string;
   question_number: number;
+  source_question_number?: number | null;
   question_type: string;
   question_text: string;
   options: Record<Option, string>;
@@ -82,6 +84,7 @@ export type ReadingQuestion = {
   } | null;
 };
 export type ReadingPassage = {
+  practice_asset_ids?: string[];
   id: string;
   title: string;
   topic: string;
@@ -100,7 +103,7 @@ export type ReadingAnswer = {
   answered_at: string | null;
   updated_at: string;
 };
-export type ReadingSession = {
+export type ReadingSession = LibraryMetadata & {
   id: string;
   mode: ReadingMode;
   test_profile: TestProfile;
@@ -119,30 +122,37 @@ export type Breakdown = {
   key: string;
   total: number;
   correct: number;
+  scorable_count?: number;
+  unscored_count?: number;
   answered: number;
-  accuracy: number;
+  accuracy: number | null;
   time_spent_seconds: number;
 };
 export type ReviewQuestion = ReadingQuestion &
   ReadingAnswer & {
     is_correct: boolean | null;
-    correct_answer: Option;
-    explanation_vi: string;
-    option_explanations: Record<
-      Option,
-      { is_correct: boolean; explanation_vi: string }
+    correct_answer: Option | null;
+    answer_key_source:
+      "provided" | "user_confirmed" | "ai_suggested" | "unknown";
+    has_trusted_key: boolean;
+    explanation_source: "imported" | "generated";
+    explanation_vi: string | null;
+    option_explanations: Partial<
+      Record<Option, { is_correct: boolean; explanation_vi: string }>
     >;
-    evidence: { paragraph_id: string; quote: string };
+    evidence: { paragraph_id: string; quote: string } | null;
   };
 export type ReadingResult = {
   session: ReadingSession;
   result: {
     id: string;
     correct_count: number;
+    scorable_count: number;
+    unscored_count: number;
     incorrect_count: number;
     unanswered_count: number;
-    accuracy: number;
-    score: number;
+    accuracy: number | null;
+    score: number | null;
     duration_seconds: number;
     question_type_breakdown: Breakdown[];
     passage_breakdown: Breakdown[];
@@ -158,6 +168,8 @@ export type ReadingResult = {
 export type ReadingProgress = {
   completed_sessions: number;
   questions_total: number;
+  scorable_count: number;
+  unscored_count: number;
   questions_answered: number;
   correct_count: number;
   accuracy: number | null;
@@ -170,8 +182,8 @@ export type ReadingProgress = {
     id: string;
     date: string;
     mode: ReadingMode;
-    score: number;
-    accuracy: number;
+    score: number | null;
+    accuracy: number | null;
   }[];
 };
 export type Bank = {

@@ -27,8 +27,10 @@ class ReadingExamService:
     def __init__(self, db, llm=None):
         self.db, self.llm = db, llm
 
-    async def create(self, data, user_id):
-        selected = await ReadingQuestionGeneratorService(self.db, self.llm).select(data, user_id)
+    async def create(self, data, user_id, *, selection=None, library=None):
+        selected = selection if selection is not None else await ReadingQuestionGeneratorService(self.db, self.llm).select(data, user_id)
+        if any(p.owner_id not in (None, user_id) for p, _ in selected):
+            raise AppError(404, "Không tìm thấy bài đọc.")
         now = utcnow()
         selected_topics = {p.topic for p, _ in selected}
         minutes = (
@@ -39,12 +41,13 @@ class ReadingExamService:
             else 8
         )
         session = ReadingExamSession(
+            **(library or {}),
             user_id=user_id,
             mode=data.mode,
             test_profile=data.test_profile,
-            blueprint_version=READING_BLUEPRINT.version if data.mode == "FULL_TEST" else None,
+            blueprint_version=READING_BLUEPRINT.version if data.mode == "FULL_TEST" and not library else None,
             blueprint_diagnostics=READING_BLUEPRINT.diagnostics(list({p.id: p for p, _ in selected}.values()))
-            if data.mode == "FULL_TEST"
+            if data.mode == "FULL_TEST" and not library
             else {},
             topic=next(iter(selected_topics)) if len(selected_topics) == 1 else "random",
             started_at=now,

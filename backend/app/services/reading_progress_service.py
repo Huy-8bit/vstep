@@ -3,9 +3,10 @@ from statistics import mean
 
 from sqlalchemy import func, select
 
+from app.api.library_metadata import library_metadata
 from app.models.reading import ReadingExamSession, ReadingPassage
 from app.services.reading_exam_service import ReadingExamService
-from app.services.reading_scoring_service import breakdown
+from app.services.reading_scoring_service import breakdown, trusted_key
 
 
 class ReadingProgressService:
@@ -25,6 +26,7 @@ class ReadingProgressService:
             "total": total,
             "items": [
                 {
+                    **library_metadata(s),
                     "id": s.id,
                     "mode": s.mode,
                     "test_profile": s.test_profile,
@@ -62,18 +64,22 @@ class ReadingProgressService:
                 by_topic[passages[a.question.passage_id].topic].append(a)
         total = sum(s.question_count for s in sessions)
         correct = sum(s.result.correct_count for s in sessions)
-        answered = sum(s.result.correct_count + s.result.incorrect_count for s in sessions)
+        answered = sum(a.selected_answer is not None for s in sessions for a in s.answers)
+        scorable = sum(trusted_key(a.question) for s in sessions for a in s.answers)
+        scores = [s.result.score for s in sessions if s.result.score is not None]
         types = breakdown(by_type)
         weaknesses = sorted(
-            [row for row in types if row["accuracy"] < 100], key=lambda row: (row["accuracy"], -row["total"])
+            [row for row in types if row["accuracy"] is not None and row["accuracy"] < 100], key=lambda row: (row["accuracy"], -row["total"])
         )[:3]
         return {
             "completed_sessions": len(sessions),
             "questions_total": total,
             "questions_answered": answered,
             "correct_count": correct,
-            "accuracy": round(correct / total * 100, 1) if total else None,
-            "average_score": round(mean(s.result.score for s in sessions), 2) if sessions else None,
+            "accuracy": round(correct / scorable * 100, 1) if scorable else None,
+            "scorable_count": scorable,
+            "unscored_count": total - scorable,
+            "average_score": round(mean(scores), 2) if scores else None,
             "average_time_per_question": round(sum(s.result.duration_seconds for s in sessions) / total, 1)
             if total
             else None,
@@ -82,6 +88,7 @@ class ReadingProgressService:
             "weaknesses": weaknesses,
             "timeline": [
                 {
+                    **library_metadata(s),
                     "id": s.id,
                     "date": s.submitted_at,
                     "mode": s.mode,

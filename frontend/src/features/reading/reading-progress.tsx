@@ -83,6 +83,13 @@ function Dashboard() {
         <Loading />
       ) : data?.completed_sessions ? (
         <div className="space-y-6">
+          {data.unscored_count > 0 && (
+            <p className="rounded-lg bg-amber-50 p-4 text-sm text-amber-900">
+              {data.unscored_count} câu chưa có đáp án được xác nhận nên không
+              tính vào tỷ lệ đúng. Điểm trung bình chỉ tính các lượt có đủ đáp
+              án.
+            </p>
+          )}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Stat
               label="Điểm Reading trung bình"
@@ -96,8 +103,8 @@ function Dashboard() {
             />
             <Stat
               label="Tỷ lệ đúng"
-              value={`${data.accuracy}%`}
-              note={`${data.correct_count} / ${data.questions_total} câu; gồm cả câu bỏ trống`}
+              value={data.accuracy === null ? "—" : `${data.accuracy}%`}
+              note={`${data.correct_count} / ${data.scorable_count} câu có đáp án; gồm cả câu bỏ trống`}
             />
             <Stat
               label="Thời gian trung bình / câu"
@@ -114,26 +121,28 @@ function Dashboard() {
                 {data.weaknesses.map((row) => (
                   <article key={row.key} className="rounded-xl bg-amber-50 p-5">
                     <p className="text-sm font-semibold">
-                      {questionTypes[row.key]}
+                      {questionTypes[row.key] || "Câu hỏi từ đề riêng"}
                     </p>
                     <p className="mt-3 text-2xl font-bold text-teal-800">
-                      {row.accuracy}%
+                      {row.accuracy === null ? "—" : `${row.accuracy ?? 0}%`}
                     </p>
                     <p className="mt-2 text-xs text-stone-500">
-                      Đúng {row.correct}/{row.total} câu
+                      Đúng {row.correct}/{row.scorable_count ?? row.total} câu
                     </p>
-                    <Button
-                      className="mt-4"
-                      asChild
-                      size="sm"
-                      variant="outline"
-                    >
-                      <Link
-                        href={`/reading?mode=QUESTION_TYPE_PRACTICE&type=${row.key}`}
+                    {questionTypes[row.key] && (
+                      <Button
+                        className="mt-4"
+                        asChild
+                        size="sm"
+                        variant="outline"
                       >
-                        Luyện dạng này →
-                      </Link>
-                    </Button>
+                        <Link
+                          href={`/reading?mode=QUESTION_TYPE_PRACTICE&type=${row.key}`}
+                        >
+                          Luyện dạng này →
+                        </Link>
+                      </Button>
+                    )}
                   </article>
                 ))}
               </div>
@@ -229,13 +238,16 @@ function Bars({
           <div className="mb-2 flex justify-between gap-3 text-xs">
             <span className="font-semibold">{labels[row.key] || row.key}</span>
             <span className="text-stone-500">
-              {row.correct}/{row.total} · {row.accuracy}%
+              {row.correct}/{row.scorable_count ?? row.total} ·{" "}
+              {row.accuracy === null ? "—" : `${row.accuracy ?? 0}%`}
             </span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-stone-100">
             <div
               className="h-full rounded-full bg-teal-600"
-              style={{ width: `${row.accuracy}%` }}
+              style={{
+                width: `${row.accuracy === null ? "—" : `${row.accuracy ?? 0}%`}`,
+              }}
             />
           </div>
         </div>

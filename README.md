@@ -193,3 +193,7 @@ Generator/validator v3 dùng blueprint chung và ngân hàng đã kiểm tra. Wr
 Trang `/vocabulary` lưu cụm từ từ kết quả Writing/Speaking/Reading, năm dạng ôn chủ động, lịch ôn, mức ghi nhớ, lỗi lặp và tiến độ liên kỹ năng. Gợi ý mới/đặt câu dùng AI; không trả gợi ý trước khi nộp. Migration bổ sung `f729a310c058` giữ dữ liệu lịch sử.
 
 Xem [generation](docs/vstep-generation.md) và [Vocabulary Coach](docs/vocabulary-coach.md).
+
+### Đề của tôi / My Question Library
+
+Mở `/my-questions` để lưu đề riêng từ văn bản, ảnh/PDF hoặc biểu mẫu thủ công. Hỗ trợ Writing, Speaking, Reading và đề đầy đủ; dùng chung engine luyện, chấm, Vocabulary Coach, lịch sử và tiến độ. Reading thiếu đáp án vẫn luyện được và được ghi rõ chưa thể tính điểm chính xác. Xem [hướng dẫn, API và JSON schemas](docs/my-question-library.md).

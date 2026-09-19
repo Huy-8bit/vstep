@@ -5,9 +5,10 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, IdentityMixin, UpdatedMixin, utcnow
+from app.models.library import LibrarySessionMixin, PrivateQuestionMixin
 
 
-class SpeakingQuestion(IdentityMixin, Base):
+class SpeakingQuestion(PrivateQuestionMixin, IdentityMixin, Base):
     __tablename__ = "speaking_questions"
     __table_args__ = (CheckConstraint("part IN (1, 2, 3)"),)
     part: Mapped[int] = mapped_column(Integer, index=True)
@@ -28,7 +29,7 @@ class SpeakingQuestion(IdentityMixin, Base):
     generation_diagnostics: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
 
 
-class SpeakingExamSession(IdentityMixin, Base):
+class SpeakingExamSession(LibrarySessionMixin, IdentityMixin, Base):
     __tablename__ = "speaking_exam_sessions"
     __table_args__ = (CheckConstraint("mode IN ('FULL_TEST', 'PART1', 'PART2', 'PART3', 'QUICK_PRACTICE')"),)
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)

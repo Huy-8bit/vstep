@@ -37,11 +37,13 @@ def question_steps(q: SpeakingQuestion) -> list[dict]:
         "question_id": q.id,
         "part": q.part,
         "topic_code": q.topic,
-        "topic": q.topic,
+        "topic": (q.presentation or {}).get("topic_title") or q.topic,
         "options": [],
         "suggested_ideas": [],
         "situation": None,
         "allow_own_idea": False,
+        "practice_asset_ids": (q.presentation or {}).get("practice_asset_ids", []),
+        "optional_context": (q.presentation or {}).get("optional_context", ""),
     }
     if q.part == 1:
         return [
@@ -75,7 +77,7 @@ class SpeakingExamService:
     def __init__(self, db, llm, storage):
         self.db, self.llm, self.storage = db, llm, storage
 
-    async def create(self, data: SpeakingSessionCreate, user_id: str):
+    async def create(self, data: SpeakingSessionCreate, user_id: str, *, resolved_questions=None, library=None):
         parts = (
             [1, 2, 3]
             if data.mode == "FULL_TEST"
@@ -85,9 +87,13 @@ class SpeakingExamService:
             raise AppError(422, "Đề thi Speaking đầy đủ được hệ thống chọn cho cả ba phần.")
         steps = []
         for part in parts:
-            if data.question_id:
+            if resolved_questions is not None:
+                q = next((q for q in resolved_questions if q.part == part and q.owner_id == user_id), None)
+                if q is None:
+                    raise AppError(422, "Thiếu phần Speaking trong đề riêng.")
+            elif data.question_id:
                 q = await self.db.get(SpeakingQuestion, data.question_id)
-                if not q or q.part != part or not q.generation_diagnostics.get("quality_valid"):
+                if not q or q.part != part or q.owner_id not in (None, user_id) or (q.owner_id is None and not q.generation_diagnostics.get("quality_valid")):
                     raise AppError(422, "Đề không khớp phần Speaking đã chọn.")
             else:
                 q = await SpeakingQuestionGeneratorService(self.db, self.llm).generate(
@@ -101,7 +107,10 @@ class SpeakingExamService:
             steps = [random.choice(steps)]
         for index, step in enumerate(steps):
             step["sequence_number"] = index
+        if library is None and q.library_question_id:
+            library = {"library_question_id": q.library_question_id, "library_revision": q.library_revision, "library_title": q.library_title}
         session = SpeakingExamSession(
+            **(library or {}),
             user_id=user_id,
             mode=data.mode,
             test_profile=data.test_profile,

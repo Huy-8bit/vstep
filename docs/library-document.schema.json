@@ -1,0 +1,499 @@
+{
+  "$defs": {
+    "LibraryContent": {
+      "additionalProperties": false,
+      "properties": {
+        "practice_asset_ids": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "title": "Practice Asset Ids",
+          "type": "array"
+        },
+        "writing": {
+          "items": {
+            "$ref": "#/$defs/LibraryWriting"
+          },
+          "maxItems": 2,
+          "title": "Writing",
+          "type": "array"
+        },
+        "speaking": {
+          "items": {
+            "$ref": "#/$defs/LibrarySpeaking"
+          },
+          "maxItems": 3,
+          "title": "Speaking",
+          "type": "array"
+        },
+        "reading": {
+          "items": {
+            "$ref": "#/$defs/LibraryReadingPassage"
+          },
+          "maxItems": 4,
+          "title": "Reading",
+          "type": "array"
+        }
+      },
+      "title": "LibraryContent",
+      "type": "object"
+    },
+    "LibraryOptions": {
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "default": "",
+          "maxLength": 5000,
+          "title": "A",
+          "type": "string"
+        },
+        "B": {
+          "default": "",
+          "maxLength": 5000,
+          "title": "B",
+          "type": "string"
+        },
+        "C": {
+          "default": "",
+          "maxLength": 5000,
+          "title": "C",
+          "type": "string"
+        },
+        "D": {
+          "default": "",
+          "maxLength": 5000,
+          "title": "D",
+          "type": "string"
+        }
+      },
+      "title": "LibraryOptions",
+      "type": "object"
+    },
+    "LibraryReadingPassage": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "default": "",
+          "maxLength": 300,
+          "title": "Title",
+          "type": "string"
+        },
+        "passage_text": {
+          "default": "",
+          "maxLength": 60000,
+          "title": "Passage Text",
+          "type": "string"
+        },
+        "questions": {
+          "items": {
+            "$ref": "#/$defs/LibraryReadingQuestion"
+          },
+          "maxItems": 40,
+          "title": "Questions",
+          "type": "array"
+        }
+      },
+      "title": "LibraryReadingPassage",
+      "type": "object"
+    },
+    "LibraryReadingQuestion": {
+      "additionalProperties": false,
+      "properties": {
+        "question_number": {
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Question Number",
+          "type": "integer"
+        },
+        "question_text": {
+          "default": "",
+          "maxLength": 10000,
+          "title": "Question Text",
+          "type": "string"
+        },
+        "question_type": {
+          "default": "other",
+          "maxLength": 40,
+          "title": "Question Type",
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/$defs/LibraryOptions"
+        },
+        "correct_answer": {
+          "anyOf": [
+            {
+              "enum": [
+                "A",
+                "B",
+                "C",
+                "D"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Correct Answer"
+        },
+        "answer_key_source": {
+          "default": "unknown",
+          "enum": [
+            "provided",
+            "user_confirmed",
+            "ai_suggested",
+            "unknown"
+          ],
+          "title": "Answer Key Source",
+          "type": "string"
+        },
+        "answer_key_evidence": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Answer Key Evidence"
+        },
+        "explanation": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Explanation"
+        }
+      },
+      "required": [
+        "question_number"
+      ],
+      "title": "LibraryReadingQuestion",
+      "type": "object"
+    },
+    "LibrarySpeaking": {
+      "additionalProperties": false,
+      "properties": {
+        "part": {
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "title": "Part",
+          "type": "integer"
+        },
+        "topic": {
+          "default": "",
+          "maxLength": 300,
+          "title": "Topic",
+          "type": "string"
+        },
+        "topic_sets": {
+          "items": {
+            "$ref": "#/$defs/LibraryTopic"
+          },
+          "maxItems": 6,
+          "title": "Topic Sets",
+          "type": "array"
+        },
+        "situation": {
+          "default": "",
+          "maxLength": 15000,
+          "title": "Situation",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "title": "Options",
+          "type": "array"
+        },
+        "candidate_task": {
+          "default": "",
+          "maxLength": 10000,
+          "title": "Candidate Task",
+          "type": "string"
+        },
+        "optional_context": {
+          "default": "",
+          "maxLength": 10000,
+          "title": "Optional Context",
+          "type": "string"
+        },
+        "central_idea": {
+          "default": "",
+          "maxLength": 10000,
+          "title": "Central Idea",
+          "type": "string"
+        },
+        "suggested_ideas": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 15,
+          "title": "Suggested Ideas",
+          "type": "array"
+        },
+        "follow_up_questions": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 15,
+          "title": "Follow Up Questions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "part"
+      ],
+      "title": "LibrarySpeaking",
+      "type": "object"
+    },
+    "LibraryTopic": {
+      "additionalProperties": false,
+      "properties": {
+        "topic": {
+          "default": "",
+          "maxLength": 300,
+          "title": "Topic",
+          "type": "string"
+        },
+        "questions": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 15,
+          "title": "Questions",
+          "type": "array"
+        }
+      },
+      "title": "LibraryTopic",
+      "type": "object"
+    },
+    "LibraryWriting": {
+      "additionalProperties": false,
+      "properties": {
+        "task_type": {
+          "enum": [
+            1,
+            2
+          ],
+          "title": "Task Type",
+          "type": "integer"
+        },
+        "instruction": {
+          "default": "",
+          "maxLength": 20000,
+          "title": "Instruction",
+          "type": "string"
+        },
+        "stimulus_type": {
+          "default": "other",
+          "enum": [
+            "letter",
+            "email",
+            "announcement",
+            "situation",
+            "request",
+            "invitation",
+            "complaint",
+            "other"
+          ],
+          "title": "Stimulus Type",
+          "type": "string"
+        },
+        "stimulus_text": {
+          "default": "",
+          "maxLength": 20000,
+          "title": "Stimulus Text",
+          "type": "string"
+        },
+        "requirements": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 30,
+          "title": "Requirements",
+          "type": "array"
+        },
+        "minimum_words": {
+          "anyOf": [
+            {
+              "maximum": 5000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum Words"
+        },
+        "essay_family": {
+          "default": "other",
+          "maxLength": 50,
+          "title": "Essay Family",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_type"
+      ],
+      "title": "LibraryWriting",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "maxLength": 300,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "skill": {
+      "enum": [
+        "writing",
+        "speaking",
+        "reading"
+      ],
+      "title": "Skill",
+      "type": "string"
+    },
+    "part": {
+      "enum": [
+        "task_1",
+        "task_2",
+        "part_1",
+        "part_2",
+        "part_3",
+        "passage",
+        "mini",
+        "full"
+      ],
+      "title": "Part",
+      "type": "string"
+    },
+    "topic": {
+      "default": "other",
+      "maxLength": 40,
+      "minLength": 1,
+      "title": "Topic",
+      "type": "string"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20,
+      "title": "Tags",
+      "type": "array"
+    },
+    "favorite": {
+      "default": false,
+      "title": "Favorite",
+      "type": "boolean"
+    },
+    "collection_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Collection Id"
+    },
+    "source_type": {
+      "default": "manual",
+      "enum": [
+        "manual",
+        "copied_text",
+        "image",
+        "pdf",
+        "teacher",
+        "website",
+        "book",
+        "other"
+      ],
+      "title": "Source Type",
+      "type": "string"
+    },
+    "source_name": {
+      "anyOf": [
+        {
+          "maxLength": 300,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Name"
+    },
+    "source_url": {
+      "anyOf": [
+        {
+          "maxLength": 2000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Url"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "asset_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10,
+      "title": "Asset Ids",
+      "type": "array"
+    },
+    "content": {
+      "$ref": "#/$defs/LibraryContent"
+    }
+  },
+  "required": [
+    "title",
+    "skill",
+    "part",
+    "content"
+  ],
+  "title": "LibraryDocument",
+  "type": "object"
+}

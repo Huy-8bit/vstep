@@ -14,6 +14,7 @@ import {
 import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice, Loading } from "@/components/feedback";
+import { PracticeAssets } from "@/features/library/practice-assets";
 import { api, audioBlob, post } from "@/services/api";
 import { useRecorder } from "./use-recorder";
 import { AudioPlayer } from "./audio-player";
@@ -398,11 +399,17 @@ function RecordingQuestion({
             · Part {question.part}
           </p>
           {question.situation && (
-            <p className="mt-5 text-lg leading-8 sm:text-xl">
+            <p className="mt-5 whitespace-pre-wrap text-lg leading-8 sm:text-xl">
               {question.situation}
             </p>
           )}
-          <h1 className="mt-4 text-2xl font-semibold leading-relaxed sm:text-3xl">
+          {question.optional_context && (
+            <p className="mt-4 whitespace-pre-wrap text-lg leading-8">
+              {question.optional_context}
+            </p>
+          )}
+          <PracticeAssets ids={question.practice_asset_ids} />
+          <h1 className="mt-4 whitespace-pre-wrap text-2xl font-semibold leading-relaxed sm:text-3xl">
             {question.question_text}
           </h1>
           <p className="mt-3 text-xs text-stone-500">
