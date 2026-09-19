@@ -1,0 +1,519 @@
+{
+  "$defs": {
+    "AnswerFeedback": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "part": {
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "title": "Part",
+          "type": "integer"
+        },
+        "summary_vi": {
+          "title": "Summary Vi",
+          "type": "string"
+        },
+        "best_option_clearly_stated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Best Option Clearly Stated"
+        },
+        "reasons_developed_vi": {
+          "title": "Reasons Developed Vi",
+          "type": "string"
+        },
+        "other_options_discussed_vi": {
+          "title": "Other Options Discussed Vi",
+          "type": "string"
+        },
+        "corrected_transcript": {
+          "title": "Corrected Transcript",
+          "type": "string"
+        },
+        "improved_b2_answer": {
+          "title": "Improved B2 Answer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "part",
+        "summary_vi",
+        "best_option_clearly_stated",
+        "reasons_developed_vi",
+        "other_options_discussed_vi",
+        "corrected_transcript",
+        "improved_b2_answer"
+      ],
+      "title": "AnswerFeedback",
+      "type": "object"
+    },
+    "Improvement": {
+      "additionalProperties": false,
+      "properties": {
+        "title_vi": {
+          "title": "Title Vi",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "example": {
+          "title": "Example",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title_vi",
+        "explanation_vi",
+        "example"
+      ],
+      "title": "Improvement",
+      "type": "object"
+    },
+    "PronunciationItem": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "word": {
+          "title": "Word",
+          "type": "string"
+        },
+        "issue": {
+          "enum": [
+            "individual_sound",
+            "word_stress",
+            "sentence_stress",
+            "final_sound",
+            "intonation",
+            "clarity"
+          ],
+          "title": "Issue",
+          "type": "string"
+        },
+        "feedback_vi": {
+          "title": "Feedback Vi",
+          "type": "string"
+        },
+        "ipa": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Ipa"
+        },
+        "suggestion": {
+          "title": "Suggestion",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "word",
+        "issue",
+        "feedback_vi",
+        "ipa",
+        "suggestion",
+        "confidence"
+      ],
+      "title": "PronunciationItem",
+      "type": "object"
+    },
+    "SpeakingErrorOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "category": {
+          "enum": [
+            "grammar",
+            "vocabulary",
+            "pronunciation",
+            "fluency",
+            "coherence",
+            "content",
+            "task_response"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "subtype": {
+          "title": "Subtype",
+          "type": "string"
+        },
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "corrected": {
+          "title": "Corrected",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "minor",
+            "major",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "category",
+        "subtype",
+        "original",
+        "corrected",
+        "explanation_vi",
+        "severity",
+        "confidence"
+      ],
+      "title": "SpeakingErrorOutput",
+      "type": "object"
+    },
+    "SpeakingScores": {
+      "additionalProperties": false,
+      "properties": {
+        "grammar": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Grammar",
+          "type": "number"
+        },
+        "vocabulary": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Vocabulary",
+          "type": "number"
+        },
+        "pronunciation": {
+          "anyOf": [
+            {
+              "maximum": 10,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Pronunciation"
+        },
+        "fluency": {
+          "anyOf": [
+            {
+              "maximum": 10,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fluency"
+        },
+        "structures": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Structures",
+          "type": "number"
+        },
+        "overall": {
+          "anyOf": [
+            {
+              "maximum": 10,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Overall"
+        }
+      },
+      "required": [
+        "grammar",
+        "vocabulary",
+        "pronunciation",
+        "fluency",
+        "structures",
+        "overall"
+      ],
+      "title": "SpeakingScores",
+      "type": "object"
+    },
+    "SpeakingVocabulary": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "suggestion": {
+          "title": "Suggestion",
+          "type": "string"
+        },
+        "reason_vi": {
+          "title": "Reason Vi",
+          "type": "string"
+        },
+        "example": {
+          "title": "Example",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "original",
+        "suggestion",
+        "reason_vi",
+        "example"
+      ],
+      "title": "SpeakingVocabulary",
+      "type": "object"
+    },
+    "SpokenCorrection": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "corrected": {
+          "title": "Corrected",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "start_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Start Seconds"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "original",
+        "corrected",
+        "explanation_vi",
+        "start_seconds"
+      ],
+      "title": "SpokenCorrection",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "part": {
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "title": "Part",
+      "type": "integer"
+    },
+    "scores": {
+      "$ref": "#/$defs/SpeakingScores"
+    },
+    "pronunciation_confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Pronunciation Confidence",
+      "type": "number"
+    },
+    "fluency_confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Fluency Confidence",
+      "type": "number"
+    },
+    "summary_vi": {
+      "title": "Summary Vi",
+      "type": "string"
+    },
+    "strengths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Strengths",
+      "type": "array"
+    },
+    "priority_improvements": {
+      "items": {
+        "$ref": "#/$defs/Improvement"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "title": "Priority Improvements",
+      "type": "array"
+    },
+    "grammar_errors": {
+      "items": {
+        "$ref": "#/$defs/SpeakingErrorOutput"
+      },
+      "title": "Grammar Errors",
+      "type": "array"
+    },
+    "other_errors": {
+      "items": {
+        "$ref": "#/$defs/SpeakingErrorOutput"
+      },
+      "title": "Other Errors",
+      "type": "array"
+    },
+    "vocabulary_suggestions": {
+      "items": {
+        "$ref": "#/$defs/SpeakingVocabulary"
+      },
+      "title": "Vocabulary Suggestions",
+      "type": "array"
+    },
+    "pronunciation_feedback": {
+      "items": {
+        "$ref": "#/$defs/PronunciationItem"
+      },
+      "title": "Pronunciation Feedback",
+      "type": "array"
+    },
+    "fluency_feedback": {
+      "items": {
+        "$ref": "#/$defs/Improvement"
+      },
+      "title": "Fluency Feedback",
+      "type": "array"
+    },
+    "structure_feedback": {
+      "items": {
+        "$ref": "#/$defs/Improvement"
+      },
+      "title": "Structure Feedback",
+      "type": "array"
+    },
+    "content_feedback": {
+      "items": {
+        "$ref": "#/$defs/Improvement"
+      },
+      "title": "Content Feedback",
+      "type": "array"
+    },
+    "sentence_corrections": {
+      "items": {
+        "$ref": "#/$defs/SpokenCorrection"
+      },
+      "title": "Sentence Corrections",
+      "type": "array"
+    },
+    "answer_feedback": {
+      "items": {
+        "$ref": "#/$defs/AnswerFeedback"
+      },
+      "title": "Answer Feedback",
+      "type": "array"
+    },
+    "speaking_frame": {
+      "items": {
+        "$ref": "#/$defs/Improvement"
+      },
+      "title": "Speaking Frame",
+      "type": "array"
+    },
+    "corrected_transcript": {
+      "title": "Corrected Transcript",
+      "type": "string"
+    },
+    "improved_b2_answer": {
+      "title": "Improved B2 Answer",
+      "type": "string"
+    }
+  },
+  "required": [
+    "part",
+    "scores",
+    "pronunciation_confidence",
+    "fluency_confidence",
+    "summary_vi",
+    "strengths",
+    "priority_improvements",
+    "grammar_errors",
+    "other_errors",
+    "vocabulary_suggestions",
+    "pronunciation_feedback",
+    "fluency_feedback",
+    "structure_feedback",
+    "content_feedback",
+    "sentence_corrections",
+    "answer_feedback",
+    "speaking_frame",
+    "corrected_transcript",
+    "improved_b2_answer"
+  ],
+  "title": "SpeakingGradingOutput",
+  "type": "object"
+}

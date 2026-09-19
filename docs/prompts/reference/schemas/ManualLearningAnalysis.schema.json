@@ -1,0 +1,87 @@
+{
+  "title": "ManualLearningAnalysis",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "data_limits_vi": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "priorities": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "concept_key": {
+            "type": "string"
+          },
+          "evidence_summary_vi": {
+            "type": "string"
+          },
+          "reason_vi": {
+            "type": "string"
+          },
+          "what_to_study_vi": {
+            "type": "string"
+          },
+          "how_to_study_vi": {
+            "type": "string"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "concept_key",
+          "evidence_summary_vi",
+          "reason_vi",
+          "what_to_study_vi",
+          "how_to_study_vi",
+          "status"
+        ]
+      }
+    },
+    "practice_recommendations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suggested_seven_days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "integer"
+          },
+          "minutes": {
+            "type": "integer"
+          },
+          "activity_vi": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "day",
+          "minutes",
+          "activity_vi"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "data_limits_vi",
+    "priorities",
+    "practice_recommendations",
+    "suggested_seven_days"
+  ]
+}

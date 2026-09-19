@@ -1,0 +1,187 @@
+{
+  "$defs": {
+    "VocabularyLearningItem": {
+      "additionalProperties": false,
+      "properties": {
+        "headword": {
+          "maxLength": 150,
+          "minLength": 1,
+          "title": "Headword",
+          "type": "string"
+        },
+        "phrase": {
+          "maxLength": 250,
+          "minLength": 1,
+          "title": "Phrase",
+          "type": "string"
+        },
+        "part_of_speech": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Part Of Speech",
+          "type": "string"
+        },
+        "meaning_vi": {
+          "maxLength": 1500,
+          "minLength": 5,
+          "title": "Meaning Vi",
+          "type": "string"
+        },
+        "meaning_in_context_vi": {
+          "maxLength": 1500,
+          "minLength": 5,
+          "title": "Meaning In Context Vi",
+          "type": "string"
+        },
+        "register": {
+          "enum": [
+            "informal",
+            "neutral",
+            "formal"
+          ],
+          "title": "Register",
+          "type": "string"
+        },
+        "collocations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 1,
+          "title": "Collocations",
+          "type": "array"
+        },
+        "common_patterns": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 1,
+          "title": "Common Patterns",
+          "type": "array"
+        },
+        "user_original": {
+          "maxLength": 1200,
+          "title": "User Original",
+          "type": "string"
+        },
+        "better_version": {
+          "maxLength": 1500,
+          "title": "Better Version",
+          "type": "string"
+        },
+        "example_sentence": {
+          "maxLength": 1000,
+          "minLength": 10,
+          "title": "Example Sentence",
+          "type": "string"
+        },
+        "why_learn_this_vi": {
+          "maxLength": 1500,
+          "minLength": 10,
+          "title": "Why Learn This Vi",
+          "type": "string"
+        },
+        "source_type": {
+          "enum": [
+            "UNNATURAL_EXPRESSION",
+            "TOPIC",
+            "REPEATED_ERROR",
+            "SPOKEN_EXPRESSION",
+            "READING_CONTEXT"
+          ],
+          "title": "Source Type",
+          "type": "string"
+        },
+        "issue_type": {
+          "enum": [
+            "word_choice",
+            "collocation",
+            "word_form",
+            "countability",
+            "register",
+            "lexical_gap",
+            "word_family"
+          ],
+          "title": "Issue Type",
+          "type": "string"
+        },
+        "priority": {
+          "enum": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ],
+          "title": "Priority",
+          "type": "string"
+        },
+        "natural_options": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4,
+          "minItems": 1,
+          "title": "Natural Options",
+          "type": "array"
+        },
+        "collocation_distractors": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Collocation Distractors",
+          "type": "array"
+        },
+        "accepted_phrases": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Accepted Phrases",
+          "type": "array"
+        }
+      },
+      "required": [
+        "headword",
+        "phrase",
+        "part_of_speech",
+        "meaning_vi",
+        "meaning_in_context_vi",
+        "register",
+        "collocations",
+        "common_patterns",
+        "user_original",
+        "better_version",
+        "example_sentence",
+        "why_learn_this_vi",
+        "source_type",
+        "issue_type",
+        "priority",
+        "natural_options",
+        "collocation_distractors",
+        "accepted_phrases"
+      ],
+      "title": "VocabularyLearningItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/VocabularyLearningItem"
+      },
+      "maxItems": 16,
+      "minItems": 1,
+      "title": "Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "items"
+  ],
+  "title": "VocabularyCoachOutput",
+  "type": "object"
+}

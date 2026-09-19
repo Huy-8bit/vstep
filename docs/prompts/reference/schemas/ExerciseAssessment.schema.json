@@ -1,0 +1,47 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "concept_correct": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Concept Correct"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "explanation_vi": {
+      "maxLength": 1500,
+      "minLength": 10,
+      "title": "Explanation Vi",
+      "type": "string"
+    },
+    "suggested_answer": {
+      "maxLength": 4000,
+      "title": "Suggested Answer",
+      "type": "string"
+    },
+    "evidence_quote": {
+      "maxLength": 4000,
+      "title": "Evidence Quote",
+      "type": "string"
+    }
+  },
+  "required": [
+    "concept_correct",
+    "confidence",
+    "explanation_vi",
+    "suggested_answer",
+    "evidence_quote"
+  ],
+  "title": "ExerciseAssessment",
+  "type": "object"
+}

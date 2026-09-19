@@ -1,0 +1,719 @@
+{
+  "title": "ManualSpeakingAudio",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "text": {
+      "additionalProperties": false,
+      "properties": {
+        "part": {
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "title": "Part",
+          "type": "integer"
+        },
+        "scores": {
+          "$ref": "#/$defs/text_SpeakingTextScores"
+        },
+        "confidence": {
+          "default": 0.8,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "summary_vi": {
+          "title": "Summary Vi",
+          "type": "string"
+        },
+        "strengths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Strengths",
+          "type": "array"
+        },
+        "priority_improvements": {
+          "items": {
+            "$ref": "#/$defs/text_Improvement"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "title": "Priority Improvements",
+          "type": "array"
+        },
+        "grammar_errors": {
+          "items": {
+            "$ref": "#/$defs/text_SpeakingErrorOutput"
+          },
+          "title": "Grammar Errors",
+          "type": "array"
+        },
+        "other_errors": {
+          "items": {
+            "$ref": "#/$defs/text_SpeakingErrorOutput"
+          },
+          "title": "Other Errors",
+          "type": "array"
+        },
+        "vocabulary_suggestions": {
+          "items": {
+            "$ref": "#/$defs/text_SpeakingVocabulary"
+          },
+          "title": "Vocabulary Suggestions",
+          "type": "array"
+        },
+        "structure_feedback": {
+          "items": {
+            "$ref": "#/$defs/text_Improvement"
+          },
+          "title": "Structure Feedback",
+          "type": "array"
+        },
+        "content_feedback": {
+          "items": {
+            "$ref": "#/$defs/text_Improvement"
+          },
+          "title": "Content Feedback",
+          "type": "array"
+        },
+        "sentence_corrections": {
+          "items": {
+            "$ref": "#/$defs/text_SpokenCorrection"
+          },
+          "title": "Sentence Corrections",
+          "type": "array"
+        },
+        "answer_feedback": {
+          "items": {
+            "$ref": "#/$defs/text_AnswerFeedback"
+          },
+          "title": "Answer Feedback",
+          "type": "array"
+        },
+        "speaking_frame": {
+          "items": {
+            "$ref": "#/$defs/text_Improvement"
+          },
+          "title": "Speaking Frame",
+          "type": "array"
+        },
+        "corrected_transcript": {
+          "title": "Corrected Transcript",
+          "type": "string"
+        },
+        "improved_b2_answer": {
+          "title": "Improved B2 Answer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "part",
+        "scores",
+        "summary_vi",
+        "strengths",
+        "priority_improvements",
+        "grammar_errors",
+        "other_errors",
+        "vocabulary_suggestions",
+        "structure_feedback",
+        "content_feedback",
+        "sentence_corrections",
+        "answer_feedback",
+        "speaking_frame",
+        "corrected_transcript",
+        "improved_b2_answer"
+      ],
+      "title": "SpeakingTextGradingOutput",
+      "type": "object"
+    },
+    "audio_by_sequence": {
+      "type": "array",
+      "items": {
+        "title": "ManualAudioRecord",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "audio": {
+            "additionalProperties": false,
+            "properties": {
+              "available": {
+                "title": "Available",
+                "type": "boolean"
+              },
+              "speech_present": {
+                "title": "Speech Present",
+                "type": "boolean"
+              },
+              "reason_vi": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Reason Vi"
+              },
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "title": "Confidence",
+                "type": "number"
+              },
+              "pronunciation_confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "title": "Pronunciation Confidence",
+                "type": "number"
+              },
+              "fluency_confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "title": "Fluency Confidence",
+                "type": "number"
+              },
+              "pronunciation_score": {
+                "anyOf": [
+                  {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "multipleOf": 0.5,
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Pronunciation Score"
+              },
+              "intelligibility_score": {
+                "anyOf": [
+                  {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "multipleOf": 0.5,
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Intelligibility Score"
+              },
+              "clarity_score": {
+                "anyOf": [
+                  {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "multipleOf": 0.5,
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Clarity Score"
+              },
+              "stress_score": {
+                "anyOf": [
+                  {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "multipleOf": 0.5,
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Stress Score"
+              },
+              "intonation_score": {
+                "anyOf": [
+                  {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "multipleOf": 0.5,
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Intonation Score"
+              },
+              "rhythm_score": {
+                "anyOf": [
+                  {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "multipleOf": 0.5,
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Rhythm Score"
+              },
+              "fluency_score": {
+                "anyOf": [
+                  {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "multipleOf": 0.5,
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Fluency Score"
+              },
+              "pronunciation_summary_vi": {
+                "title": "Pronunciation Summary Vi",
+                "type": "string"
+              },
+              "fluency_summary_vi": {
+                "title": "Fluency Summary Vi",
+                "type": "string"
+              },
+              "issues": {
+                "items": {
+                  "$ref": "#/$defs/audio_AudioIssue"
+                },
+                "maxItems": 20,
+                "title": "Issues",
+                "type": "array"
+              },
+              "heard_text": {
+                "title": "Heard Text",
+                "type": "string"
+              },
+              "reference_coverage": {
+                "anyOf": [
+                  {
+                    "maximum": 1,
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Reference Coverage"
+              },
+              "stress_feedback_vi": {
+                "title": "Stress Feedback Vi",
+                "type": "string"
+              },
+              "issue_vi": {
+                "title": "Issue Vi",
+                "type": "string"
+              },
+              "practice_tip_vi": {
+                "title": "Practice Tip Vi",
+                "type": "string"
+              }
+            },
+            "required": [
+              "available",
+              "speech_present",
+              "reason_vi",
+              "confidence",
+              "pronunciation_confidence",
+              "fluency_confidence",
+              "pronunciation_score",
+              "intelligibility_score",
+              "clarity_score",
+              "stress_score",
+              "intonation_score",
+              "rhythm_score",
+              "fluency_score",
+              "pronunciation_summary_vi",
+              "fluency_summary_vi",
+              "issues",
+              "heard_text",
+              "reference_coverage",
+              "stress_feedback_vi",
+              "issue_vi",
+              "practice_tip_vi"
+            ],
+            "title": "AudioAssessment",
+            "type": "object"
+          },
+          "sequence_number": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "audio",
+          "sequence_number"
+        ]
+      }
+    },
+    "pronunciation": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "fluency": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "overall": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "coverage_note_vi": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "text",
+    "audio_by_sequence",
+    "pronunciation",
+    "fluency",
+    "overall",
+    "coverage_note_vi"
+  ],
+  "$defs": {
+    "text_AnswerFeedback": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "part": {
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "title": "Part",
+          "type": "integer"
+        },
+        "summary_vi": {
+          "title": "Summary Vi",
+          "type": "string"
+        },
+        "best_option_clearly_stated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Best Option Clearly Stated"
+        },
+        "reasons_developed_vi": {
+          "title": "Reasons Developed Vi",
+          "type": "string"
+        },
+        "other_options_discussed_vi": {
+          "title": "Other Options Discussed Vi",
+          "type": "string"
+        },
+        "corrected_transcript": {
+          "title": "Corrected Transcript",
+          "type": "string"
+        },
+        "improved_b2_answer": {
+          "title": "Improved B2 Answer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "part",
+        "summary_vi",
+        "best_option_clearly_stated",
+        "reasons_developed_vi",
+        "other_options_discussed_vi",
+        "corrected_transcript",
+        "improved_b2_answer"
+      ],
+      "title": "AnswerFeedback",
+      "type": "object"
+    },
+    "text_Improvement": {
+      "additionalProperties": false,
+      "properties": {
+        "title_vi": {
+          "title": "Title Vi",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "example": {
+          "title": "Example",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title_vi",
+        "explanation_vi",
+        "example"
+      ],
+      "title": "Improvement",
+      "type": "object"
+    },
+    "text_SpeakingErrorOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "category": {
+          "enum": [
+            "grammar",
+            "vocabulary",
+            "pronunciation",
+            "fluency",
+            "coherence",
+            "content",
+            "task_response"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "subtype": {
+          "title": "Subtype",
+          "type": "string"
+        },
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "corrected": {
+          "title": "Corrected",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "minor",
+            "major",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "category",
+        "subtype",
+        "original",
+        "corrected",
+        "explanation_vi",
+        "severity",
+        "confidence"
+      ],
+      "title": "SpeakingErrorOutput",
+      "type": "object"
+    },
+    "text_SpeakingTextScores": {
+      "additionalProperties": false,
+      "properties": {
+        "grammar": {
+          "maximum": 10,
+          "minimum": 0,
+          "multipleOf": 0.5,
+          "title": "Grammar",
+          "type": "number"
+        },
+        "vocabulary": {
+          "maximum": 10,
+          "minimum": 0,
+          "multipleOf": 0.5,
+          "title": "Vocabulary",
+          "type": "number"
+        },
+        "structures": {
+          "maximum": 10,
+          "minimum": 0,
+          "multipleOf": 0.5,
+          "title": "Structures",
+          "type": "number"
+        }
+      },
+      "required": [
+        "grammar",
+        "vocabulary",
+        "structures"
+      ],
+      "title": "SpeakingTextScores",
+      "type": "object"
+    },
+    "text_SpeakingVocabulary": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "suggestion": {
+          "title": "Suggestion",
+          "type": "string"
+        },
+        "reason_vi": {
+          "title": "Reason Vi",
+          "type": "string"
+        },
+        "example": {
+          "title": "Example",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "original",
+        "suggestion",
+        "reason_vi",
+        "example"
+      ],
+      "title": "SpeakingVocabulary",
+      "type": "object"
+    },
+    "text_SpokenCorrection": {
+      "additionalProperties": false,
+      "properties": {
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        },
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "corrected": {
+          "title": "Corrected",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "start_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Start Seconds"
+        }
+      },
+      "required": [
+        "sequence_number",
+        "original",
+        "corrected",
+        "explanation_vi",
+        "start_seconds"
+      ],
+      "title": "SpokenCorrection",
+      "type": "object"
+    },
+    "audio_AudioIssue": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "word_pronunciation",
+            "final_sound",
+            "word_stress",
+            "sentence_stress",
+            "intonation",
+            "rhythm",
+            "hesitation",
+            "clarity"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "target": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "description_vi": {
+          "maxLength": 1500,
+          "minLength": 10,
+          "title": "Description Vi",
+          "type": "string"
+        },
+        "suggestion_vi": {
+          "maxLength": 1500,
+          "minLength": 10,
+          "title": "Suggestion Vi",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "audible_evidence_vi": {
+          "maxLength": 1500,
+          "minLength": 10,
+          "title": "Audible Evidence Vi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "target",
+        "description_vi",
+        "suggestion_vi",
+        "confidence",
+        "audible_evidence_vi"
+      ],
+      "title": "AudioIssue",
+      "type": "object"
+    }
+  }
+}

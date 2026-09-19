@@ -1,0 +1,171 @@
+{
+  "$defs": {
+    "ExerciseItem": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "MULTIPLE_CHOICE",
+            "FILL_BLANK",
+            "ERROR_CORRECTION",
+            "SENTENCE_TRANSFORMATION",
+            "COLLOCATION",
+            "NATURAL_EXPRESSION",
+            "REWRITE_SENTENCE",
+            "CONTEXTUAL_GAP",
+            "ACTIVE_RECALL",
+            "FIX_SENTENCE",
+            "IMPROVE_PARAGRAPH",
+            "WRITE_INTRODUCTION",
+            "DEVELOP_IDEA",
+            "MINI_TASK1",
+            "MINI_TASK2",
+            "READING_TARGETED",
+            "SHORT_ANSWER",
+            "SENTENCE_EXPANSION",
+            "TIMED_RESPONSE",
+            "PRONUNCIATION_WORDS",
+            "REUSE_VOCABULARY",
+            "PART2_COMPARISON",
+            "PART3_DEVELOPMENT"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "instruction_vi": {
+          "maxLength": 1000,
+          "minLength": 5,
+          "title": "Instruction Vi",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 5000,
+          "minLength": 3,
+          "title": "Text",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Options",
+          "type": "array"
+        },
+        "accepted_answers": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "title": "Accepted Answers",
+          "type": "array"
+        },
+        "sample_answer": {
+          "maxLength": 4000,
+          "title": "Sample Answer",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "rubric": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Rubric",
+          "type": "array"
+        },
+        "passage": {
+          "anyOf": [
+            {
+              "maxLength": 8000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Passage"
+        },
+        "target_words": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 12,
+          "title": "Target Words",
+          "type": "array"
+        },
+        "seconds": {
+          "anyOf": [
+            {
+              "maximum": 300,
+              "minimum": 15,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Seconds"
+        },
+        "evaluation": {
+          "enum": [
+            "OBJECTIVE",
+            "COACH",
+            "RECORDING"
+          ],
+          "title": "Evaluation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "instruction_vi",
+        "text",
+        "options",
+        "accepted_answers",
+        "sample_answer",
+        "explanation_vi",
+        "rubric",
+        "passage",
+        "target_words",
+        "seconds",
+        "evaluation"
+      ],
+      "title": "ExerciseItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "concept_key": {
+      "title": "Concept Key",
+      "type": "string"
+    },
+    "items": {
+      "items": {
+        "$ref": "#/$defs/ExerciseItem"
+      },
+      "maxItems": 10,
+      "minItems": 5,
+      "title": "Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "title",
+    "concept_key",
+    "items"
+  ],
+  "title": "PersonalizedExercisesOutput",
+  "type": "object"
+}

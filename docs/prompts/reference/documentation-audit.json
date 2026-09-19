@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-19",
+  "source_commit": "658986a",
+  "scope": "Local documentation/source/schema audit only; no API requests, database access, generic test suite, or chatbot quality evaluation.",
+  "counts": {
+    "markdown_files": 74,
+    "functional_prompts": 64,
+    "quick_prompts": 6,
+    "quick_copy_examples_checked": 6,
+    "schema_snapshots": 30,
+    "native_schemas": 22,
+    "mapped_source_files": 73,
+    "checked_relative_links": 939,
+    "json_modes": 48
+  },
+  "checks": {
+    "required_sections": true,
+    "complete_copy_blocks": true,
+    "delimited_placeholders": true,
+    "relative_links": true,
+    "schema_references": true,
+    "embedded_schema_equality": true,
+    "native_schema_equality": true,
+    "manifest_hashes": true,
+    "credential_pattern_scan": true,
+    "draft_2020_12_metaschema": "not run; jsonschema unavailable"
+  },
+  "errors": [],
+  "limitations": [
+    "Schema equality does not execute every production model validator on chatbot output.",
+    "No real audio, chatbot response or examiner-rated grading accuracy was evaluated.",
+    "Manual wrapper schemas are documentation contracts; the app has no manual grade-import endpoint."
+  ]
+}

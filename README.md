@@ -2,6 +2,12 @@
 
 Ứng dụng luyện VSTEP Writing, Speaking và Reading dành cho người Việt. Reading có thi thử 4 bài đọc/40 câu/60 phút, luyện passage/dạng câu/chủ đề, chấm điểm ngay, giải thích từng phương án và bằng chứng trong bài. Speaking gồm thi thử ba phần, luyện từng Part, ghi âm, nhận dạng giọng nói, chữa từng câu và theo dõi tiến độ. Writing gồm: thi thử hai Task, luyện riêng thư/email hoặc bài luận, lưu nháp, chấm và chữa bài bằng AI, lịch sử và biểu đồ tiến độ. Toàn bộ giao diện và giải thích bằng tiếng Việt; đề và bài viết bằng tiếng Anh.
 
+## Học thủ công khi API hết quota
+
+[VSTEP Manual AI Prompt Kit](docs/prompts/README.md) có các prompt hoàn chỉnh để sao chép vào ChatGPT, Claude, Gemini hoặc chatbot có khả năng phù hợp. Bắt đầu với [Writing Task 1](docs/prompts/quick/quick-grade-writing-task1.md), [Writing Task 2](docs/prompts/quick/quick-grade-writing-task2.md), [Speaking từ transcript](docs/prompts/quick/quick-grade-speaking.md), [giải thích Reading](docs/prompts/quick/quick-explain-reading.md), [Vocabulary Coach](docs/prompts/quick/quick-vocabulary-coach.md) hoặc [phân tích học tập](docs/prompts/quick/quick-learning-analysis.md). Thay các ô `{{...}}` bằng đề, bài gốc và dữ liệu thật; không cần API key để dùng tài liệu.
+
+Bộ prompt có bản đọc dễ hiểu, JSON, all-in-one, sinh/nhập đề, bài học và bài tập; mỗi bản ghi nguồn code, phiên bản và khác biệt với ứng dụng. Phát âm cần audio thực sự nghe được; Reading thiếu key nguồn không có tổng điểm; một task Writing chưa đủ quy đổi bậc. Kết quả từ chatbot cần lưu riêng, chưa có chức năng nhập JSON chấm thủ công để ghi đè điểm trong app. Xem [quy trình sử dụng](docs/prompts/reference/manual-workflows.md) và [bản đồ phiên bản](docs/prompts/reference/prompt-version-map.md).
+
 ## Chạy bằng Docker
 
 Yêu cầu Docker với Compose v2. Từ thư mục gốc:
@@ -31,7 +37,7 @@ Writing, Speaking và Reading dùng chung `test_profile=VSTEP_3_5`. Người h�
 | `DATABASE_URL` | URL SQLAlchemy `postgresql+asyncpg://...` cho chạy backend ngoài Docker |
 | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | Thông tin DB dùng trong Docker Compose |
 | `OPENAI_API_KEY` | Key chỉ đọc ở backend; để trống nếu chỉ dùng đề mẫu |
-| `OPENAI_MODEL_*` | Cấu hình theo tác vụ trong `.env.example`; `OPENAI_MODEL` cũ không còn ghi đè mọi tác vụ. Grading mới đang chờ đạt benchmark, xem `MODEL_EVALUATION.md` |
+| `OPENAI_MODEL_*` | Cấu hình theo tác vụ trong `.env.example`; `OPENAI_MODEL` cũ không còn ghi đè mọi tác vụ. Cấu hình đã chọn và kết quả benchmark nội bộ nằm trong `MODEL_EVALUATION.md` |
 | `OPENAI_REASONING_DEFAULT`, `OPENAI_REASONING_GRADING`, `OPENAI_REASONING_ESCALATION` | Mức reasoning riêng; JSON `OPENAI_REASONING_OVERRIDES` cho từng operation |
 | `MODEL_VERSION` | Phiên bản cấu hình model trong cache chấm |
 | `AI_COST_ADMIN_EMAILS` | Email admin đã đăng nhập được xem `/internal/ai-costs` |

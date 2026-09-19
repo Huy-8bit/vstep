@@ -1,0 +1,15 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "improved_b2_version": {
+      "maxLength": 10000,
+      "title": "Improved B2 Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "improved_b2_version"
+  ],
+  "title": "ImprovedAnswer",
+  "type": "object"
+}

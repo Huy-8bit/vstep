@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "ReadingItemQuality": {
+      "additionalProperties": false,
+      "properties": {
+        "question_number": {
+          "title": "Question Number",
+          "type": "integer"
+        },
+        "single_best_answer": {
+          "title": "Single Best Answer",
+          "type": "boolean"
+        },
+        "supported_by_evidence": {
+          "title": "Supported By Evidence",
+          "type": "boolean"
+        },
+        "plausible_distractors": {
+          "title": "Plausible Distractors",
+          "type": "boolean"
+        },
+        "independently_selected_answer": {
+          "title": "Independently Selected Answer",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question_number",
+        "single_best_answer",
+        "supported_by_evidence",
+        "plausible_distractors",
+        "independently_selected_answer",
+        "confidence",
+        "notes"
+      ],
+      "title": "ReadingItemQuality",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "accepted": {
+      "title": "Accepted",
+      "type": "boolean"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "realistic_context": {
+      "title": "Realistic Context",
+      "type": "boolean"
+    },
+    "no_specialist_knowledge": {
+      "title": "No Specialist Knowledge",
+      "type": "boolean"
+    },
+    "no_embedded_answer": {
+      "title": "No Embedded Answer",
+      "type": "boolean"
+    },
+    "requirements_consistent": {
+      "title": "Requirements Consistent",
+      "type": "boolean"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "reading_items": {
+      "items": {
+        "$ref": "#/$defs/ReadingItemQuality"
+      },
+      "title": "Reading Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "accepted",
+    "confidence",
+    "realistic_context",
+    "no_specialist_knowledge",
+    "no_embedded_answer",
+    "requirements_consistent",
+    "notes",
+    "reading_items"
+  ],
+  "title": "QuestionQualityReview",
+  "type": "object"
+}

@@ -1,0 +1,55 @@
+{
+  "$defs": {
+    "WeeklyRecommendation": {
+      "additionalProperties": false,
+      "properties": {
+        "weakness_id": {
+          "title": "Weakness Id",
+          "type": "string"
+        },
+        "reason_vi": {
+          "maxLength": 500,
+          "minLength": 10,
+          "title": "Reason Vi",
+          "type": "string"
+        },
+        "activity_vi": {
+          "maxLength": 500,
+          "minLength": 10,
+          "title": "Activity Vi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "weakness_id",
+        "reason_vi",
+        "activity_vi"
+      ],
+      "title": "WeeklyRecommendation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "summary_vi": {
+      "maxLength": 1200,
+      "minLength": 10,
+      "title": "Summary Vi",
+      "type": "string"
+    },
+    "recommendations": {
+      "items": {
+        "$ref": "#/$defs/WeeklyRecommendation"
+      },
+      "maxItems": 3,
+      "title": "Recommendations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "summary_vi",
+    "recommendations"
+  ],
+  "title": "WeeklyCoachOutput",
+  "type": "object"
+}

@@ -1,0 +1,139 @@
+{
+  "$defs": {
+    "LessonExample": {
+      "additionalProperties": false,
+      "properties": {
+        "english": {
+          "title": "English",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "english",
+        "explanation_vi"
+      ],
+      "title": "LessonExample",
+      "type": "object"
+    },
+    "UserLessonExample": {
+      "additionalProperties": false,
+      "properties": {
+        "signal_id": {
+          "title": "Signal Id",
+          "type": "string"
+        },
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "corrected": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Corrected"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "signal_id",
+        "original",
+        "corrected",
+        "explanation_vi"
+      ],
+      "title": "UserLessonExample",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "maxLength": 200,
+      "minLength": 3,
+      "title": "Title",
+      "type": "string"
+    },
+    "why_this_matters_vi": {
+      "maxLength": 1500,
+      "title": "Why This Matters Vi",
+      "type": "string"
+    },
+    "simple_explanation_vi": {
+      "maxLength": 3000,
+      "title": "Simple Explanation Vi",
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 6,
+      "minItems": 1,
+      "title": "Rules",
+      "type": "array"
+    },
+    "examples": {
+      "items": {
+        "$ref": "#/$defs/LessonExample"
+      },
+      "maxItems": 5,
+      "minItems": 2,
+      "title": "Examples",
+      "type": "array"
+    },
+    "examples_from_user_errors": {
+      "items": {
+        "$ref": "#/$defs/UserLessonExample"
+      },
+      "maxItems": 5,
+      "title": "Examples From User Errors",
+      "type": "array"
+    },
+    "common_traps": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 5,
+      "minItems": 1,
+      "title": "Common Traps",
+      "type": "array"
+    },
+    "quick_check": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "title": "Quick Check",
+      "type": "array"
+    },
+    "practice_recommendation": {
+      "title": "Practice Recommendation",
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "why_this_matters_vi",
+    "simple_explanation_vi",
+    "rules",
+    "examples",
+    "examples_from_user_errors",
+    "common_traps",
+    "quick_check",
+    "practice_recommendation"
+  ],
+  "title": "PersonalizedLessonOutput",
+  "type": "object"
+}

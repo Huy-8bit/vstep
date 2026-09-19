@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "correct": {
+      "title": "Correct",
+      "type": "boolean"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "explanation_vi": {
+      "maxLength": 1500,
+      "minLength": 10,
+      "title": "Explanation Vi",
+      "type": "string"
+    },
+    "corrected_sentence": {
+      "maxLength": 1500,
+      "title": "Corrected Sentence",
+      "type": "string"
+    }
+  },
+  "required": [
+    "correct",
+    "confidence",
+    "explanation_vi",
+    "corrected_sentence"
+  ],
+  "title": "VocabularyUsageAssessment",
+  "type": "object"
+}

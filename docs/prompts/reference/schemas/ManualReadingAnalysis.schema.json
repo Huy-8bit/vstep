@@ -1,0 +1,373 @@
+{
+  "title": "ManualReadingAnalysis",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "total_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "correct_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "incorrect_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "unanswered_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "scorable_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "unscored_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 10
+    },
+    "accuracy": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question_id": {
+            "type": "string"
+          },
+          "passage_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_scorable": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "correct",
+              "incorrect",
+              "unanswered",
+              "unscored"
+            ]
+          },
+          "explanation": {
+            "title": "ManualReadingExplanation",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "provided_answer": {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  null
+                ]
+              },
+              "answer_key_source": {
+                "enum": [
+                  "provided",
+                  "user_confirmed",
+                  "unknown"
+                ]
+              },
+              "ai_suggested_answer": {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  null
+                ]
+              },
+              "user_answer": {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  null
+                ]
+              },
+              "is_correct_against_provided_key": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "key_conflict_or_limits_vi": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "question_type": {
+                "enum": [
+                  "main_idea",
+                  "detail",
+                  "inference",
+                  "vocabulary",
+                  "reference",
+                  "purpose",
+                  "negative_detail",
+                  "sentence_meaning",
+                  "organization",
+                  "tone",
+                  "attitude",
+                  "sentence_insertion",
+                  "paragraph_completion",
+                  null
+                ]
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "paragraph_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "quote": {
+                      "type": "string"
+                    },
+                    "supports_vi": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "paragraph_id",
+                    "quote",
+                    "supports_vi"
+                  ]
+                }
+              },
+              "option_explanations": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "option": {
+                      "enum": [
+                        "A",
+                        "B",
+                        "C",
+                        "D"
+                      ]
+                    },
+                    "assessment": {
+                      "enum": [
+                        "supported",
+                        "unsupported",
+                        "uncertain"
+                      ]
+                    },
+                    "explanation_vi": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "option",
+                    "assessment",
+                    "explanation_vi"
+                  ]
+                }
+              },
+              "strategy_vi": {
+                "type": "string"
+              },
+              "vocabulary": {
+                "type": "array",
+                "maxItems": 3,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "phrase": {
+                      "type": "string"
+                    },
+                    "meaning_in_context_vi": {
+                      "type": "string"
+                    },
+                    "example_sentence": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "phrase",
+                    "meaning_in_context_vi",
+                    "example_sentence"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "provided_answer",
+              "answer_key_source",
+              "ai_suggested_answer",
+              "user_answer",
+              "is_correct_against_provided_key",
+              "key_conflict_or_limits_vi",
+              "question_type",
+              "evidence",
+              "option_explanations",
+              "strategy_vi",
+              "vocabulary"
+            ]
+          }
+        },
+        "required": [
+          "question_id",
+          "passage_id",
+          "is_scorable",
+          "status",
+          "explanation"
+        ]
+      }
+    },
+    "breakdown": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "total_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "correct_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "incorrect_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "unanswered_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "scorable_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "unscored_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "group_by": {
+            "enum": [
+              "question_type",
+              "passage"
+            ]
+          },
+          "group_value": {
+            "type": "string"
+          },
+          "accuracy_over_scorable": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "total_count",
+          "correct_count",
+          "incorrect_count",
+          "unanswered_count",
+          "scorable_count",
+          "unscored_count",
+          "group_by",
+          "group_value",
+          "accuracy_over_scorable"
+        ]
+      }
+    },
+    "data_limits_vi": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_steps_vi": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "vocabulary": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "phrase": {
+            "type": "string"
+          },
+          "meaning_in_context_vi": {
+            "type": "string"
+          },
+          "example_sentence": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "phrase",
+          "meaning_in_context_vi",
+          "example_sentence"
+        ]
+      }
+    },
+    "practice_suggestion_vi": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "total_count",
+    "correct_count",
+    "incorrect_count",
+    "unanswered_count",
+    "scorable_count",
+    "unscored_count",
+    "score",
+    "accuracy",
+    "questions",
+    "breakdown",
+    "data_limits_vi",
+    "next_steps_vi",
+    "vocabulary",
+    "practice_suggestion_vi"
+  ]
+}

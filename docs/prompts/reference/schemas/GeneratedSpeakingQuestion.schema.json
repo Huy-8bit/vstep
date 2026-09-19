@@ -1,0 +1,122 @@
+{
+  "$defs": {
+    "TopicSet": {
+      "additionalProperties": false,
+      "properties": {
+        "topic": {
+          "title": "Topic",
+          "type": "string"
+        },
+        "questions": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Questions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "topic",
+        "questions"
+      ],
+      "title": "TopicSet",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "part": {
+      "enum": [
+        1,
+        2,
+        3
+      ],
+      "title": "Part",
+      "type": "integer"
+    },
+    "question_type": {
+      "enum": [
+        "social_interaction",
+        "solution_discussion",
+        "topic_development"
+      ],
+      "title": "Question Type",
+      "type": "string"
+    },
+    "topic": {
+      "title": "Topic",
+      "type": "string"
+    },
+    "question_text": {
+      "maxLength": 3000,
+      "minLength": 15,
+      "title": "Question Text",
+      "type": "string"
+    },
+    "topic_sets": {
+      "items": {
+        "$ref": "#/$defs/TopicSet"
+      },
+      "title": "Topic Sets",
+      "type": "array"
+    },
+    "situation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Situation"
+    },
+    "options": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Options",
+      "type": "array"
+    },
+    "suggested_ideas": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Suggested Ideas",
+      "type": "array"
+    },
+    "allow_own_idea": {
+      "title": "Allow Own Idea",
+      "type": "boolean"
+    },
+    "follow_up_questions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Follow Up Questions",
+      "type": "array"
+    },
+    "test_profile": {
+      "const": "VSTEP_3_5",
+      "default": "VSTEP_3_5",
+      "title": "Test Profile",
+      "type": "string"
+    }
+  },
+  "required": [
+    "part",
+    "question_type",
+    "topic",
+    "question_text",
+    "topic_sets",
+    "situation",
+    "options",
+    "suggested_ideas",
+    "allow_own_idea",
+    "follow_up_questions"
+  ],
+  "title": "GeneratedSpeakingQuestion",
+  "type": "object"
+}

@@ -1,0 +1,930 @@
+{
+  "manual_kit_version": "1.0.0",
+  "last_synchronized": "2026-09-19",
+  "source_commit": "658986a",
+  "native_schemas": {
+    "WritingCoreOutput": {
+      "module": "app.schemas.writing_core",
+      "class": "WritingCoreOutput",
+      "file": "reference/schemas/WritingCoreOutput.schema.json",
+      "sha256": "fd37701f305888a1ad9c1a7741d24baf05de2ddace1f83f968ca3c5faa3a9b02"
+    },
+    "GradingOutput": {
+      "module": "app.schemas.writing",
+      "class": "GradingOutput",
+      "file": "reference/schemas/GradingOutput.schema.json",
+      "sha256": "77238b746528037da69f16d9323980e1a5f5045f4d43f9816d9d1070edf978e7"
+    },
+    "GeneratedQuestion": {
+      "module": "app.schemas.writing",
+      "class": "GeneratedQuestion",
+      "file": "reference/schemas/GeneratedQuestion.schema.json",
+      "sha256": "f2a80a913745f49481b49179532ee26c3ee46cc79d161d0f5a883f0ff30c661c"
+    },
+    "WritingFeedback": {
+      "module": "app.schemas.writing_assessment",
+      "class": "WritingFeedback",
+      "file": "reference/schemas/WritingFeedback.schema.json",
+      "sha256": "1ef85535f0797009435a759f7238e4180a227c43857e1181acd90635d546b81f"
+    },
+    "SentenceCorrections": {
+      "module": "app.services.writing_optional_feedback",
+      "class": "SentenceCorrections",
+      "file": "reference/schemas/SentenceCorrections.schema.json",
+      "sha256": "5c5738df03fcf095a043184b2e961decc1da3fae6606cb5b4237e605a98d5193"
+    },
+    "CorrectedAnswer": {
+      "module": "app.services.writing_optional_feedback",
+      "class": "CorrectedAnswer",
+      "file": "reference/schemas/CorrectedAnswer.schema.json",
+      "sha256": "ab19df2bd6c458a235e695feb82edd665af883fde3105ecce85b5121122f3ecc"
+    },
+    "ImprovedAnswer": {
+      "module": "app.services.writing_optional_feedback",
+      "class": "ImprovedAnswer",
+      "file": "reference/schemas/ImprovedAnswer.schema.json",
+      "sha256": "e119685901657d121bf76ca4725b17c5c107f7507aae80427489042537509222"
+    },
+    "SpeakingTextGradingOutput": {
+      "module": "app.schemas.speaking",
+      "class": "SpeakingTextGradingOutput",
+      "file": "reference/schemas/SpeakingTextGradingOutput.schema.json",
+      "sha256": "eb52643c6c82d448294c5ccfdb9b2e34c7433ea26c9c95902f9ba2bc20be8846"
+    },
+    "SpeakingGradingOutput": {
+      "module": "app.schemas.speaking",
+      "class": "SpeakingGradingOutput",
+      "file": "reference/schemas/SpeakingGradingOutput.schema.json",
+      "sha256": "fbc805e5f861e4f251800d3ed2a6842ab3c2a419cec43e7b59769df532684dde"
+    },
+    "GeneratedSpeakingQuestion": {
+      "module": "app.schemas.speaking",
+      "class": "GeneratedSpeakingQuestion",
+      "file": "reference/schemas/GeneratedSpeakingQuestion.schema.json",
+      "sha256": "ef4d0f02f1405f3e81f32c358f5a70534bda3eaaa828a8568b0aad3843980752"
+    },
+    "AudioAssessment": {
+      "module": "app.schemas.audio_assessment",
+      "class": "AudioAssessment",
+      "file": "reference/schemas/AudioAssessment.schema.json",
+      "sha256": "838bd1104eb185e83d9099abf4245d8968bfbbd989be8bfa92672d2a4da2a9e6"
+    },
+    "GeneratedReadingPassage": {
+      "module": "app.schemas.reading",
+      "class": "GeneratedReadingPassage",
+      "file": "reference/schemas/GeneratedReadingPassage.schema.json",
+      "sha256": "405f31af14db1e09fad567002b3c682e62a7b3ac6a80d365aa2bcb4a719918e6"
+    },
+    "ReadingVocabulary": {
+      "module": "app.schemas.reading",
+      "class": "ReadingVocabulary",
+      "file": "reference/schemas/ReadingVocabulary.schema.json",
+      "sha256": "8ca338e052821e747b1a9e62de51eee53e65ac4c0edf58cb033a74594fad3a24"
+    },
+    "VocabularyCoachOutput": {
+      "module": "app.schemas.vocabulary_coach",
+      "class": "VocabularyCoachOutput",
+      "file": "reference/schemas/VocabularyCoachOutput.schema.json",
+      "sha256": "44decfca9cbf2e6f6334f7b4b3046ef6900322ccb350ea7a721595fd66438ce8"
+    },
+    "VocabularyUsageAssessment": {
+      "module": "app.schemas.vocabulary_coach",
+      "class": "VocabularyUsageAssessment",
+      "file": "reference/schemas/VocabularyUsageAssessment.schema.json",
+      "sha256": "d63cd3210cc7a4d3f7310eee80ec94afc8d3fa65dadce7c4f29ddbdc523e25ed"
+    },
+    "PersonalizedLessonOutput": {
+      "module": "app.schemas.learning",
+      "class": "PersonalizedLessonOutput",
+      "file": "reference/schemas/PersonalizedLessonOutput.schema.json",
+      "sha256": "a41ed0a062cd6fa251bd8c4aebd4096aac6712ed07c519190ede5b04c9879ff0"
+    },
+    "PersonalizedExercisesOutput": {
+      "module": "app.schemas.learning",
+      "class": "PersonalizedExercisesOutput",
+      "file": "reference/schemas/PersonalizedExercisesOutput.schema.json",
+      "sha256": "ac15c0da401669199e51d6daaffb3f0bb4bed82e86fd204048120585c4fa0579"
+    },
+    "ExerciseAssessment": {
+      "module": "app.schemas.learning",
+      "class": "ExerciseAssessment",
+      "file": "reference/schemas/ExerciseAssessment.schema.json",
+      "sha256": "d7eb5d3658c41aaf98e9ddb7989c5617e6c196ac6974b86a0052533ee7391df8"
+    },
+    "WeeklyCoachOutput": {
+      "module": "app.schemas.learning",
+      "class": "WeeklyCoachOutput",
+      "file": "reference/schemas/WeeklyCoachOutput.schema.json",
+      "sha256": "0070469d5be605ccce4a5b40856b04c5865178df0fcb659a864a1d776260418e"
+    },
+    "ParsedImport": {
+      "module": "app.schemas.library",
+      "class": "ParsedImport",
+      "file": "reference/schemas/ParsedImport.schema.json",
+      "sha256": "68de0c1708f1a44ff165c9111710e5451b9311eebc2a6036cbab8a0e9222427d"
+    },
+    "LibraryDocument": {
+      "module": "app.schemas.library",
+      "class": "LibraryDocument",
+      "file": "reference/schemas/LibraryDocument.schema.json",
+      "sha256": "b19cea67e931cc8492e95e8a36b1d4e5c0b9a3178470237d37d0aee0805abeaf"
+    },
+    "QuestionQualityReview": {
+      "module": "app.schemas.generation_quality",
+      "class": "QuestionQualityReview",
+      "file": "reference/schemas/QuestionQualityReview.schema.json",
+      "sha256": "15e505169d8970405f297295b5b9549fcc9cb6cdc55036283df03af40cee578a"
+    }
+  },
+  "documents": {
+    "writing/task1-grading.md": {
+      "versions": "WRITING_GRADER_VERSION=4.1.0; WRITING_CORE_VERSION=4.1.0; analysis/calibration/feedback=3.0.0; ESCALATION_VERSION=1.5.0; OPTIONAL_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/writing_core.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/prompts/writing_calibration.py",
+        "backend/app/services/writing_core_service.py",
+        "backend/app/services/writing_analysis_service.py",
+        "backend/app/services/writing_grader.py",
+        "backend/app/services/grading_escalation_service.py",
+        "backend/app/schemas/writing_core.py",
+        "backend/app/vstep_reference/scoring_reference.py",
+        "backend/app/prompts/task1_grader.py"
+      ],
+      "schema": "WritingCoreOutput"
+    },
+    "writing/task2-grading.md": {
+      "versions": "WRITING_GRADER_VERSION=4.1.0; WRITING_CORE_VERSION=4.1.0; analysis/calibration/feedback=3.0.0; ESCALATION_VERSION=1.5.0; OPTIONAL_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/writing_core.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/prompts/writing_calibration.py",
+        "backend/app/services/writing_core_service.py",
+        "backend/app/services/writing_analysis_service.py",
+        "backend/app/services/writing_grader.py",
+        "backend/app/services/grading_escalation_service.py",
+        "backend/app/schemas/writing_core.py",
+        "backend/app/vstep_reference/scoring_reference.py",
+        "backend/app/prompts/task2_grader.py"
+      ],
+      "schema": "WritingCoreOutput"
+    },
+    "writing/all-in-one-writing.md": {
+      "versions": "Core 4.1.0; escalation 1.5.0; optional/vocabulary 1.0.0",
+      "sources": [
+        "backend/app/prompts/writing_core.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/prompts/writing_calibration.py",
+        "backend/app/services/writing_core_service.py",
+        "backend/app/services/writing_analysis_service.py",
+        "backend/app/services/writing_grader.py",
+        "backend/app/services/grading_escalation_service.py",
+        "backend/app/schemas/writing_core.py",
+        "backend/app/vstep_reference/scoring_reference.py",
+        "backend/app/services/writing_optional_feedback.py",
+        "backend/app/prompts/vocabulary_coach.py"
+      ],
+      "schema": "ManualWritingBundle"
+    },
+    "writing/full-writing-grading.md": {
+      "versions": "WRITING_GRADER_VERSION=4.1.0; WRITING_CORE_VERSION=4.1.0; analysis/calibration/feedback=3.0.0; ESCALATION_VERSION=1.5.0; OPTIONAL_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/writing_core.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/prompts/writing_calibration.py",
+        "backend/app/services/writing_core_service.py",
+        "backend/app/services/writing_analysis_service.py",
+        "backend/app/services/writing_grader.py",
+        "backend/app/services/grading_escalation_service.py",
+        "backend/app/schemas/writing_core.py",
+        "backend/app/vstep_reference/scoring_reference.py",
+        "backend/app/services/progress_service.py",
+        "backend/app/services/writing_optional_feedback.py"
+      ],
+      "schema": "ManualFullWriting"
+    },
+    "writing/sentence-correction.md": {
+      "versions": "OPTIONAL_VERSION=1.0.0; WRITING_FEEDBACK_PROMPT_VERSION=3.0.0",
+      "sources": [
+        "backend/app/services/writing_optional_feedback.py",
+        "backend/app/services/writing_feedback_service.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/schemas/writing_assessment.py",
+        "backend/app/schemas/writing.py"
+      ],
+      "schema": "SentenceCorrections"
+    },
+    "writing/corrected-version.md": {
+      "versions": "OPTIONAL_VERSION=1.0.0; WRITING_FEEDBACK_PROMPT_VERSION=3.0.0",
+      "sources": [
+        "backend/app/services/writing_optional_feedback.py",
+        "backend/app/services/writing_feedback_service.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/schemas/writing_assessment.py",
+        "backend/app/schemas/writing.py"
+      ],
+      "schema": "CorrectedAnswer"
+    },
+    "writing/improved-answer.md": {
+      "versions": "OPTIONAL_VERSION=1.0.0; WRITING_FEEDBACK_PROMPT_VERSION=3.0.0",
+      "sources": [
+        "backend/app/services/writing_optional_feedback.py",
+        "backend/app/services/writing_feedback_service.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/schemas/writing_assessment.py",
+        "backend/app/schemas/writing.py"
+      ],
+      "schema": "ImprovedAnswer"
+    },
+    "writing/detailed-feedback.md": {
+      "versions": "OPTIONAL_VERSION=1.0.0; WRITING_FEEDBACK_PROMPT_VERSION=3.0.0",
+      "sources": [
+        "backend/app/services/writing_optional_feedback.py",
+        "backend/app/services/writing_feedback_service.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/schemas/writing_assessment.py",
+        "backend/app/schemas/writing.py"
+      ],
+      "schema": "WritingFeedback"
+    },
+    "writing/second-opinion.md": {
+      "versions": "WRITING_GRADER_VERSION=4.1.0; WRITING_CORE_VERSION=4.1.0; analysis/calibration/feedback=3.0.0; ESCALATION_VERSION=1.5.0; OPTIONAL_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/writing_core.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/prompts/writing_calibration.py",
+        "backend/app/services/writing_core_service.py",
+        "backend/app/services/writing_analysis_service.py",
+        "backend/app/services/writing_grader.py",
+        "backend/app/services/grading_escalation_service.py",
+        "backend/app/schemas/writing_core.py",
+        "backend/app/vstep_reference/scoring_reference.py"
+      ],
+      "schema": "WritingCoreOutput"
+    },
+    "speaking/part1-grading.md": {
+      "versions": "SPEAKING_GRADER_PROMPT_VERSION=2.1.0; SPEAKING_CORRECTION_PROMPT_VERSION=1.0.0; ESCALATION_VERSION=1.5.0",
+      "sources": [
+        "backend/app/prompts/speaking_grader.py",
+        "backend/app/prompts/speaking_correction.py",
+        "backend/app/services/speaking_grading_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/schemas/speaking.py"
+      ],
+      "schema": "SpeakingTextGradingOutput"
+    },
+    "speaking/part2-grading.md": {
+      "versions": "SPEAKING_GRADER_PROMPT_VERSION=2.1.0; SPEAKING_CORRECTION_PROMPT_VERSION=1.0.0; ESCALATION_VERSION=1.5.0",
+      "sources": [
+        "backend/app/prompts/speaking_grader.py",
+        "backend/app/prompts/speaking_correction.py",
+        "backend/app/services/speaking_grading_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/schemas/speaking.py"
+      ],
+      "schema": "SpeakingTextGradingOutput"
+    },
+    "speaking/part3-grading.md": {
+      "versions": "SPEAKING_GRADER_PROMPT_VERSION=2.1.0; SPEAKING_CORRECTION_PROMPT_VERSION=1.0.0; ESCALATION_VERSION=1.5.0",
+      "sources": [
+        "backend/app/prompts/speaking_grader.py",
+        "backend/app/prompts/speaking_correction.py",
+        "backend/app/services/speaking_grading_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/schemas/speaking.py"
+      ],
+      "schema": "SpeakingTextGradingOutput"
+    },
+    "speaking/full-speaking-grading.md": {
+      "versions": "SPEAKING_GRADER_PROMPT_VERSION=2.1.0; SPEAKING_CORRECTION_PROMPT_VERSION=1.0.0; ESCALATION_VERSION=1.5.0",
+      "sources": [
+        "backend/app/prompts/speaking_grader.py",
+        "backend/app/prompts/speaking_correction.py",
+        "backend/app/services/speaking_grading_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/schemas/speaking.py"
+      ],
+      "schema": "SpeakingTextGradingOutput"
+    },
+    "speaking/all-in-one-text.md": {
+      "versions": "SPEAKING_GRADER_PROMPT_VERSION=2.1.0; SPEAKING_CORRECTION_PROMPT_VERSION=1.0.0; ESCALATION_VERSION=1.5.0; VOCABULARY_COACH_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/speaking_grader.py",
+        "backend/app/prompts/speaking_correction.py",
+        "backend/app/services/speaking_grading_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/schemas/speaking.py",
+        "backend/app/prompts/vocabulary_coach.py"
+      ],
+      "schema": "SpeakingTextGradingOutput"
+    },
+    "speaking/pronunciation-audio-analysis.md": {
+      "versions": "AUDIO_ASSESSMENT_VERSION=2.0.0",
+      "sources": [
+        "backend/app/prompts/audio_assessment.py",
+        "backend/app/schemas/audio_assessment.py",
+        "backend/app/speech/openai_audio_analysis.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/services/pronunciation_practice_service.py"
+      ],
+      "schema": "AudioAssessment"
+    },
+    "speaking/pronunciation-practice.md": {
+      "versions": "AUDIO_ASSESSMENT_VERSION=2.0.0",
+      "sources": [
+        "backend/app/prompts/audio_assessment.py",
+        "backend/app/schemas/audio_assessment.py",
+        "backend/app/speech/openai_audio_analysis.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/services/pronunciation_practice_service.py"
+      ],
+      "schema": "AudioAssessment"
+    },
+    "speaking/all-in-one-audio.md": {
+      "versions": "SPEAKING_GRADER_PROMPT_VERSION=2.1.0; SPEAKING_CORRECTION_PROMPT_VERSION=1.0.0; ESCALATION_VERSION=1.5.0; audio=2.0.0",
+      "sources": [
+        "backend/app/prompts/speaking_grader.py",
+        "backend/app/prompts/speaking_correction.py",
+        "backend/app/services/speaking_grading_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/schemas/speaking.py",
+        "backend/app/prompts/audio_assessment.py",
+        "backend/app/schemas/audio_assessment.py",
+        "backend/app/speech/openai_audio_analysis.py",
+        "backend/app/services/pronunciation_practice_service.py"
+      ],
+      "schema": "ManualSpeakingAudio"
+    },
+    "speaking/speaking-correction.md": {
+      "versions": "SPEAKING_CORRECTION_PROMPT_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/speaking_grader.py",
+        "backend/app/prompts/speaking_correction.py",
+        "backend/app/services/speaking_grading_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/schemas/speaking.py"
+      ],
+      "schema": null
+    },
+    "speaking/audio-transcription.md": {
+      "versions": "Không có prompt-version riêng; provider operation speaking_transcribe; TranscriptionResult",
+      "sources": [
+        "backend/app/speech/openai_speech_client.py",
+        "backend/app/services/speech_transcription_service.py",
+        "backend/app/schemas/speaking.py"
+      ],
+      "schema": null
+    },
+    "speaking/reference-audio.md": {
+      "versions": "Không có prompt-version riêng; operation speaking_tts",
+      "sources": [
+        "backend/app/services/text_to_speech_service.py",
+        "backend/app/speech/openai_speech_client.py"
+      ],
+      "schema": null
+    },
+    "writing/writing-vocabulary-coach.md": {
+      "versions": "VOCABULARY_COACH_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/vocabulary_coach.py",
+        "backend/app/services/vocabulary_coach_service.py",
+        "backend/app/schemas/vocabulary_coach.py"
+      ],
+      "schema": "VocabularyCoachOutput"
+    },
+    "vocabulary/vocabulary-from-writing.md": {
+      "versions": "VOCABULARY_COACH_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/vocabulary_coach.py",
+        "backend/app/services/vocabulary_coach_service.py",
+        "backend/app/schemas/vocabulary_coach.py"
+      ],
+      "schema": "VocabularyCoachOutput"
+    },
+    "speaking/speaking-vocabulary-coach.md": {
+      "versions": "VOCABULARY_COACH_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/vocabulary_coach.py",
+        "backend/app/services/vocabulary_coach_service.py",
+        "backend/app/schemas/vocabulary_coach.py"
+      ],
+      "schema": "VocabularyCoachOutput"
+    },
+    "vocabulary/vocabulary-from-speaking.md": {
+      "versions": "VOCABULARY_COACH_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/vocabulary_coach.py",
+        "backend/app/services/vocabulary_coach_service.py",
+        "backend/app/schemas/vocabulary_coach.py"
+      ],
+      "schema": "VocabularyCoachOutput"
+    },
+    "reading/reading-vocabulary-coach.md": {
+      "versions": "VOCABULARY_COACH_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/vocabulary_coach.py",
+        "backend/app/services/vocabulary_coach_service.py",
+        "backend/app/schemas/vocabulary_coach.py",
+        "backend/app/prompts/reading_vocabulary_explanation.py"
+      ],
+      "schema": "VocabularyCoachOutput"
+    },
+    "vocabulary/vocabulary-from-reading.md": {
+      "versions": "VOCABULARY_COACH_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/vocabulary_coach.py",
+        "backend/app/services/vocabulary_coach_service.py",
+        "backend/app/schemas/vocabulary_coach.py",
+        "backend/app/prompts/reading_vocabulary_explanation.py"
+      ],
+      "schema": "VocabularyCoachOutput"
+    },
+    "vocabulary/usage-assessment.md": {
+      "versions": "VOCABULARY_COACH_VERSION=1.0.0 (VOCABULARY_USAGE_PROMPT không có version riêng)",
+      "sources": [
+        "backend/app/prompts/vocabulary_coach.py",
+        "backend/app/services/vocabulary_coach_service.py",
+        "backend/app/schemas/vocabulary_coach.py"
+      ],
+      "schema": "VocabularyUsageAssessment"
+    },
+    "reading/answer-explanation.md": {
+      "versions": "Không có prompt-version giải thích đáp án riêng; Reading generator/validator=3.0.0",
+      "sources": [
+        "backend/app/services/reading_scoring_service.py",
+        "backend/app/schemas/reading.py",
+        "backend/app/services/reading_exam_service.py",
+        "backend/app/services/reading_progress_service.py",
+        "backend/app/validators/quality.py"
+      ],
+      "schema": "ManualReadingExplanation"
+    },
+    "reading/reading-analysis.md": {
+      "versions": "Deterministic Reading scoring; không có prompt-version chấm AI",
+      "sources": [
+        "backend/app/services/reading_scoring_service.py",
+        "backend/app/schemas/reading.py",
+        "backend/app/services/reading_exam_service.py",
+        "backend/app/services/reading_progress_service.py"
+      ],
+      "schema": "ManualReadingAnalysis"
+    },
+    "reading/all-in-one-reading.md": {
+      "versions": "Deterministic Reading scoring; không có prompt-version chấm AI",
+      "sources": [
+        "backend/app/services/reading_scoring_service.py",
+        "backend/app/schemas/reading.py",
+        "backend/app/services/reading_exam_service.py",
+        "backend/app/services/reading_progress_service.py"
+      ],
+      "schema": "ManualReadingAnalysis"
+    },
+    "writing/writing-question-generation.md": {
+      "versions": "QUESTION_GENERATOR_PROMPT_VERSION=REFERENCE_VERSION=3.0.0; VALIDATOR_VERSION=3.0.0",
+      "sources": [
+        "backend/app/prompts/question_generator.py",
+        "backend/app/services/question_generator.py",
+        "backend/app/schemas/writing.py",
+        "backend/app/validators/questions.py",
+        "backend/app/vstep_reference/writing_blueprints.py"
+      ],
+      "schema": "GeneratedQuestion"
+    },
+    "speaking/speaking-question-generation.md": {
+      "versions": "SPEAKING_PART1/2/3_PROMPT_VERSION=3.0.0",
+      "sources": [
+        "backend/app/prompts/speaking_part1_generator.py",
+        "backend/app/prompts/speaking_part2_generator.py",
+        "backend/app/prompts/speaking_part3_generator.py",
+        "backend/app/services/speaking_question_generator.py",
+        "backend/app/schemas/speaking.py",
+        "backend/app/vstep_reference/speaking_blueprints.py"
+      ],
+      "schema": "GeneratedSpeakingQuestion"
+    },
+    "reading/reading-question-generation.md": {
+      "versions": "READING_GENERATOR_PROMPT_VERSION=3.0.0; ReadingFullTestBlueprint.version=3.0.0",
+      "sources": [
+        "backend/app/prompts/reading_question_generator.py",
+        "backend/app/services/reading_question_generator.py",
+        "backend/app/schemas/reading.py",
+        "backend/app/vstep_reference/reading_blueprints.py",
+        "backend/app/validators/quality.py"
+      ],
+      "schema": "GeneratedReadingPassage"
+    },
+    "reading/reading-full-test-generation.md": {
+      "versions": "READING_GENERATOR_PROMPT_VERSION=3.0.0; ReadingFullTestBlueprint.version=3.0.0",
+      "sources": [
+        "backend/app/prompts/reading_question_generator.py",
+        "backend/app/services/reading_question_generator.py",
+        "backend/app/schemas/reading.py",
+        "backend/app/vstep_reference/reading_blueprints.py",
+        "backend/app/validators/quality.py"
+      ],
+      "schema": "ManualReadingFullTest"
+    },
+    "reading/selected-term-explanation.md": {
+      "versions": "READING_VOCABULARY_PROMPT_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/reading_vocabulary_explanation.py",
+        "backend/app/schemas/reading.py",
+        "backend/app/llm/openai_client.py"
+      ],
+      "schema": "ReadingVocabulary"
+    },
+    "learning/learning-analysis.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/analysis.py",
+        "backend/app/learning/aggregation.py",
+        "backend/app/learning/extraction.py",
+        "backend/app/learning/taxonomy/__init__.py",
+        "backend/app/learning/plans.py",
+        "backend/app/core/config.py"
+      ],
+      "schema": "ManualLearningAnalysis"
+    },
+    "learning/weakness-analysis.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/analysis.py",
+        "backend/app/learning/aggregation.py",
+        "backend/app/learning/extraction.py",
+        "backend/app/learning/taxonomy/__init__.py",
+        "backend/app/learning/plans.py",
+        "backend/app/core/config.py"
+      ],
+      "schema": "ManualLearningAnalysis"
+    },
+    "learning/grammar-lesson.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/coaching.py",
+        "backend/app/learning/__init__.py",
+        "backend/app/schemas/learning.py",
+        "backend/app/learning/taxonomy/__init__.py"
+      ],
+      "schema": "PersonalizedLessonOutput"
+    },
+    "learning/vocabulary-lesson.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/coaching.py",
+        "backend/app/learning/__init__.py",
+        "backend/app/schemas/learning.py",
+        "backend/app/learning/taxonomy/__init__.py"
+      ],
+      "schema": "PersonalizedLessonOutput"
+    },
+    "vocabulary/vocabulary-lesson.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/coaching.py",
+        "backend/app/learning/__init__.py",
+        "backend/app/schemas/learning.py",
+        "backend/app/learning/taxonomy/__init__.py"
+      ],
+      "schema": "PersonalizedLessonOutput"
+    },
+    "learning/reading-strategy-lesson.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/coaching.py",
+        "backend/app/learning/__init__.py",
+        "backend/app/schemas/learning.py",
+        "backend/app/learning/taxonomy/__init__.py"
+      ],
+      "schema": "PersonalizedLessonOutput"
+    },
+    "learning/speaking-coach.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/coaching.py",
+        "backend/app/learning/__init__.py",
+        "backend/app/schemas/learning.py",
+        "backend/app/learning/taxonomy/__init__.py"
+      ],
+      "schema": "PersonalizedLessonOutput"
+    },
+    "learning/personalized-exercise-generation.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/coaching.py",
+        "backend/app/schemas/learning.py",
+        "backend/app/learning/targeted.py",
+        "backend/app/services/vocabulary_coach_service.py"
+      ],
+      "schema": "PersonalizedExercisesOutput"
+    },
+    "vocabulary/vocabulary-exercise-generation.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/coaching.py",
+        "backend/app/schemas/learning.py",
+        "backend/app/learning/targeted.py",
+        "backend/app/services/vocabulary_coach_service.py"
+      ],
+      "schema": "PersonalizedExercisesOutput"
+    },
+    "learning/exercise-feedback.md": {
+      "versions": "EXERCISE_VERSION=1.0.0; ASSESS_PROMPT không có version riêng",
+      "sources": [
+        "backend/app/learning/coaching.py",
+        "backend/app/schemas/learning.py"
+      ],
+      "schema": "ExerciseAssessment"
+    },
+    "learning/daily-study-plan.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/analysis.py",
+        "backend/app/learning/aggregation.py",
+        "backend/app/learning/extraction.py",
+        "backend/app/learning/taxonomy/__init__.py",
+        "backend/app/learning/plans.py",
+        "backend/app/core/config.py"
+      ],
+      "schema": null
+    },
+    "learning/weekly-review.md": {
+      "versions": "SUMMARY_VERSION=1.0.0; analysis/taxonomy=1.0.0",
+      "sources": [
+        "backend/app/learning/weekly.py",
+        "backend/app/learning/analysis.py",
+        "backend/app/schemas/learning.py"
+      ],
+      "schema": "WeeklyCoachOutput"
+    },
+    "learning/targeted-practice.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0; question generators=3.0.0",
+      "sources": [
+        "backend/app/learning/targeted.py",
+        "backend/app/learning/coaching.py",
+        "backend/app/services/question_generator.py",
+        "backend/app/services/speaking_question_generator.py",
+        "backend/app/services/reading_question_generator.py"
+      ],
+      "schema": null
+    },
+    "question-import/parse-writing-question.md": {
+      "versions": "QUESTION_IMPORT_PROMPT hiện chưa có version constant riêng; dùng source commit/hash trong version map",
+      "sources": [
+        "backend/app/prompts/question_import.py",
+        "backend/app/services/question_import_service.py",
+        "backend/app/schemas/library.py",
+        "backend/app/services/library_service.py"
+      ],
+      "schema": "ParsedImport"
+    },
+    "question-import/parse-speaking-question.md": {
+      "versions": "QUESTION_IMPORT_PROMPT hiện chưa có version constant riêng; dùng source commit/hash trong version map",
+      "sources": [
+        "backend/app/prompts/question_import.py",
+        "backend/app/services/question_import_service.py",
+        "backend/app/schemas/library.py",
+        "backend/app/services/library_service.py"
+      ],
+      "schema": "ParsedImport"
+    },
+    "question-import/parse-reading-question.md": {
+      "versions": "QUESTION_IMPORT_PROMPT hiện chưa có version constant riêng; dùng source commit/hash trong version map",
+      "sources": [
+        "backend/app/prompts/question_import.py",
+        "backend/app/services/question_import_service.py",
+        "backend/app/schemas/library.py",
+        "backend/app/services/library_service.py"
+      ],
+      "schema": "ParsedImport"
+    },
+    "question-import/parse-generic-question.md": {
+      "versions": "QUESTION_IMPORT_PROMPT hiện chưa có version constant riêng; dùng source commit/hash trong version map",
+      "sources": [
+        "backend/app/prompts/question_import.py",
+        "backend/app/services/question_import_service.py",
+        "backend/app/schemas/library.py",
+        "backend/app/services/library_service.py"
+      ],
+      "schema": "ParsedImport"
+    },
+    "reference/question-quality-review.md": {
+      "versions": "VALIDATOR_VERSION=3.0.0; REFERENCE_VERSION=3.0.0; QUALITY_PROMPT không có version riêng",
+      "sources": [
+        "backend/app/validators/quality.py",
+        "backend/app/validators/questions.py",
+        "backend/app/schemas/generation_quality.py",
+        "backend/app/vstep_reference/specification.py"
+      ],
+      "schema": "QuestionQualityReview"
+    },
+    "reference/vstep-format.md": {
+      "versions": "REFERENCE_VERSION=3.0.0; ReadingFullTestBlueprint.version=3.0.0",
+      "sources": [
+        "backend/app/vstep_reference/specification.py",
+        "backend/app/vstep_reference/scoring_reference.py",
+        "backend/app/vstep_reference/writing_blueprints.py",
+        "backend/app/vstep_reference/speaking_blueprints.py",
+        "backend/app/vstep_reference/reading_blueprints.py"
+      ],
+      "schema": null
+    },
+    "reference/scoring-rules.md": {
+      "versions": "Core/grader 4.1.0; escalation 1.5.0; reference layer 3.0.0 (scoring_reference.py không có version constant riêng)",
+      "sources": [
+        "backend/app/vstep_reference/specification.py",
+        "backend/app/vstep_reference/scoring_reference.py",
+        "backend/app/vstep_reference/writing_blueprints.py",
+        "backend/app/vstep_reference/speaking_blueprints.py",
+        "backend/app/vstep_reference/reading_blueprints.py",
+        "backend/app/services/reading_scoring_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/prompts/writing_calibration_anchors.py",
+        "backend/app/services/grading_escalation_service.py"
+      ],
+      "schema": null
+    },
+    "reference/output-schemas.md": {
+      "versions": "Snapshots từ Pydantic tại commit 658986a",
+      "sources": [
+        "backend/app/schemas/writing_core.py",
+        "backend/app/schemas/writing.py",
+        "backend/app/schemas/speaking.py",
+        "backend/app/schemas/reading.py",
+        "backend/app/schemas/library.py",
+        "backend/app/schemas/learning.py",
+        "backend/app/schemas/vocabulary_coach.py"
+      ],
+      "schema": null
+    },
+    "reference/prompt-version-map.md": {
+      "versions": "MANUAL_KIT_VERSION=1.0.0; source commit 658986a",
+      "sources": [
+        "backend/app/vstep_reference/specification.py",
+        "backend/app/vstep_reference/scoring_reference.py",
+        "backend/app/vstep_reference/writing_blueprints.py",
+        "backend/app/vstep_reference/speaking_blueprints.py",
+        "backend/app/vstep_reference/reading_blueprints.py",
+        "backend/app/llm/routing.py",
+        "backend/app/core/config.py"
+      ],
+      "schema": null
+    },
+    "reference/manual-workflows.md": {
+      "versions": "MANUAL_KIT_VERSION=1.0.0",
+      "sources": [
+        "docs/ai-operations.md",
+        "docs/my-question-library.md",
+        "backend/app/api/routes/writing.py",
+        "backend/app/api/routes/library.py"
+      ],
+      "schema": null
+    },
+    "quick/quick-grade-writing-task1.md": {
+      "versions": "WRITING_GRADER_VERSION=4.1.0; WRITING_CORE_VERSION=4.1.0; analysis/calibration/feedback=3.0.0; ESCALATION_VERSION=1.5.0; OPTIONAL_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/writing_core.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/prompts/writing_calibration.py",
+        "backend/app/services/writing_core_service.py",
+        "backend/app/services/writing_analysis_service.py",
+        "backend/app/services/writing_grader.py",
+        "backend/app/services/grading_escalation_service.py",
+        "backend/app/schemas/writing_core.py",
+        "backend/app/vstep_reference/scoring_reference.py"
+      ],
+      "schema": null
+    },
+    "quick/quick-grade-writing-task2.md": {
+      "versions": "WRITING_GRADER_VERSION=4.1.0; WRITING_CORE_VERSION=4.1.0; analysis/calibration/feedback=3.0.0; ESCALATION_VERSION=1.5.0; OPTIONAL_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/writing_core.py",
+        "backend/app/prompts/writing_analysis.py",
+        "backend/app/prompts/writing_calibration.py",
+        "backend/app/services/writing_core_service.py",
+        "backend/app/services/writing_analysis_service.py",
+        "backend/app/services/writing_grader.py",
+        "backend/app/services/grading_escalation_service.py",
+        "backend/app/schemas/writing_core.py",
+        "backend/app/vstep_reference/scoring_reference.py"
+      ],
+      "schema": null
+    },
+    "quick/quick-grade-speaking.md": {
+      "versions": "SPEAKING_GRADER_PROMPT_VERSION=2.1.0; SPEAKING_CORRECTION_PROMPT_VERSION=1.0.0; ESCALATION_VERSION=1.5.0",
+      "sources": [
+        "backend/app/prompts/speaking_grader.py",
+        "backend/app/prompts/speaking_correction.py",
+        "backend/app/services/speaking_grading_service.py",
+        "backend/app/services/speaking_correction.py",
+        "backend/app/schemas/speaking.py"
+      ],
+      "schema": null
+    },
+    "quick/quick-explain-reading.md": {
+      "versions": "Reading generator/validator 3.0.0; explanation lưu sẵn",
+      "sources": [
+        "backend/app/services/reading_scoring_service.py",
+        "backend/app/schemas/reading.py",
+        "backend/app/services/reading_exam_service.py",
+        "backend/app/services/reading_progress_service.py"
+      ],
+      "schema": null
+    },
+    "quick/quick-vocabulary-coach.md": {
+      "versions": "VOCABULARY_COACH_VERSION=1.0.0",
+      "sources": [
+        "backend/app/prompts/vocabulary_coach.py",
+        "backend/app/services/vocabulary_coach_service.py",
+        "backend/app/schemas/vocabulary_coach.py"
+      ],
+      "schema": null
+    },
+    "quick/quick-learning-analysis.md": {
+      "versions": "ANALYSIS_VERSION=1.0.0; TAXONOMY_VERSION=1.0.0; LESSON_VERSION=1.0.0; EXERCISE_VERSION=1.0.0",
+      "sources": [
+        "backend/app/learning/analysis.py",
+        "backend/app/learning/aggregation.py",
+        "backend/app/learning/extraction.py",
+        "backend/app/learning/taxonomy/__init__.py",
+        "backend/app/learning/plans.py",
+        "backend/app/core/config.py"
+      ],
+      "schema": null
+    }
+  },
+  "source_files": {
+    "backend/app/prompts/writing_core.py": "9ef2ce2f11fba1dd74dc2aa83c7e4519cbd008997612c7ce7daa5803212540c5",
+    "backend/app/prompts/writing_analysis.py": "a60413fb58dd11fa41ec60f6017d1f98fc11f8280da9ca7879507f5e2a5b31ee",
+    "backend/app/prompts/writing_calibration.py": "2c67eceaecbaafe3a7613321729bf06406001209dc35d5be81ec47c5bb81f111",
+    "backend/app/services/writing_core_service.py": "f7d611d95e2631e1b3c7eeb570662196670375ae10bf496c18cfa5cc2f2eeb83",
+    "backend/app/services/writing_analysis_service.py": "92fb8d0ae882408cd509d7488a9eb2b10590dbb7fce24598c20fca04d2aa8937",
+    "backend/app/services/writing_grader.py": "ad0ff6dd6212f89862d2239c4da3bd027c9849f4eb8f09728161118cdf0f5a67",
+    "backend/app/services/grading_escalation_service.py": "1eeebb7db60f935ea06457eed02811433c9f5f8eec42136ad37018a8fe6a958e",
+    "backend/app/schemas/writing_core.py": "cd70c84e4357818edc170efcb27acad78f5e783b7c7c3f3adfcd63d001f9e2cf",
+    "backend/app/vstep_reference/scoring_reference.py": "29147a6f22a1adbe8903ddfdc325e367e91d1bfd5acea3b137a484f84ca3ea1f",
+    "backend/app/prompts/task1_grader.py": "4e586a47db66c1ea21c6ee51c5a45d49eb7d7a521b42fd6e7d8704c86b8f7a45",
+    "backend/app/prompts/task2_grader.py": "8f2664b0ee73008bf2a84233b23a80e99733b0885a87ecf9e629971f17e6f6d6",
+    "backend/app/services/writing_optional_feedback.py": "147bdd1bacdf8064e5347bfc8b9286ecf7cf304927464d4df50f1ae71adb42a9",
+    "backend/app/prompts/vocabulary_coach.py": "7d9ea599fad5970615dd6747174a241ca40cb0a63828fd2d048a6e7fe5b04b51",
+    "backend/app/services/progress_service.py": "66835a3d72b252c2a122d50a9093361784a472278534c9eb44be698f5eb12700",
+    "backend/app/services/writing_feedback_service.py": "0b4f836deb46262f40b96cdc3da143d6d352a61859b039b32f729ab13b96883a",
+    "backend/app/schemas/writing_assessment.py": "d28678b69e3c6f9af8eaa38c83aa76465005788a86b7fb416a83de4976176632",
+    "backend/app/schemas/writing.py": "2d9e4233e94f69ecb33a2ce0b026d1d99c7224c4a4a06778e892714d34a05dc3",
+    "backend/app/prompts/speaking_grader.py": "e96def0006c6c5a02c50a885c4d22935a363628dfe193398e28daca53d5bcc9d",
+    "backend/app/prompts/speaking_correction.py": "bf0ceafb19e9c7d6237fdd9a332bd2ae05220e60ba768be98d15cc3a5dee790a",
+    "backend/app/services/speaking_grading_service.py": "88b2c19d2c073897e6b4ca42490e27921be7a776349e9f0c369d2b4f0c00aef9",
+    "backend/app/services/speaking_correction.py": "0736095e8fa7122cf9438238d5910a904ffbdc3e684db6f2711908b1c6557479",
+    "backend/app/schemas/speaking.py": "0b62ef66b8e3271863e85dd9300c44568f32ca24ca84b96b1db4febdabbba403",
+    "backend/app/prompts/audio_assessment.py": "b9aa2b82be4b9e91d5374fd62c065ea2d13f3e3bb5ce180ad9abf72645c1f1fd",
+    "backend/app/schemas/audio_assessment.py": "5a22f2cd422aec5b43df34918ca5b6e98e35836b662b7ccf7d10cd41a2e24494",
+    "backend/app/speech/openai_audio_analysis.py": "e494769c8f119a3c83351a49765a3cb264902a36aa179c4aa9fda171183e4fa0",
+    "backend/app/services/pronunciation_practice_service.py": "a3cd5bde86425c5503a845685c4fce28e14c0ffbb8e63b58b4b49e938404c212",
+    "backend/app/speech/openai_speech_client.py": "0fd0b13b47f6f9239c14879e1912a8f837cd247e3d98bc8535d2ea1d73125595",
+    "backend/app/services/speech_transcription_service.py": "e9c50d6a64bdd375851d2839f549a72f4ab50055dfe82ae13db62e8a1db6caa4",
+    "backend/app/services/text_to_speech_service.py": "5cebb56dc35dfedf0465248d77952ae46864823f2bb6dec2f190bdf7c16b1ed6",
+    "backend/app/services/vocabulary_coach_service.py": "e54d079e4f171bab4646a76445d3175e7514377513f061341be9ec6f4fd9efad",
+    "backend/app/schemas/vocabulary_coach.py": "75a7d1e6be2610ebc40a89c90843b1e5e12561594cd3ea7514c86d86e2dc55b8",
+    "backend/app/prompts/reading_vocabulary_explanation.py": "de572e93786163954feb3e552ebc1955a4b8f9646cfa4cd403fe85a7eb5410e5",
+    "backend/app/services/reading_scoring_service.py": "800d767382f234444d613484d1f48be8ce90e1baa322c55fc538f340309d6de9",
+    "backend/app/schemas/reading.py": "ac483d3a90e782020fd9f6afcff2b6475768d4143b5a644860ef0cd71e492c2e",
+    "backend/app/services/reading_exam_service.py": "47d17d18f2f69610fb9878b6cf697750cf7144fac8be790c313a41c655561f98",
+    "backend/app/services/reading_progress_service.py": "52f3beaaf834ff8d713aca249a998331d9a01fad2e59ac73a85bfcae0dd93825",
+    "backend/app/validators/quality.py": "f65ab9e4cfd3c3942ff4c2b69fda467bde3fcfa96084143ddbbfa361bd1ee85f",
+    "backend/app/prompts/question_generator.py": "acb9ff42f33bb1c633ba6f05cbe691919663cc6d41443618f82acdc035de2bde",
+    "backend/app/services/question_generator.py": "7fb6e630880f656bc833b78ae2385ef5dedfdf08be3bf93ad159c8610d521db9",
+    "backend/app/validators/questions.py": "968b6e4e8313aa9f9c269707e751372cc49119d5b464b20e233d455983408e70",
+    "backend/app/vstep_reference/writing_blueprints.py": "de356e024bedbe0e326ed7b38b15a362006f8f2a91345996ba48a6979a851b6f",
+    "backend/app/prompts/speaking_part1_generator.py": "f2bd380acb8003f5d48fed78749c587912362c1e4dcaed10fe12b6f83f6b0ec9",
+    "backend/app/prompts/speaking_part2_generator.py": "6c317d7684a24ff7862e6b71030db26148cd45aec2fbd8fc94bcad7d7052f7b0",
+    "backend/app/prompts/speaking_part3_generator.py": "f5feed23f3536680fc9a2f17150c169e97c49131a357c51aa04297c573130686",
+    "backend/app/services/speaking_question_generator.py": "7b95b0f86591d217324f8f5920b9e22bd4bd6e1bb79b81a54ff5792e7b238e40",
+    "backend/app/vstep_reference/speaking_blueprints.py": "acf6a042720943f11ff971fc26142d125b0da4958e25a1cc6fd909f90ded3298",
+    "backend/app/prompts/reading_question_generator.py": "0d52694c66f798e5d97d18a5ad10cb5e2b1c18644fd97b2d01990622fcb2c2de",
+    "backend/app/services/reading_question_generator.py": "62532508569e347eca3f3b3904ebb00e709e46ecd44b804d2fe1a8e037c19420",
+    "backend/app/vstep_reference/reading_blueprints.py": "db013604e34ea466eb99f99694fd369c73b2d1755a320d502c600bc4aa073ad8",
+    "backend/app/llm/openai_client.py": "045f0c45cdc49769adbdce0cfa9a87152cbaad0f719a121d8272651a970b782b",
+    "backend/app/learning/analysis.py": "89615fa443c61fb9f486015eaff173746b0bd735c64e6c3bd9e5e0bcda34b4a0",
+    "backend/app/learning/aggregation.py": "a576e915494b778b0ba73f8093e43edec5dfc357430efb95fec77eff6e40c723",
+    "backend/app/learning/extraction.py": "98ac62b08fe825b8d6df3c6ffe21f2bb55bbd2d4b8e0e686354410f66631a5ac",
+    "backend/app/learning/taxonomy/__init__.py": "52359a9ef032f5bfc36d71b1fed984ad0783e059743fda7555daccfa62339755",
+    "backend/app/learning/plans.py": "b53d197e2a6fc99db5ec4c24f607074fe8129e794eba8099603f6bac17b50e2e",
+    "backend/app/core/config.py": "f193363d149dc7379026116162da5cb0a24e0b20885a720737eee75d422df5c6",
+    "backend/app/learning/coaching.py": "ce6d78a7d1a68cb2835693611b0847585709e309eaa1d597fe76d2f0b2bfa53d",
+    "backend/app/learning/__init__.py": "1feb7726377f6f8c8104f7d5f9c44b02bb45021049be21817f938706a3d6dae6",
+    "backend/app/schemas/learning.py": "86ffd8ffc8f3aa68de300d8093847ad012ac8c45aa2f2ea37881caf43723739f",
+    "backend/app/learning/targeted.py": "3d348580aa7b67281289022a8426ba427927489ed44d7930a140620ab48a2107",
+    "backend/app/learning/weekly.py": "432a495d7122c49777e7b749e7d8724be53403b103181012cb3b6c72e78bcc8e",
+    "backend/app/prompts/question_import.py": "175f57e1ea599a6e625cd968936f9f31a222e6f3e0b66ec7c5544f553823cebc",
+    "backend/app/services/question_import_service.py": "0556208057f3d36169b60868a21febc7e55928ab7e563a1afcdb42bc4bde7b01",
+    "backend/app/schemas/library.py": "cd6710028aa4841d87645ca500a84428eddee2d4470524b178d341285e70aecc",
+    "backend/app/services/library_service.py": "02d8abd795dc15a6b7ccaa08d89da005d61420e47902c23af40e0b7500e104cf",
+    "backend/app/schemas/generation_quality.py": "ea9c4a3de90a41f2ed735b1bc2dea0b5a27faf40b608461bead2769bea309957",
+    "backend/app/vstep_reference/specification.py": "6b683eb7a4cbe9ad54c041e8beb6900f0069a8972f93fbd94bb8f474c753aceb",
+    "backend/app/prompts/writing_calibration_anchors.py": "ab5685ebc0cdb706c7d09016e290b4de9591f71c6df1eeec59a8d8eec2c67173",
+    "backend/app/llm/routing.py": "30572fc1efb3796884bee2e8935dae782cc3e163f245e668470e1f8925ad602f",
+    "docs/ai-operations.md": "0ae01f3f5299cb3df7ad222f79db7349f9e205ea51a5ce7796c42be96f276cd2",
+    "docs/my-question-library.md": "0accf3abbf6dc8edc9c5ef23b230990907fe907d814bd5909512decca2f1e2ac",
+    "backend/app/api/routes/writing.py": "b333cc8ea8b955f5cb3bc281ad4e6bf2cc95578aa33396854801f0b52f768191",
+    "backend/app/api/routes/library.py": "907b31a410ccfaceeecff880db2f3af902812dd6f28b48b4b3cb4ed36daef7b0"
+  }
+}

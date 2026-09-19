@@ -1,0 +1,280 @@
+{
+  "$defs": {
+    "ErrorFeedback": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "grammar",
+            "vocabulary",
+            "spelling",
+            "punctuation",
+            "collocation",
+            "word_choice",
+            "sentence_structure",
+            "cohesion",
+            "task_response",
+            "register"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "subtype": {
+          "title": "Subtype",
+          "type": "string"
+        },
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "corrected": {
+          "title": "Corrected",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "minor",
+            "major",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "category",
+        "subtype",
+        "original",
+        "corrected",
+        "explanation_vi",
+        "severity"
+      ],
+      "title": "ErrorFeedback",
+      "type": "object"
+    },
+    "Improvement": {
+      "additionalProperties": false,
+      "properties": {
+        "title_vi": {
+          "title": "Title Vi",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "example": {
+          "title": "Example",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title_vi",
+        "explanation_vi",
+        "example"
+      ],
+      "title": "Improvement",
+      "type": "object"
+    },
+    "Scores": {
+      "additionalProperties": false,
+      "properties": {
+        "task_fulfillment": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Task Fulfillment",
+          "type": "number"
+        },
+        "organization": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Organization",
+          "type": "number"
+        },
+        "vocabulary": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Vocabulary",
+          "type": "number"
+        },
+        "grammar": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Grammar",
+          "type": "number"
+        },
+        "overall": {
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Overall",
+          "type": "number"
+        }
+      },
+      "required": [
+        "task_fulfillment",
+        "organization",
+        "vocabulary",
+        "grammar",
+        "overall"
+      ],
+      "title": "Scores",
+      "type": "object"
+    },
+    "SentenceFeedback": {
+      "additionalProperties": false,
+      "properties": {
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "corrected": {
+          "title": "Corrected",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "original",
+        "corrected",
+        "explanation_vi"
+      ],
+      "title": "SentenceFeedback",
+      "type": "object"
+    },
+    "VocabularySuggestion": {
+      "additionalProperties": false,
+      "properties": {
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "suggestion": {
+          "title": "Suggestion",
+          "type": "string"
+        },
+        "reason_vi": {
+          "title": "Reason Vi",
+          "type": "string"
+        },
+        "example": {
+          "title": "Example",
+          "type": "string"
+        }
+      },
+      "required": [
+        "original",
+        "suggestion",
+        "reason_vi",
+        "example"
+      ],
+      "title": "VocabularySuggestion",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "task": {
+      "enum": [
+        1,
+        2
+      ],
+      "title": "Task",
+      "type": "integer"
+    },
+    "word_count": {
+      "minimum": 0,
+      "title": "Word Count",
+      "type": "integer"
+    },
+    "scores": {
+      "$ref": "#/$defs/Scores"
+    },
+    "summary_vi": {
+      "title": "Summary Vi",
+      "type": "string"
+    },
+    "strengths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Strengths",
+      "type": "array"
+    },
+    "priority_improvements": {
+      "items": {
+        "$ref": "#/$defs/Improvement"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "title": "Priority Improvements",
+      "type": "array"
+    },
+    "structure_feedback": {
+      "items": {
+        "$ref": "#/$defs/Improvement"
+      },
+      "title": "Structure Feedback",
+      "type": "array"
+    },
+    "task_fulfillment_feedback": {
+      "items": {
+        "$ref": "#/$defs/Improvement"
+      },
+      "title": "Task Fulfillment Feedback",
+      "type": "array"
+    },
+    "errors": {
+      "items": {
+        "$ref": "#/$defs/ErrorFeedback"
+      },
+      "title": "Errors",
+      "type": "array"
+    },
+    "vocabulary_suggestions": {
+      "items": {
+        "$ref": "#/$defs/VocabularySuggestion"
+      },
+      "title": "Vocabulary Suggestions",
+      "type": "array"
+    },
+    "sentence_feedback": {
+      "items": {
+        "$ref": "#/$defs/SentenceFeedback"
+      },
+      "title": "Sentence Feedback",
+      "type": "array"
+    },
+    "corrected_version": {
+      "title": "Corrected Version",
+      "type": "string"
+    },
+    "improved_b2_version": {
+      "title": "Improved B2 Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "task",
+    "word_count",
+    "scores",
+    "summary_vi",
+    "strengths",
+    "priority_improvements",
+    "structure_feedback",
+    "task_fulfillment_feedback",
+    "errors",
+    "vocabulary_suggestions",
+    "sentence_feedback",
+    "corrected_version",
+    "improved_b2_version"
+  ],
+  "title": "GradingOutput",
+  "type": "object"
+}

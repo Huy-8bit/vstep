@@ -1,0 +1,15 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "corrected_version": {
+      "maxLength": 16000,
+      "title": "Corrected Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "corrected_version"
+  ],
+  "title": "CorrectedAnswer",
+  "type": "object"
+}

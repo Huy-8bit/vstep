@@ -1,0 +1,42 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "term": {
+      "title": "Term",
+      "type": "string"
+    },
+    "meaning_vi": {
+      "title": "Meaning Vi",
+      "type": "string"
+    },
+    "part_of_speech": {
+      "title": "Part Of Speech",
+      "type": "string"
+    },
+    "meaning_in_context": {
+      "title": "Meaning In Context",
+      "type": "string"
+    },
+    "example": {
+      "title": "Example",
+      "type": "string"
+    },
+    "synonyms": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Synonyms",
+      "type": "array"
+    }
+  },
+  "required": [
+    "term",
+    "meaning_vi",
+    "part_of_speech",
+    "meaning_in_context",
+    "example",
+    "synonyms"
+  ],
+  "title": "ReadingVocabulary",
+  "type": "object"
+}

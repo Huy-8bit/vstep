@@ -1,0 +1,359 @@
+{
+  "$defs": {
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "paragraph_id": {
+          "title": "Paragraph Id",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 1800,
+          "minLength": 5,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "paragraph_id",
+        "quote"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "GeneratedReadingQuestion": {
+      "additionalProperties": false,
+      "properties": {
+        "internal_difficulty_band": {
+          "enum": [
+            "ACCESSIBLE",
+            "MODERATE",
+            "CHALLENGING",
+            "ADVANCED"
+          ],
+          "title": "Internal Difficulty Band",
+          "type": "string"
+        },
+        "question_number": {
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Question Number",
+          "type": "integer"
+        },
+        "question_type": {
+          "enum": [
+            "main_idea",
+            "detail",
+            "inference",
+            "vocabulary",
+            "reference",
+            "purpose",
+            "negative_detail",
+            "sentence_meaning",
+            "organization",
+            "tone",
+            "attitude",
+            "sentence_insertion",
+            "paragraph_completion"
+          ],
+          "title": "Question Type",
+          "type": "string"
+        },
+        "question_text": {
+          "maxLength": 1200,
+          "minLength": 10,
+          "title": "Question Text",
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/$defs/Options"
+        },
+        "correct_answer": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "title": "Correct Answer",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Explanation Vi",
+          "type": "string"
+        },
+        "option_explanations": {
+          "$ref": "#/$defs/OptionExplanations"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        },
+        "placement": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReadingPlacement"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "internal_difficulty_band",
+        "question_number",
+        "question_type",
+        "question_text",
+        "options",
+        "correct_answer",
+        "explanation_vi",
+        "option_explanations",
+        "evidence"
+      ],
+      "title": "GeneratedReadingQuestion",
+      "type": "object"
+    },
+    "InsertionPosition": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "title": "Label",
+          "type": "string"
+        },
+        "after_text": {
+          "maxLength": 600,
+          "minLength": 5,
+          "title": "After Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "after_text"
+      ],
+      "title": "InsertionPosition",
+      "type": "object"
+    },
+    "OptionExplanation": {
+      "additionalProperties": false,
+      "properties": {
+        "is_correct": {
+          "title": "Is Correct",
+          "type": "boolean"
+        },
+        "explanation_vi": {
+          "maxLength": 1500,
+          "minLength": 10,
+          "title": "Explanation Vi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "is_correct",
+        "explanation_vi"
+      ],
+      "title": "OptionExplanation",
+      "type": "object"
+    },
+    "OptionExplanations": {
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "$ref": "#/$defs/OptionExplanation"
+        },
+        "B": {
+          "$ref": "#/$defs/OptionExplanation"
+        },
+        "C": {
+          "$ref": "#/$defs/OptionExplanation"
+        },
+        "D": {
+          "$ref": "#/$defs/OptionExplanation"
+        }
+      },
+      "required": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "title": "OptionExplanations",
+      "type": "object"
+    },
+    "Options": {
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "maxLength": 700,
+          "minLength": 1,
+          "title": "A",
+          "type": "string"
+        },
+        "B": {
+          "maxLength": 700,
+          "minLength": 1,
+          "title": "B",
+          "type": "string"
+        },
+        "C": {
+          "maxLength": 700,
+          "minLength": 1,
+          "title": "C",
+          "type": "string"
+        },
+        "D": {
+          "maxLength": 700,
+          "minLength": 1,
+          "title": "D",
+          "type": "string"
+        }
+      },
+      "required": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "title": "Options",
+      "type": "object"
+    },
+    "Paragraph": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^p[1-9][0-9]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 4000,
+          "minLength": 40,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "text"
+      ],
+      "title": "Paragraph",
+      "type": "object"
+    },
+    "ReadingPlacement": {
+      "additionalProperties": false,
+      "properties": {
+        "paragraph_id": {
+          "title": "Paragraph Id",
+          "type": "string"
+        },
+        "sentence_to_insert": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Sentence To Insert"
+        },
+        "positions": {
+          "items": {
+            "$ref": "#/$defs/InsertionPosition"
+          },
+          "title": "Positions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "paragraph_id",
+        "sentence_to_insert",
+        "positions"
+      ],
+      "title": "ReadingPlacement",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "maxLength": 300,
+      "minLength": 5,
+      "title": "Title",
+      "type": "string"
+    },
+    "topic": {
+      "enum": [
+        "education",
+        "technology",
+        "environment",
+        "health",
+        "science",
+        "society",
+        "culture",
+        "work",
+        "business",
+        "travel",
+        "psychology",
+        "history",
+        "communication",
+        "nature",
+        "lifestyle"
+      ],
+      "title": "Topic",
+      "type": "string"
+    },
+    "test_profile": {
+      "const": "VSTEP_3_5",
+      "default": "VSTEP_3_5",
+      "title": "Test Profile",
+      "type": "string"
+    },
+    "internal_difficulty_band": {
+      "enum": [
+        "ACCESSIBLE",
+        "MODERATE",
+        "CHALLENGING",
+        "ADVANCED"
+      ],
+      "title": "Internal Difficulty Band",
+      "type": "string"
+    },
+    "paragraphs": {
+      "items": {
+        "$ref": "#/$defs/Paragraph"
+      },
+      "maxItems": 8,
+      "minItems": 3,
+      "title": "Paragraphs",
+      "type": "array"
+    },
+    "questions": {
+      "items": {
+        "$ref": "#/$defs/GeneratedReadingQuestion"
+      },
+      "maxItems": 10,
+      "minItems": 5,
+      "title": "Questions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "title",
+    "topic",
+    "internal_difficulty_band",
+    "paragraphs",
+    "questions"
+  ],
+  "title": "GeneratedReadingPassage",
+  "type": "object"
+}

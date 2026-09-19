@@ -1,0 +1,44 @@
+{
+  "$defs": {
+    "SentenceFeedback": {
+      "additionalProperties": false,
+      "properties": {
+        "original": {
+          "title": "Original",
+          "type": "string"
+        },
+        "corrected": {
+          "title": "Corrected",
+          "type": "string"
+        },
+        "explanation_vi": {
+          "title": "Explanation Vi",
+          "type": "string"
+        }
+      },
+      "required": [
+        "original",
+        "corrected",
+        "explanation_vi"
+      ],
+      "title": "SentenceFeedback",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "sentence_feedback": {
+      "items": {
+        "$ref": "#/$defs/SentenceFeedback"
+      },
+      "maxItems": 80,
+      "title": "Sentence Feedback",
+      "type": "array"
+    }
+  },
+  "required": [
+    "sentence_feedback"
+  ],
+  "title": "SentenceCorrections",
+  "type": "object"
+}
