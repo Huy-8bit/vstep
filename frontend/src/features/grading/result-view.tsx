@@ -1,4 +1,5 @@
 "use client";
+import { AttemptLearningSignals } from "@/features/learning/integration";
 import {
   WritingEvidencePanel,
   WritingGradingHistory,
@@ -503,6 +504,7 @@ function Result({ id }: { id: string }) {
         </div>
       </div>
       <LibraryOrigin value={data.question} retry />
+      {g && <AttemptLearningSignals key={g.id} skill="WRITING" attemptId={data.id} />}
       <LocalRecovery attempt={data} />
       {data.exam.mode === "FULL_TEST" && (
         <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">

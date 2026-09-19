@@ -23,6 +23,23 @@ ReadingType = Literal[
     "sentence_insertion",
     "paragraph_completion",
 ]
+ReadingTopic = Literal[
+    "education",
+    "technology",
+    "environment",
+    "health",
+    "science",
+    "society",
+    "culture",
+    "work",
+    "business",
+    "travel",
+    "psychology",
+    "history",
+    "communication",
+    "nature",
+    "lifestyle",
+]
 Option = Literal["A", "B", "C", "D"]
 READING_TOPICS = [
     "education",
@@ -113,7 +130,7 @@ class GeneratedReadingQuestion(StrictModel):
 
 class GeneratedReadingPassage(StrictModel):
     title: str = Field(min_length=5, max_length=300)
-    topic: str
+    topic: ReadingTopic
     test_profile: TestProfile = "VSTEP_3_5"
     internal_difficulty_band: ItemDifficultyBand
     paragraphs: list[Paragraph] = Field(min_length=3, max_length=8)

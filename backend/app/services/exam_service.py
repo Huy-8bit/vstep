@@ -39,6 +39,8 @@ class ExamService:
                     )
                 )
         now = utcnow()
+        if data.mode == "FULL_TEST" and any(q.generation_diagnostics.get("learning_focus") for q in questions):
+            raise AppError(422, "Đề luyện điểm yếu không được dùng trong bài thi đầy đủ.")
         minutes = (
             OFFICIAL_FORMAT["writing"]["minutes"]
             if data.mode == "FULL_TEST"

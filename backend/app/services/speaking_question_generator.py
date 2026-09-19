@@ -49,7 +49,7 @@ class SpeakingQuestionGeneratorService:
     def __init__(self, db, llm: LLMClient):
         self.db, self.llm = db, llm
 
-    async def generate(self, request: SpeakingQuestionRequest, user_id: str) -> SpeakingQuestion:
+    async def generate(self, request: SpeakingQuestionRequest, user_id: str, *, learning_focus=None) -> SpeakingQuestion:
         recent_sets = list(
             await self.db.scalars(
                 select(SpeakingExamSession.question_set)
@@ -115,18 +115,23 @@ class SpeakingQuestionGeneratorService:
                 for q in recent_rows
             ],
         }
+        if learning_focus:
+            payload["learning_focus"] = learning_focus
         generated = await self.llm.generate_speaking_question(payload, user_id)
         SpeakingQuestionValidator().validate(generated, payload["recent_complete_prompts"])
         diagnostics = await validate_quality(self.llm, "SPEAKING", generated.model_dump(), user_id)
         diagnostics["source_blueprint"] = SPEAKING_BLUEPRINTS[request.part]["id"]
         data = generated.model_dump(exclude={"allow_own_idea"})
         question = SpeakingQuestion(
+            owner_id=user_id if learning_focus else None,
             **data,
             source="AI",
             generation_diagnostics=diagnostics,
             fingerprint=speaking_fingerprint(data),
             prompt_version=SPEAKING_VERSIONS[request.part],
         )
+        if learning_focus:
+            question.generation_diagnostics = {**diagnostics, "learning_focus": learning_focus}
         self.db.add(question)
         try:
             await self.db.commit()

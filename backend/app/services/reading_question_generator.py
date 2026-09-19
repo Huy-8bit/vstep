@@ -71,7 +71,9 @@ class ReadingQuestionGeneratorService:
         bank.sort(key=lambda p: p.id in seen)
         return bank
 
-    async def generate(self, request: ReadingGenerateRequest, user_id, *, slot=None, plan=None):
+    async def generate(self, request: ReadingGenerateRequest, user_id, *, slot=None, plan=None, learning_focus=None):
+        if learning_focus and request.mode == "FULL_TEST":
+            raise AppError(422, "Luyện điểm yếu chỉ áp dụng trong chế độ học.")
         # Only this service chooses internal item targets. Public requests never carry proficiency levels.
         bank = await self.ordered_bank("random" if request.mode == "FULL_TEST" else request.topic, user_id)
         if request.mode == "FULL_TEST":
@@ -95,6 +97,8 @@ class ReadingQuestionGeneratorService:
             await self.db.scalars(select(ReadingPassage).where(ReadingPassage.owner_id.is_(None)).where(ReadingPassage.id.in_(ids)).limit(20))
         )
         payload = request.model_dump()
+        if learning_focus:
+            payload["learning_focus"] = learning_focus
         companions = [p for p in (plan or []) if p]
         payload["recent_topics"] = list(
             dict.fromkeys([p.topic for p in companions] + request.recent_topics + [p.topic for p in recent])
@@ -111,12 +115,16 @@ class ReadingQuestionGeneratorService:
             )
         generated = await self.llm.generate_reading(payload, user_id)
         reject_near_duplicate(" ".join(p.text for p in generated.paragraphs), [p.content for p in bank[:30]])
-        diagnostics = await ReadingQuestionQualityValidator().validate(self.llm, generated, user_id)
+        diagnostics = await ReadingQuestionQualityValidator().validate(self.llm, generated, user_id,
+            practice_context={"mode": request.mode, "target_question_types": request.target_question_types, "question_count": request.question_count})
         diagnostics["source_blueprint"] = (
             "reading_full_3.0.0" if request.mode == "FULL_TEST" else "reading_practice_3.0.0"
         )
         passage = passage_from_generated(generated)
         passage.generation_diagnostics = diagnostics
+        if learning_focus:
+            passage.owner_id = user_id
+            passage.generation_diagnostics = {**diagnostics, "learning_focus": learning_focus}
         if request.mode == "FULL_TEST":
             if not READING_BLUEPRINT.accepts(passage, slot):
                 raise AppError(

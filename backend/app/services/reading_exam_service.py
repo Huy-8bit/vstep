@@ -4,6 +4,7 @@ from sqlalchemy import select
 
 from app.common.errors import AppError
 from app.db.base import utcnow
+from app.learning.signals import sync_learning
 from app.models.reading import ReadingAnswer, ReadingExamSession, ReadingPassage
 from app.services.reading_blueprint import READING_BLUEPRINT
 from app.services.reading_question_generator import ReadingQuestionGeneratorService
@@ -77,6 +78,7 @@ class ReadingExamService:
         if session.status == "IN_PROGRESS" and session.expires_at and utcnow() >= session.expires_at:
             ReadingScoringService().finalize(session, expired=True)
             await self.db.commit()
+            await sync_learning(user_id, "READING", session_id)
         return session
 
     def apply(self, session, changes):
@@ -128,6 +130,7 @@ class ReadingExamService:
         self.apply(session, changes)
         ReadingScoringService().finalize(session)
         await self.db.commit()
+        await sync_learning(user_id, "READING", session_id)
         return session
 
     async def expire_pending(self, user_id):
@@ -140,9 +143,12 @@ class ReadingExamService:
             )
             .with_for_update()
         )
-        for session in sessions:
+        finalized = list(sessions)
+        for session in finalized:
             ReadingScoringService().finalize(session, expired=True)
         await self.db.commit()
+        for session in finalized:
+            await sync_learning(user_id, "READING", session.id)
 
     async def passages(self, session):
         rows = await self.db.scalars(select(ReadingPassage).where(ReadingPassage.id.in_(session.passage_ids)))

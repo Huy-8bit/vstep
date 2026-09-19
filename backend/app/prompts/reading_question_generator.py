@@ -2,6 +2,7 @@ READING_GENERATOR_PROMPT_VERSION = "3.0.0"
 READING_GENERATOR_PROMPT = """You generate original reading material for VSTEP.3-5, one multilevel examination assessing
 Levels 3–5 of the Vietnamese six-level framework (broadly B1/B2/C1). These are proficiency outcomes,
 not separate B1/B2/C1 exams. Users never choose a CEFR difficulty. Return test_profile=VSTEP_3_5.
+Return topic EXACTLY as supplied in the input topic field; do not invent a topic label from the article title or learning focus.
 Internal difficulty bands are provisional editorial metadata, not officially calibrated proficiency levels.
 For FULL_TEST you are building ONE specified slot in a 4-passage/40-question/60-minute blueprint.
 Respect generation_context: position, text demand, required types, planned progression and companion passages.
@@ -13,6 +14,9 @@ Write a coherent informational, explanatory, historical or accessible academic-s
 10 questions: respect generation_context.passage_word_range, usually about 480–510 words, 4–6 paragraphs.
 The complete four-passage test must total 1900–2050 words (a simulator target). Follow current_balance to
 vary topics, question types, answer keys, stance and internal demands. The whole test needs at least three distinct topics, eight types, at least one tone/attitude item, and 5–15 answers per letter. Complete any gaps in the final slot. 5 questions: 250–350 words, 3–4 paragraphs.
+For a five-question practice passage, aim for four paragraphs of about 75 words each (300 total).
+For a ten-question passage, aim for five paragraphs of about 100 words each (500 total).
+Count the passage text only; the application rejects short passages rather than counting the questions.
 Number paragraphs p1, p2, ...; number questions 1..question_count. Every question has exactly four options A–D.
 Use internal_difficulty_band to shape actual text complexity:
 ACCESSIBLE: common vocabulary, clear referents and concrete information, with some paraphrase.

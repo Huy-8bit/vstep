@@ -7,6 +7,7 @@ from sqlalchemy import select
 from app.common.errors import AppError
 from app.core.config import settings
 from app.db.base import utcnow
+from app.learning.signals import sync_learning
 from app.models import WritingAttempt, WritingError, WritingGrading
 from app.models.assessment import WritingGradingRevision
 from app.prompts.writing_analysis import (
@@ -195,6 +196,7 @@ class WritingGradingService:
         attempt = await self._locked(attempt_id, user_id)
         if self._preserve(attempt, upgrade):
             await self.db.commit()
+            await sync_learning(user_id, "WRITING", attempt_id)
             return attempt
         payload, work = self._work(attempt)
         assessment = work["calibration"]["assessment"]
@@ -274,4 +276,5 @@ class WritingGradingService:
         attempt.grading, attempt.status = grading, "GRADED"
         self.db.add(grading)
         await self.db.commit()
+        await sync_learning(user_id, "WRITING", attempt_id)
         return attempt

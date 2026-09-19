@@ -14,15 +14,19 @@ answers its own requests. Writing 2 needs short stimulus, a clear essay instruct
 Speaking 1 must be conversational. Speaking 2 needs THREE meaningfully different viable options with a debatable
 choice, none obviously correct or absurd. Speaking 3 needs a focused statement, ideas and relevant discussion.
 For READING independently solve EVERY item, check exact evidence in context, exactly one best answer, plausibility
-and mutual exclusivity of distractors. Check insertion positions/completion logic and paragraph references. A quote's
+and mutual exclusivity of distractors. Targeted learning passages may intentionally contain five questions of
+one requested type; this is valid practice, not a full exam. Respect practice_context when provided. Check
+insertion positions/completion logic and paragraph references. A quote's
 mere existence does not prove the answer. Return a reading_items entry per question, your independently chosen
 answer and uncertainty. Reject any ambiguous/unsupported item. For other skills reading_items=[].
 Report concise review notes, not hidden reasoning. Conservative confidence; do not rubber-stamp the source key.
 """
 
 
-async def validate_quality(llm, skill, payload, user_id):
-    result = await llm.review_question_quality({"skill": skill, "material": payload}, user_id)
+async def validate_quality(llm, skill, payload, user_id, *, practice_context=None):
+    result = await llm.review_question_quality(
+        {"skill": skill, "material": payload, "practice_context": practice_context}, user_id
+    )
     threshold = SIMULATOR_HEURISTICS["independent_quality_confidence"]
     accepted = (
         result.accepted
@@ -70,6 +74,8 @@ async def validate_quality(llm, skill, payload, user_id):
 
 
 class ReadingQuestionQualityValidator:
-    async def validate(self, llm, generated, user_id):
+    async def validate(self, llm, generated, user_id, *, practice_context=None):
         # Pydantic handles the deterministic evidence/options/distribution gate first.
-        return await validate_quality(llm, "READING", generated.model_dump(), user_id)
+        return await validate_quality(
+            llm, "READING", generated.model_dump(), user_id, practice_context=practice_context
+        )

@@ -1,4 +1,5 @@
 "use client";
+import { LearningEntry } from "@/features/learning/integration";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -79,6 +80,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
   }
   return (
     <div className="space-y-8">
+<LearningEntry skill="Speaking" />
       <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">
         <div>
           <h2 className="font-semibold">Luyện phát âm từng từ, từng câu</h2>

@@ -1,4 +1,5 @@
 "use client";
+import { LearningEntry } from "@/features/learning/integration";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
@@ -106,6 +107,7 @@ function Dashboard() {
     }));
   return (
     <div className="space-y-7">
+<LearningEntry />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="eyebrow">Nhìn lại để đi xa hơn</p>

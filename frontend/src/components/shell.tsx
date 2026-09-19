@@ -51,6 +51,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               ["/speaking", "Speaking"],
               ["/reading", "Reading"],
               ["/my-questions", "Đề của tôi"],
+              ["/learning", "Phân tích học tập"],
               ["/vocabulary", "Từ vựng"],
               ["/history", "Lịch sử"],
               ["/progress", "Tiến độ"],

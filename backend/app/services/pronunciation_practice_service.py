@@ -119,6 +119,7 @@ class PronunciationPracticeService:
         )
         if item.analysis_key == key and item.analysis is not None:
             await self.db.commit()
+            await self.sync_learning(item, user_id)
             return item
         await speech_lock(self.db, f"pronunciation-analysis:{user_id}:{key}")
         cached = await self.db.scalar(
@@ -146,7 +147,18 @@ class PronunciationPracticeService:
         item.fluency_score = item.analysis.get("fluency_score")
         item.audio_model, item.prompt_version = settings.openai_speaking_audio_model, AUDIO_ASSESSMENT_VERSION
         await self.db.commit()
+        await self.sync_learning(item, user_id)
         return item
+
+    async def sync_learning(self, item, user_id):
+        import logging
+
+        from app.learning.transfer import sync_pronunciation_learning
+
+        try:
+            await sync_pronunciation_learning(user_id, item.id)
+        except Exception:
+            logging.getLogger(__name__).exception("Pronunciation learning update deferred")
 
     async def history(self, user_id, reference_hash=None, offset=0, limit=20):
         query = select(PronunciationPractice).where(PronunciationPractice.user_id == user_id)

@@ -189,6 +189,9 @@ class SpeakingExamService:
         await self.db.commit()
         if previous_path and previous_path != stored.path:
             self.storage.remove(previous_path)
+            from app.learning.signals import sync_learning
+
+            await sync_learning(user_id, "SPEAKING", session.id)
         return answer
 
     async def advance(self, session_id: str, user_id: str, sequence: int, skip: bool):

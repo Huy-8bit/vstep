@@ -1,0 +1,26 @@
+CONCEPTS = {
+    "WORD_CHOICE": "Chọn từ phù hợp",
+    "COLLOCATION": "Kết hợp từ tự nhiên",
+    "REGISTER": "Văn phong phù hợp",
+    "WORD_FORM": "Dạng từ",
+    "REPETITION": "Lặp từ",
+    "SPELLING": "Chính tả",
+    "UNNATURAL_EXPRESSION": "Diễn đạt tự nhiên",
+    "DIRECT_TRANSLATION": "Tránh dịch từng từ",
+    "OVERUSE_BASIC_WORD": "Mở rộng cách diễn đạt trong ngữ cảnh",
+    "PHRASAL_PATTERN": "Mẫu cụm từ",
+    "ACADEMIC_GENERAL_WORD_USAGE": "Từ học thuật thông dụng",
+    "TOPIC_VOCABULARY_GAP": "Từ vựng theo chủ đề",
+    "NATURAL_HEALTH_COLLOCATION": "Kết hợp từ về sức khỏe",
+}
+ALIASES = {
+    "word_choice": "WORD_CHOICE",
+    "collocation": "COLLOCATION",
+    "register": "REGISTER",
+    "word_form": "WORD_FORM",
+    "repetition": "REPETITION",
+    "spelling": "SPELLING",
+    "unnatural": "UNNATURAL_EXPRESSION",
+    "translation": "DIRECT_TRANSLATION",
+    "phrasal": "PHRASAL_PATTERN",
+}

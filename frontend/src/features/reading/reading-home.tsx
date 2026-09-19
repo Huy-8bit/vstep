@@ -1,4 +1,5 @@
 "use client";
+import { LearningEntry } from "@/features/learning/integration";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -146,6 +147,7 @@ function Setup({
   }
   return (
     <div className="space-y-8">
+<LearningEntry skill="Reading" />
       <section className="relative overflow-hidden rounded-3xl bg-[#eaf0e6] p-7 sm:p-10">
         <div className="relative z-10 max-w-2xl">
           <p className="eyebrow">VSTEP.3–5 · Reading</p>

@@ -44,6 +44,18 @@ class Settings(BaseSettings):
     )
     openai_grading_temperature: float | None = Field(default=None, ge=0, le=0.3)
     writing_calibration_admin_emails: str = ""
+    learning_observed_attempts: int = Field(default=2, ge=2, le=20)
+    learning_recurring_attempts: int = Field(default=3, ge=3, le=30)
+    learning_recency_half_life_days: int = Field(default=30, ge=7, le=365)
+    learning_trend_window: int = Field(default=5, ge=2, le=20)
+    learning_trend_delta: float = Field(default=0.2, ge=0.05, le=0.8)
+    learning_mastery_exercises: int = Field(default=20, ge=10, le=100)
+    learning_mastery_sessions: int = Field(default=3, ge=2, le=10)
+    learning_mastery_reuses: int = Field(default=3, ge=2, le=10)
+    learning_priority_weights: dict[str, float] = Field(default_factory=lambda: {
+        "frequency": 25, "recency": 15, "severity": 15,
+        "confidence": 15, "impact": 15, "persistence": 15,
+    })
 
     @field_validator("vocabulary_review_days")
     @classmethod

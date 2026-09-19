@@ -706,4 +706,10 @@ class VocabularyCoachService:
             "confidence": confidence,
         }
         await self.db.commit()
+        try:
+            from app.learning.vocabulary import sync_vocabulary_learning
+            await sync_vocabulary_learning(user_id, review.id)
+        except Exception:
+            import logging
+            logging.getLogger(__name__).exception("Vocabulary learning update deferred")
         return review_view(review)

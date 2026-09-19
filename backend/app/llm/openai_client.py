@@ -102,6 +102,7 @@ class OpenAILLMClient(LLMClient):
             timeout=240 if operation == "question_import" else 150,
             max_retries=0,
         ) as client:
+            validation_feedback = ""
             for attempt in range(2):
                 started = time.monotonic()
                 response = None
@@ -110,7 +111,7 @@ class OpenAILLMClient(LLMClient):
                     response = await client.responses.parse(
                         model=settings.openai_model,
                         input=[
-                            {"role": "system", "content": prompt},
+                            {"role": "system", "content": prompt + validation_feedback},
                             {
                                 "role": "user",
                                 "content": (
@@ -137,14 +138,27 @@ class OpenAILLMClient(LLMClient):
                         ),
                     )
                     if response.status != "completed" or response.output_parsed is None:
-                        raise ValueError("Missing structured output")
+                        reason = getattr(response.incomplete_details, "reason", None)
+                        raise ValueError(f"Structured output incomplete: {response.status}; {reason}")
                     result = schema.model_validate(response.output_parsed)
                     if validate:
                         validate(result)
                     status = "success"
                     return result
-                except (ValidationError, ValueError):
+                except (ValidationError, ValueError) as exc:
                     status = "invalid_output"
+                    # Schema messages only: never log full responses or learner input.
+                    validation_feedback = (
+                        "\nCorrect these deterministic validation failures before returning: "
+                        + (
+                            "; ".join(
+                                str(e["loc"]) + ": " + e["msg"] for e in exc.errors(include_input=False)[:5]
+                            )
+                            if isinstance(exc, ValidationError)
+                            else str(exc)[:400]
+                        )
+                    )
+                    logger.warning("Structured %s validation: %s", operation, validation_feedback)
                     if attempt == 1:
                         raise AppError(
                             502,
@@ -326,7 +340,13 @@ class OpenAILLMClient(LLMClient):
                 raise ValueError("Duplicate reading title")
 
         return await self._structured(
-            GeneratedReadingPassage, READING_GENERATOR_PROMPT, payload, user_id, "reading_generate", validate
+            GeneratedReadingPassage,
+            READING_GENERATOR_PROMPT,
+            payload,
+            user_id,
+            "reading_generate",
+            validate,
+            max_output_tokens=24000,
         )
 
     async def explain_reading_vocabulary(self, payload: dict, user_id: str) -> ReadingVocabulary:

@@ -172,6 +172,10 @@ function RecordingQuestion({
   const router = useRouter();
   const question = session.current_question!;
   const full = session.mode === "FULL_TEST";
+  const recordingLimit =
+    !full && question.practice_seconds
+      ? Math.min(question.practice_seconds, session.limits.max_audio_seconds)
+      : session.limits.max_audio_seconds;
   const [answer, setAnswer] = useState<SpeakingAnswer | null>(
     session.answers.find(
       (a) => a.sequence_number === question.sequence_number,
@@ -179,7 +183,7 @@ function RecordingQuestion({
   );
   const recorder = useRecorder(
     `${user!.id}:${session.id}:${question.sequence_number}`,
-    session.limits.max_audio_seconds,
+    recordingLimit,
     session.limits.max_audio_mb,
   );
   const [busy, setBusy] = useState("");
@@ -491,7 +495,7 @@ function RecordingQuestion({
           )}
         </p>
         <p className="mt-2 text-xs text-stone-400">
-          Tối đa {duration(session.limits.max_audio_seconds)} / câu ·{" "}
+          Tối đa {duration(recordingLimit)} / câu ·{" "}
           {session.limits.max_audio_mb} MB
         </p>
         {(error || recorder.error) && (

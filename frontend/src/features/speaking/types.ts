@@ -96,6 +96,7 @@ export type SpeakingQuestion = {
   source: string;
 };
 export type Step = {
+  practice_seconds?: number;
   optional_context?: string;
   practice_asset_ids?: string[];
   sequence_number: number;

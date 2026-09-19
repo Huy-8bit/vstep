@@ -1,4 +1,5 @@
 "use client";
+import { LearningEntry } from "@/features/learning/integration";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, FileClock, Plus } from "lucide-react";
@@ -43,7 +44,8 @@ function History() {
   }, [page, mode, reload]);
   return (
     <>
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <LearningEntry />
+<div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="eyebrow">Mỗi bài viết đều được ghi lại</p>
           <h1 className="mb-3 mt-3 text-3xl font-bold">Lịch sử luyện tập</h1>

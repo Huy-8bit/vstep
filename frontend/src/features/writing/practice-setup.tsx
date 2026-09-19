@@ -1,4 +1,5 @@
 "use client";
+import { LearningEntry } from "@/features/learning/integration";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -124,6 +125,7 @@ function Setup({ task }: { task: 1 | 2 }) {
   return (
     <>
       <p className="eyebrow">Luyện tập có chủ đích</p>
+<LearningEntry skill="Writing" />
       <h1 className="mb-3 mt-3 text-3xl font-bold">
         Task {task} · {task === 1 ? "Viết thư & email" : "Viết bài luận"}
       </h1>

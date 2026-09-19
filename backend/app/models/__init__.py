@@ -62,7 +62,7 @@ class WritingQuestion(PrivateQuestionMixin, IdentityMixin, Base):
     genre: Mapped[str | None] = mapped_column(String(20))
     register: Mapped[str | None] = mapped_column(String(20))
     recipient_relationship: Mapped[str | None] = mapped_column(String(50))
-    purpose: Mapped[str | None] = mapped_column(String(100))
+    purpose: Mapped[str | None] = mapped_column(Text)
 
 
 class ExamSession(LibrarySessionMixin, IdentityMixin, Base):
@@ -171,6 +171,18 @@ from app.models.assessment import (  # noqa: F401, E402
     PronunciationPractice,
     WritingCalibrationSample,
     WritingGradingRevision,
+)
+from app.models.learning import (  # noqa: E402,F401
+    LearningAttempt,
+    LearningExerciseAnswer,
+    LearningLesson,
+    LearningSignal,
+    PersonalizedExercise,
+    StudyPlan,
+    StudyPlanItem,
+    UserLearningEvent,
+    UserLearningProfile,
+    UserWeakness,
 )
 from app.models.library import (  # noqa: E402,F401
     LibraryQuestion,

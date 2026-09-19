@@ -5,6 +5,7 @@ from sqlalchemy import select
 
 from app.common.errors import AppError
 from app.core.config import settings
+from app.learning.signals import sync_learning
 from app.models.speaking import SpeakingError, SpeakingGrading
 from app.prompts.speaking_grader import SPEAKING_GRADER_PROMPT_VERSION
 from app.services.speaking_correction import SpeakingCorrectionService, speaking_level
@@ -105,6 +106,7 @@ class SpeakingGradingService:
         existing = await self.db.scalar(query)
         if existing and existing.cache_key == key:
             await self.db.commit()
+            await sync_learning(user_id, "SPEAKING", session_id)
             return existing
         cached = await self.db.scalar(
             select(SpeakingGrading)
@@ -175,4 +177,5 @@ class SpeakingGradingService:
         if not answer_id:
             session.status = "GRADED"
         await self.db.commit()
+        await sync_learning(user_id, "SPEAKING", session_id)
         return grading

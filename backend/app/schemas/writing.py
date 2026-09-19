@@ -84,8 +84,8 @@ class GeneratedQuestion(StrictModel):
     response_instruction: str = Field(min_length=20, max_length=1200)
     genre: Literal["email", "letter", "essay"]
     register: Literal["informal", "semi-formal", "formal"] = Field(...)
-    recipient_relationship: str
-    purpose: str
+    recipient_relationship: str = Field(max_length=50)
+    purpose: str = Field(max_length=1000)
     requirements: list[str] = Field(
         validation_alias=AliasChoices("communicative_requirements", "requirements")
     )

@@ -23,7 +23,7 @@ class QuestionGeneratorService:
     def __init__(self, db, llm: LLMClient):
         self.db, self.llm = db, llm
 
-    async def generate(self, request: QuestionRequest, user_id: str) -> WritingQuestion:
+    async def generate(self, request: QuestionRequest, user_id: str, *, learning_focus=None) -> WritingQuestion:
         recent = list(
             await self.db.scalars(
                 select(WritingQuestion).where(WritingQuestion.owner_id.is_(None))
@@ -63,6 +63,8 @@ class QuestionGeneratorService:
                 "no_seed_match",
             )
         payload = request.model_dump(exclude={"source", "exclude_ids"})
+        if learning_focus:
+            payload["learning_focus"] = learning_focus
         if payload["question_type"] == "random":
             payload["question_type"] = random.choice(TASK1_TYPES if request.task == 1 else TASK2_TYPES)
         if payload["topic"] == "random":
@@ -87,6 +89,7 @@ class QuestionGeneratorService:
         diagnostics = await validate_quality(self.llm, "WRITING", result.model_dump(), user_id)
         diagnostics["source_blueprint"] = WRITING_BLUEPRINTS[request.task]["id"]
         question = WritingQuestion(
+            owner_id=user_id if learning_focus else None,
             task_type=result.task,
             **result.model_dump(exclude={"task"}),
             source="AI",
@@ -94,6 +97,8 @@ class QuestionGeneratorService:
             prompt_version=QUESTION_GENERATOR_PROMPT_VERSION,
             generation_diagnostics=diagnostics,
         )
+        if learning_focus:
+            question.generation_diagnostics = {**diagnostics, "learning_focus": learning_focus}
         self.db.add(question)
         try:
             await self.db.commit()

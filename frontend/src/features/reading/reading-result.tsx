@@ -1,4 +1,5 @@
 "use client";
+import { AttemptLearningSignals } from "@/features/learning/integration";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Circle, Search, XCircle } from "lucide-react";
@@ -164,6 +165,7 @@ function ResultView({ id }: { id: string }) {
         </Button>
       </div>
       <LibraryOrigin value={session} retry />
+      <AttemptLearningSignals skill="READING" attemptId={session.id} />
       {result.unscored_count > 0 && (
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900">
           <strong>Không thể tính điểm chính xác vì đáp án chưa đầy đủ.</strong>
