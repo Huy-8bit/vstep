@@ -117,12 +117,48 @@ function Feedback({
   grading,
   answer,
   attemptId,
+  ready,
+  onUpdate,
 }: {
   grading: Grading;
   answer: string;
   attemptId: string;
+  ready: string[];
+  onUpdate: () => Promise<unknown>;
 }) {
   const [showAll, setShowAll] = useState(false);
+  const [busy, setBusy] = useState("");
+  const [optionalError, setOptionalError] = useState("");
+  async function generate(kind: string) {
+    setBusy(kind);
+    setOptionalError("");
+    try {
+      await post(`/attempts/${attemptId}/optional-feedback/${kind}`);
+      await onUpdate();
+    } catch (e) {
+      setOptionalError((e as Error).message);
+    } finally {
+      setBusy("");
+    }
+  }
+  function request(kind: string, label: string) {
+    return (
+      <Button
+        variant="outline"
+        disabled={!!busy}
+        onClick={() => generate(kind)}
+      >
+        {busy === kind ? (
+          <>
+            <LoaderCircle className="animate-spin" />
+            Đang chuẩn bị…
+          </>
+        ) : (
+          label
+        )}
+      </Button>
+    );
+  }
   return (
     <Tabs defaultValue="overview">
       <TabsList>
@@ -140,7 +176,13 @@ function Feedback({
           </TabsTrigger>
         ))}
       </TabsList>
+      {optionalError && <ErrorNotice message={optionalError} />}
       <TabsContent value="overview">
+        {!ready.includes("detailed") && (
+          <div className="mb-5">
+            {request("detailed", "Giải thích chi tiết và gợi ý diễn đạt")}
+          </div>
+        )}
         <div className="grid items-start gap-6 lg:grid-cols-[1.5fr_1fr]">
           <section className="panel p-6 sm:p-7">
             <div className="mb-6 flex items-center gap-3">
@@ -233,6 +275,12 @@ function Feedback({
         <h2 className="mb-5 text-lg font-bold">
           Diễn đạt tự nhiên hơn ở trình độ B2
         </h2>
+        {!grading.vocabulary_suggestions.length &&
+          !ready.includes("detailed") && (
+            <div className="mb-5">
+              {request("detailed", "Tạo gợi ý diễn đạt theo ngữ cảnh")}
+            </div>
+          )}
         <div className="mb-7 grid gap-4 md:grid-cols-2">
           {grading.vocabulary_suggestions.map((v, i) => (
             <div key={i} className="panel p-5">
@@ -271,6 +319,9 @@ function Feedback({
       </TabsContent>
       <TabsContent value="sentences">
         <h2 className="mb-5 text-lg font-bold">Hiểu từng câu trong bài viết</h2>
+        {!grading.sentence_feedback.length &&
+          !ready.includes("sentences") &&
+          request("sentences", "Chữa từng câu trong bài của tôi")}
         <div className="space-y-5">
           {grading.sentence_feedback.map((s, i) => (
             <article key={i} className="panel p-6">
@@ -305,19 +356,27 @@ function Feedback({
           Giữ nguyên ý và phần lớn cách diễn đạt của bạn, chỉ sửa các lỗi cần
           thiết.
         </p>
-        <article lang="en" className="prose-writing panel p-6 sm:p-9">
-          {grading.corrected_version || "Không có nội dung để chỉnh sửa."}
-        </article>
+        {!grading.corrected_version && !ready.includes("corrected") ? (
+          request("corrected", "Tạo bản đã sửa")
+        ) : (
+          <article lang="en" className="prose-writing panel p-6 sm:p-9">
+            {grading.corrected_version || "Không có nội dung để chỉnh sửa."}
+          </article>
+        )}
       </TabsContent>
       <TabsContent value="improved">
         <p className="mb-4 text-sm text-stone-500">
           Bài tham khảo phát triển từ ý chính của bạn, hướng đến cách diễn đạt
           B2 / B2+.
         </p>
-        <article lang="en" className="prose-writing panel p-6 sm:p-9">
-          {grading.improved_b2_version ||
-            "Bài viết chưa đủ nội dung để phát triển phiên bản tham khảo."}
-        </article>
+        {!grading.improved_b2_version && !ready.includes("improved") ? (
+          request("improved", "Tạo bài tham khảo B2")
+        ) : (
+          <article lang="en" className="prose-writing panel p-6 sm:p-9">
+            {grading.improved_b2_version ||
+              "Bài viết chưa đủ nội dung để phát triển phiên bản tham khảo."}
+          </article>
+        )}
       </TabsContent>
       <details className="panel mt-7 p-5">
         <summary className="cursor-pointer text-sm font-semibold">
@@ -399,22 +458,7 @@ function Result({ id }: { id: string }) {
             attempt.status !== "DRAFT"
           ) {
             setGradingTask(attempt.task_type);
-            const suffix = upgrade ? "?upgrade=true" : "";
-            setStage("Đang phân tích bài gốc và đối chiếu lỗi");
-            await post(`/attempts/${attempt.id}/analyze${suffix}`);
-            setStage("Đang hiệu chỉnh điểm theo bằng chứng");
-            const calibration = await post<{ reviewed: boolean }>(
-              `/attempts/${attempt.id}/calibrate${suffix}`,
-            );
-            if (!calibration.reviewed) {
-              setStage("Đang rà soát mức điểm và bằng chứng");
-              await post(`/attempts/${attempt.id}/calibrate${suffix}`);
-            }
-            setStage("Đã chốt điểm · Đang viết phản hồi học tập");
-            await post(`/attempts/${attempt.id}/feedback${suffix}`);
-            setStage("Đang chọn cụm từ hữu ích từ bài viết");
-            await post(`/attempts/${attempt.id}/vocabulary${suffix}`);
-            setStage("Đang sửa câu và chuẩn bị bài tham khảo");
+            setStage("Đang đối chiếu bằng chứng và chấm bốn tiêu chí");
             await post(
               `/attempts/${attempt.id}/${upgrade ? "regrade" : "grade"}`,
             );
@@ -504,7 +548,13 @@ function Result({ id }: { id: string }) {
         </div>
       </div>
       <LibraryOrigin value={data.question} retry />
-      {g && <AttemptLearningSignals key={g.id} skill="WRITING" attemptId={data.id} />}
+      {g && (
+        <AttemptLearningSignals
+          key={g.id}
+          skill="WRITING"
+          attemptId={data.id}
+        />
+      )}
       <LocalRecovery attempt={data} />
       {data.exam.mode === "FULL_TEST" && (
         <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">
@@ -651,6 +701,8 @@ function Result({ id }: { id: string }) {
             grading={g}
             answer={data.answer}
             attemptId={data.id}
+            ready={data.optional_feedback_ready || []}
+            onUpdate={load}
           />
         </>
       ) : !grading && !error ? (

@@ -97,6 +97,20 @@ async def regrade_attempt(attempt_id: str, db: DB, user: CurrentUser):
     return attempt_view(await WritingGradingService(db, get_llm()).grade(attempt_id, user.id, upgrade=True))
 
 
+@router.post("/attempts/{attempt_id}/optional-feedback/{kind}")
+async def optional_feedback(
+    attempt_id: str,
+    kind: Literal["sentences", "corrected", "improved", "detailed"],
+    db: DB,
+    user: CurrentUser,
+):
+    from app.services.writing_optional_feedback import WritingOptionalFeedbackService
+
+    return attempt_view(
+        await WritingOptionalFeedbackService(db, get_llm()).generate(attempt_id, user.id, kind)
+    )
+
+
 @router.get("/attempts/{attempt_id}/grading-history")
 async def grading_history(attempt_id: str, db: DB, user: CurrentUser):
     attempt = await owned_attempt(db, attempt_id, user.id)

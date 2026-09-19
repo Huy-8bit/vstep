@@ -1,13 +1,13 @@
 from sqlalchemy import func, select
 
 from app.common.errors import AppError
-from app.core.config import settings
 from app.db.base import utcnow
 from app.learning import ANALYSIS_VERSION, EXERCISE_VERSION, LESSON_VERSION, TAXONOMY_VERSION
 from app.learning.aggregation import WeaknessAggregationService
 from app.learning.analysis import owned_weakness
 from app.learning.extraction import digest
 from app.learning.signals import profile_for
+from app.llm.routing import route_for
 from app.models.learning import (
     LearningExerciseAnswer,
     LearningLesson,
@@ -93,7 +93,7 @@ class PersonalizedCoachService:
     async def lesson(self, identifier, user_id):
         await speech_lock(self.db, f"learning-lesson:{user_id}:{identifier}")
         w, context = await self.context(identifier, user_id)
-        cache = digest([context, LESSON_VERSION, settings.openai_model])
+        cache = digest([context, LESSON_VERSION, route_for("learning_lesson").identity])
         lesson = await self.db.scalar(
             select(LearningLesson).where(LearningLesson.user_id == user_id, LearningLesson.cache_key == cache)
         )
@@ -124,7 +124,7 @@ class PersonalizedCoachService:
                 },
                 version=LESSON_VERSION,
                 cache_key=cache,
-                model=settings.openai_model,
+                model=route_for("learning_lesson").model,
             )
             self.db.add(lesson)
             await self.db.flush()
@@ -206,7 +206,7 @@ class PersonalizedCoachService:
                 "taxonomy_version": TAXONOMY_VERSION,
             },
             version=EXERCISE_VERSION,
-            model=settings.openai_model,
+            model=route_for("learning_exercises").model,
             client_request_id=str(data.client_request_id),
         )
         self.db.add(exercise)
@@ -318,7 +318,7 @@ class PersonalizedCoachService:
             feedback = {
                 **result.model_dump(),
                 "assessment": "concept_feedback",
-                "model": settings.openai_model,
+                "model": route_for("learning_feedback").model,
             }
         elapsed = min(data.duration_seconds, max(0, int((utcnow() - exercise.created_at).total_seconds())))
         self.db.add(

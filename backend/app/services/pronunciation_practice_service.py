@@ -107,6 +107,12 @@ class PronunciationPracticeService:
         return item
 
     async def analyze(self, identifier, user_id):
+        from app.llm.usage import ai_context
+
+        with ai_context(attempt_id=identifier):
+            return await self._analyze(identifier, user_id)
+
+    async def _analyze(self, identifier, user_id):
         item = await self.owned(identifier, user_id, lock=True)
         if not item.audio_path:
             raise AppError(409, "Hãy lưu bản ghi trước khi phân tích.")

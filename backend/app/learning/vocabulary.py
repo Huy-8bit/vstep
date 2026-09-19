@@ -1,13 +1,13 @@
 from sqlalchemy import select
 
 from app.common.errors import AppError
-from app.core.config import settings
 from app.db.session import SessionLocal
 from app.learning import ANALYSIS_VERSION, TAXONOMY_VERSION
 from app.learning.aggregation import WeaknessAggregationService
 from app.learning.extraction import digest
 from app.learning.signals import profile_for
 from app.learning.taxonomy import normalize
+from app.llm.routing import route_for
 from app.models.learning import LearningAttempt, LearningSignal, UserLearningEvent
 from app.models.vocabulary import UserVocabularyItem, VocabularyReview
 from app.services.speech_transcription_service import speech_lock
@@ -115,7 +115,7 @@ async def verify_reuse(db, llm, user_id, event_id):
         **event.details,
         "verified": correct is True,
         "assessment": result.model_dump(),
-        "model": settings.openai_model,
+        "model": route_for("vocabulary_usage").model,
     }
     event.event_type = "CONCEPT_REUSED" if correct is True else "VOCABULARY_OBSERVED"
     cat, sub, concept = normalize(
@@ -142,7 +142,7 @@ async def verify_reuse(db, llm, user_id, event_id):
                 grader_version="vocabulary-usage-1",
                 analysis_version=ANALYSIS_VERSION,
                 taxonomy_version=TAXONOMY_VERSION,
-                model=settings.openai_model,
+                model=route_for("vocabulary_usage").model,
                 details={
                     "item_id": item.id,
                     "source_url": attempt.source_url,

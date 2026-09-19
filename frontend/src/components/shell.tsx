@@ -56,6 +56,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
               ["/history", "Lịch sử"],
               ["/progress", "Tiến độ"],
               ["/settings", "Cài đặt"],
+              ...(user?.is_ai_admin
+                ? [["/internal/ai-costs", "Chi phí AI"]]
+                : []),
             ].map(([href, label]) => (
               <Link
                 key={href}

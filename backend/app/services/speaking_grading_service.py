@@ -6,8 +6,11 @@ from sqlalchemy import select
 from app.common.errors import AppError
 from app.core.config import settings
 from app.learning.signals import sync_learning
+from app.llm.routing import route_for
+from app.llm.usage import ai_context
 from app.models.speaking import SpeakingError, SpeakingGrading
 from app.prompts.speaking_grader import SPEAKING_GRADER_PROMPT_VERSION
+from app.services.grading_escalation_service import ESCALATION_VERSION
 from app.services.speaking_correction import SpeakingCorrectionService, speaking_level
 from app.services.speaking_exam_service import owned_speaking_answer, owned_speaking_session
 from app.services.speech_transcription_service import (
@@ -40,6 +43,10 @@ class SpeakingGradingService:
         self.processor = SpeechTranscriptionService(db, speech, storage)
 
     async def grade(self, session_id: str, user_id: str, answer_id: str | None = None):
+        with ai_context(attempt_id=session_id):
+            return await self._grade(session_id, user_id, answer_id)
+
+    async def _grade(self, session_id: str, user_id: str, answer_id: str | None = None):
         session = await owned_speaking_session(self.db, session_id, user_id)
         if session.status == "IN_PROGRESS" and (session.mode == "FULL_TEST" or not answer_id):
             raise AppError(409, "Hãy hoàn thành bài nói trước khi chấm.", "exam_feedback_locked")
@@ -92,7 +99,12 @@ class SpeakingGradingService:
             entry["question"].pop("question_id", None)
         key = speech_cache_key(
             json.dumps(cache_payload, sort_keys=True, ensure_ascii=False),
-            settings.openai_model,
+            route_for("speaking_grade").identity,
+            route_for("speaking_escalation").identity,
+            str(settings.grading_escalation_enabled),
+            str(settings.grading_confidence_threshold),
+            settings.model_version,
+            ESCALATION_VERSION,
             settings.openai_transcribe_model,
             settings.openai_speaking_audio_model,
             SPEAKING_GRADER_PROMPT_VERSION,
@@ -152,15 +164,35 @@ class SpeakingGradingService:
                     for a in source
                 ],
             }
-            text_result = await self.llm.grade_speaking(text_payload, user_id)
+            from app.services.grading_escalation_service import GradingEscalationService
+
+            final_model = route_for("speaking_grade").model
+            try:
+                text_result = await self.llm.grade_speaking(text_payload, user_id)
+                reasons = GradingEscalationService().speaking_reasons(text_result, text_payload)
+            except AppError as exc:
+                if exc.code != "ai_invalid_output" or not settings.grading_escalation_enabled:
+                    raise
+                reasons = ["INVALID_PRIMARY_OUTPUT"]
+            if reasons and settings.grading_escalation_enabled:
+                text_result = await self.llm.grade_speaking(
+                    {**text_payload, "review_concerns": reasons}, user_id, "speaking_escalation"
+                )
+                final_model = route_for("speaking_escalation").model
             result, coverage = SpeakingCorrectionService().finalize(text_result, source)
+            coverage["text_routing"] = {
+                "model": final_model,
+                "escalated": bool(reasons and settings.grading_escalation_enabled),
+                "reasons": reasons,
+                "confidence": text_result.confidence,
+            }
             data = result.model_dump()
             values = {name: data[name] for name in FEEDBACK_FIELDS}
             values.update({f"{key}_score": value for key, value in data["scores"].items()})
             values.update(
                 estimated_level=speaking_level(result.scores.overall),
                 audio_coverage=coverage,
-                ai_model=settings.openai_model,
+                ai_model=final_model,
                 audio_model=settings.openai_speaking_audio_model or None,
                 transcription_model=settings.openai_transcribe_model,
                 prompt_version=SPEAKING_GRADER_PROMPT_VERSION,

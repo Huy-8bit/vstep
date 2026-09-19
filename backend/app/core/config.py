@@ -9,7 +9,43 @@ class Settings(BaseSettings):
     app_env: str = "development"
     database_url: str = "postgresql+asyncpg://vstep:vstep_dev@localhost:5432/vstep"
     openai_api_key: str = ""
-    openai_model: str = "gpt-5.6"
+    # Legacy OPENAI_MODEL is deliberately not a fallback for operation routes.
+    openai_model: str = "gpt-5.6-luna"
+    openai_model_default: str = "gpt-5.6-luna"
+    openai_model_question_generation: str = "gpt-5.6-luna"
+    openai_model_reading_generation: str = "gpt-5.6-luna"
+    openai_model_question_quality: str = "gpt-5.4-mini-2026-03-17"
+    openai_model_writing_analysis: str = "gpt-5.6-luna"
+    openai_model_writing_scoring: str = "gpt-5.6-luna"
+    openai_model_writing_escalation: str = "gpt-5.6-terra"
+    openai_model_writing_corrections: str = "gpt-5.4-mini-2026-03-17"
+    openai_model_vocabulary: str = "gpt-5.6-luna"
+    openai_model_learning_coach: str = "gpt-5.6-luna"
+    openai_model_exercise_generator: str = "gpt-5.6-luna"
+    openai_model_speaking_text_grading: str = "gpt-5.4-mini-2026-03-17"
+    openai_model_speaking_escalation: str = "gpt-5.6-terra"
+    openai_model_import: str = "gpt-5.4-mini-2026-03-17"
+    openai_reasoning_default: str = "low"
+    openai_reasoning_grading: str = "low"
+    openai_reasoning_writing: str = "medium"
+    openai_reasoning_escalation: str = "none"
+    openai_reasoning_overrides: dict[str, str] = Field(default_factory=dict)
+    openai_price_overrides: dict[str, dict[str, float]] = Field(default_factory=dict)
+    model_version: str = "2026-09-19-routing-v2"
+    grading_escalation_enabled: bool = True
+    grading_confidence_threshold: float = Field(default=0.70, ge=0, le=1)
+    grading_boundary_confidence_threshold: float = Field(default=0.80, ge=0, le=1)
+    grading_long_response_words: int = Field(default=650, ge=300, le=5000)
+    grading_shadow_enabled: bool = False
+    grading_shadow_sample_rate: float = Field(default=0.05, ge=0, le=1)
+    ai_cost_admin_emails: str = ""
+    eval_overall_mae_max: float = Field(default=0.5, ge=0, le=10)
+    eval_criterion_mae_max: float = Field(default=0.75, ge=0, le=10)
+    eval_within_half_min: float = Field(default=0.70, ge=0, le=1)
+    eval_within_one_min: float = Field(default=0.90, ge=0, le=1)
+    eval_serious_overscore_max: float = Field(default=0.02, ge=0, le=1)
+    eval_structured_success_min: float = Field(default=0.99, ge=0, le=1)
+    eval_min_samples: int = Field(default=12, ge=1)
     openai_transcribe_model: str = "gpt-4o-transcribe"
     openai_audio_model: str = Field(
         default="gpt-audio",
@@ -52,10 +88,21 @@ class Settings(BaseSettings):
     learning_mastery_exercises: int = Field(default=20, ge=10, le=100)
     learning_mastery_sessions: int = Field(default=3, ge=2, le=10)
     learning_mastery_reuses: int = Field(default=3, ge=2, le=10)
-    learning_priority_weights: dict[str, float] = Field(default_factory=lambda: {
-        "frequency": 25, "recency": 15, "severity": 15,
-        "confidence": 15, "impact": 15, "persistence": 15,
-    })
+    learning_priority_weights: dict[str, float] = Field(
+        default_factory=lambda: {
+            "frequency": 25,
+            "recency": 15,
+            "severity": 15,
+            "confidence": 15,
+            "impact": 15,
+            "persistence": 15,
+        }
+    )
+
+    @field_validator("openai_reasoning_overrides", "openai_price_overrides", mode="before")
+    @classmethod
+    def empty_routing_maps(cls, value):
+        return {} if value == "" else value
 
     @field_validator("vocabulary_review_days")
     @classmethod

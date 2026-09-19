@@ -5,13 +5,14 @@ from collections.abc import Callable
 from typing import TypeVar
 
 from openai import APIConnectionError, APIStatusError, APITimeoutError, AsyncOpenAI
+from openai.lib._pydantic import to_strict_json_schema
 from pydantic import BaseModel, ValidationError
 
 from app.common.errors import AppError
 from app.core.config import settings
-from app.db.session import SessionLocal
 from app.llm.base import LLMClient
-from app.models import AIUsageLog
+from app.llm.routing import route_for
+from app.llm.usage import record_usage
 from app.prompts.question_generator import QUESTION_GENERATOR_PROMPT
 from app.prompts.reading_question_generator import READING_GENERATOR_PROMPT
 from app.prompts.reading_vocabulary_explanation import READING_VOCABULARY_PROMPT
@@ -47,6 +48,12 @@ logger = logging.getLogger(__name__)
 
 
 class OpenAILLMClient(LLMClient):
+    def __init__(self, model=None, reasoning_effort=None, max_attempts=2):
+        self.model_override = model
+        self.effort_override = reasoning_effort
+        self.max_attempts = max_attempts
+        self.calls = []
+
     async def parse_library_question(self, payload, user_id, media=None):
         from app.prompts.question_import import QUESTION_IMPORT_PROMPT
         from app.schemas.library import ParsedImport
@@ -93,23 +100,28 @@ class OpenAILLMClient(LLMClient):
         validate: Callable[[T], None] | None = None,
         *,
         media: list | None = None,
-        max_output_tokens: int = 14000,
+        max_output_tokens: int | None = None,
     ) -> T:
         if not settings.openai_api_key:
             raise AppError(503, "Chưa cấu hình OpenAI API.", "ai_not_configured")
+        route = route_for(operation)
+        model = self.model_override or route.model
+        effort = self.effort_override or route.reasoning_effort
+        limit = max_output_tokens or route.max_output_tokens
         async with AsyncOpenAI(
             api_key=settings.openai_api_key,
             timeout=240 if operation == "question_import" else 150,
             max_retries=0,
         ) as client:
             validation_feedback = ""
-            for attempt in range(2):
+            for attempt in range(self.max_attempts):
                 started = time.monotonic()
                 response = None
+                provider_error_code = retry_after_seconds = None
                 status = "error"
                 try:
-                    response = await client.responses.parse(
-                        model=settings.openai_model,
+                    response = await client.responses.create(
+                        model=model,
                         input=[
                             {"role": "system", "content": prompt + validation_feedback},
                             {
@@ -127,20 +139,33 @@ class OpenAILLMClient(LLMClient):
                                 ),
                             },
                         ],
-                        text_format=schema,
-                        max_output_tokens=max_output_tokens,
+                        text={
+                            "format": {
+                                "type": "json_schema",
+                                "name": schema.__name__,
+                                "strict": True,
+                                "schema": to_strict_json_schema(schema),
+                            }
+                        },
+                        max_output_tokens=limit,
                         store=False,
+                        **(
+                            {"reasoning": {"effort": effort}}
+                            if model.startswith(("gpt-5", "gpt-6", "o3", "o4"))
+                            else {}
+                        ),
                         **(
                             {"temperature": settings.openai_grading_temperature}
                             if operation.startswith("writing_")
                             and settings.openai_grading_temperature is not None
+                            and effort == "none"
                             else {}
                         ),
                     )
-                    if response.status != "completed" or response.output_parsed is None:
+                    if response.status != "completed" or not response.output_text:
                         reason = getattr(response.incomplete_details, "reason", None)
                         raise ValueError(f"Structured output incomplete: {response.status}; {reason}")
-                    result = schema.model_validate(response.output_parsed)
+                    result = schema.model_validate_json(response.output_text)
                     if validate:
                         validate(result)
                     status = "success"
@@ -159,7 +184,7 @@ class OpenAILLMClient(LLMClient):
                         )
                     )
                     logger.warning("Structured %s validation: %s", operation, validation_feedback)
-                    if attempt == 1:
+                    if attempt == self.max_attempts - 1:
                         raise AppError(
                             502,
                             "AI chưa nhận diện được cấu trúc hợp lệ. Chưa lưu đề; hãy thử lại hoặc nhập thủ công."
@@ -184,31 +209,46 @@ class OpenAILLMClient(LLMClient):
                     ) from None
                 except APIStatusError as exc:
                     status = f"http_{exc.status_code}"
+                    provider_error_code = str(exc.code or "unknown")[:100]
+                    retry_after_seconds = exc.response.headers.get("retry-after")
+                    logger.warning(
+                        "AI request rejected: status=%s code=%s retry_after=%s",
+                        status,
+                        provider_error_code,
+                        retry_after_seconds,
+                    )
+                    if provider_error_code in {
+                        "credit_balance_exhausted",
+                        "insufficient_quota",
+                        "billing_hard_limit_reached",
+                    }:
+                        raise AppError(
+                            503,
+                            "Tài khoản AI đã hết hạn mức. Bài làm đã được lưu; quản trị viên cần bổ sung hạn mức trước khi chấm tiếp.",
+                            "ai_quota_exhausted",
+                        ) from None
                     message = (
                         "OpenAI đang bận hoặc tài khoản đã hết hạn mức. Vui lòng thử lại sau."
                         if exc.status_code == 429
-                        else "Không thể gọi OpenAI. Kiểm tra API key và OPENAI_MODEL trên backend."
+                        else "Không thể gọi OpenAI. Kiểm tra quyền truy cập và cấu hình model cho tác vụ này."
                     )
                     raise AppError(502, message, "ai_unavailable") from None
                 finally:
-                    # Separate transaction preserves diagnostics when the application transaction rolls back.
-                    try:
-                        async with SessionLocal() as db:
-                            usage = response.usage if response else None
-                            db.add(
-                                AIUsageLog(
-                                    user_id=user_id,
-                                    operation=operation,
-                                    model=settings.openai_model,
-                                    input_tokens=usage.input_tokens if usage else 0,
-                                    output_tokens=usage.output_tokens if usage else 0,
-                                    latency_ms=int((time.monotonic() - started) * 1000),
-                                    status=status,
-                                )
-                            )
-                            await db.commit()
-                    except Exception:
-                        logger.error("Could not persist AI usage metadata")
+                    self.calls.append(
+                        await record_usage(
+                            user_id=user_id,
+                            operation=operation,
+                            model=getattr(response, "model", None) or model,
+                            reasoning_effort=effort,
+                            usage=getattr(response, "usage", None),
+                            latency_ms=int((time.monotonic() - started) * 1000),
+                            status=status,
+                            category=route.category,
+                            response_id=getattr(response, "id", None),
+                            provider_error_code=provider_error_code,
+                            retry_after_seconds=retry_after_seconds,
+                        )
+                    )
         raise AppError(502, "AI chưa trả kết quả hợp lệ.")
 
     async def generate_question(self, payload: dict, user_id: str) -> GeneratedQuestion:
@@ -296,7 +336,9 @@ class OpenAILLMClient(LLMClient):
             GeneratedSpeakingQuestion, prompt, payload, user_id, "speaking_question", validate
         )
 
-    async def grade_speaking(self, payload: dict, user_id: str) -> SpeakingTextGradingOutput:
+    async def grade_speaking(
+        self, payload: dict, user_id: str, operation="speaking_grade"
+    ) -> SpeakingTextGradingOutput:
         def validate(result):
             source = {a["sequence_number"]: a for a in payload["answers"]}
             if result.part != payload["part"] or {a.sequence_number for a in result.answer_feedback} != set(
@@ -310,7 +352,7 @@ class OpenAILLMClient(LLMClient):
                     raise ValueError("Invented transcript quotation")
 
         return await self._structured(
-            SpeakingTextGradingOutput, SPEAKING_GRADER_PROMPT, payload, user_id, "speaking_grade", validate
+            SpeakingTextGradingOutput, SPEAKING_GRADER_PROMPT, payload, user_id, operation, validate
         )
 
     async def generate_reading(self, payload: dict, user_id: str) -> GeneratedReadingPassage:

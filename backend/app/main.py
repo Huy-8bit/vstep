@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
 from app.api.routes import (
+    ai_costs,
     auth,
     learning,
     library,
@@ -97,6 +98,10 @@ async def request_guards(request: Request, call_next):
                 "/regrade",
                 "/calibrate",
                 "/feedback",
+                "/sentences",
+                "/corrected",
+                "/improved",
+                "/detailed",
                 "/vocabulary",
                 "/recommendations",
                 "/answer",
@@ -171,6 +176,7 @@ async def health():
 
 
 for router in (
+    ai_costs.router,
     auth.router,
     writing.router,
     progress.router,

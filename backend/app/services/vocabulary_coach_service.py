@@ -9,6 +9,7 @@ from sqlalchemy import func, select
 from app.common.errors import AppError
 from app.core.config import settings
 from app.db.base import utcnow
+from app.llm.routing import route_for
 from app.models import ExamSession, WritingAttempt, WritingError, WritingGrading
 from app.models.reading import ReadingPassage
 from app.models.speaking import SpeakingError, SpeakingGrading
@@ -311,7 +312,7 @@ class VocabularyCoachService:
                         for k, v in context.items()
                         if k not in {"recurring_errors", "observed_errors", "observed_suggestions"}
                     },
-                    "model": settings.openai_model,
+                    "model": route_for("vocabulary_coach").identity,
                     "version": VOCABULARY_COACH_VERSION,
                 },
                 sort_keys=True,
@@ -335,7 +336,7 @@ class VocabularyCoachService:
                 source_topic=context["topic"],
                 cache_key=key,
                 items=result.model_dump()["items"],
-                model=settings.openai_model,
+                model=route_for("vocabulary_coach").model,
                 prompt_version=VOCABULARY_COACH_VERSION,
             )
             self.db.add(batch)
@@ -673,7 +674,7 @@ class VocabularyCoachService:
             correct, confidence, model = (
                 result.correct if result.confidence >= 0.8 else None,
                 result.confidence,
-                settings.openai_model,
+                route_for("vocabulary_coach").model,
             )
             explanation, correction = result.explanation_vi, result.corrected_sentence
         now = utcnow()
@@ -708,8 +709,10 @@ class VocabularyCoachService:
         await self.db.commit()
         try:
             from app.learning.vocabulary import sync_vocabulary_learning
+
             await sync_vocabulary_learning(user_id, review.id)
         except Exception:
             import logging
+
             logging.getLogger(__name__).exception("Vocabulary learning update deferred")
         return review_view(review)

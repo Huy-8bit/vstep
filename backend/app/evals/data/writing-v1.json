@@ -1,0 +1,347 @@
+{
+  "version": "editorial-writing-2026-09-v1",
+  "reference_policy": "Editorial estimates, not certified examiner scores. No evaluation references are sent to candidate models. Human reviews supersede these references.",
+  "samples": [
+    {
+      "id": "weak",
+      "task": 1,
+      "question": "Your English-speaking friend Alex is visiting your hometown next month and has asked for advice. Write an email to Alex.\nSuggest the best time and way to travel to your town.\nRecommend two places to visit and explain why.\nInvite your friend to do something with you.\nWrite at least 120 words.",
+      "answer": "Dear Alex, My town good. You come bus. Market is buy and museum is old. I like you visit. We dinner. Bye, Huy",
+      "requirements": [
+        "Suggest best time and transport with reasons",
+        "Recommend two places and explain why",
+        "Invite Alex to an activity together"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 2.5,
+        "organization": 3,
+        "vocabulary": 2.5,
+        "grammar": 2,
+        "overall": 2.5
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "editorial_anchor",
+        "weak response"
+      ],
+      "rationale": "{'task_fulfillment': 'Requirements are only fragments; timing and reasons are absent.', 'organization': 'Some task order, but little connection between fragments.', 'vocabulary': 'Very narrow repertoire; imprecise constructions.', 'grammar': 'Repeated missing verbs/articles and sentence fragments limit meaning.'}"
+    },
+    {
+      "id": "borderline_b1",
+      "task": 1,
+      "question": "Your English-speaking friend Alex is visiting your hometown next month and has asked for advice. Write an email to Alex.\nSuggest the best time and way to travel to your town.\nRecommend two places to visit and explain why.\nInvite your friend to do something with you.\nWrite at least 120 words.",
+      "answer": "Dear Alex,\nI happy that you will come my town next month. You should go on Saturday because I not work. You can take bus because it cheap. The bus is near your house and stop in town. I can meet you there.\nYou should visit market. It have many food and clothes. I go there every week with my mother. The park is a good place too. You can walk and take photo. Many people likes the park because it is beautiful.\nPlease come my house for dinner. My mother cook very good and she want meet you. We can eat and watch a film. Tell me when you arrive and I will wait you.\nBest wishes,\nHuy",
+      "requirements": [
+        "Suggest best time and transport with reasons",
+        "Recommend two places and explain why",
+        "Invite Alex to an activity together"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 5,
+        "organization": 4.5,
+        "vocabulary": 4,
+        "grammar": 3.5,
+        "overall": 4.25
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "editorial_anchor",
+        "borderline B1-like performance"
+      ],
+      "rationale": "{'task_fulfillment': 'Most requirements addressed with simple reasons, limited specificity.', 'organization': 'Recognisable email and grouping; repetitive links and short sequences.', 'vocabulary': 'Basic repeated vocabulary and unnatural constructions.', 'grammar': 'Frequent agreement, missing auxiliary, article and preposition errors.'}"
+    },
+    {
+      "id": "solid_b1",
+      "task": 1,
+      "question": "Your English-speaking friend Alex is visiting your hometown next month and has asked for advice. Write an email to Alex.\nSuggest the best time and way to travel to your town.\nRecommend two places to visit and explain why.\nInvite your friend to do something with you.\nWrite at least 120 words.",
+      "answer": "Dear Alex,\nThanks for your email. I am glad you are coming to my town next month. The best time is the weekend because I will be free. You can take a bus from your city. It takes about two hours and is cheaper than the train.\nI think you should visit the market. You can try local food there and buy gifts for your family. The park is another good place. It is quiet in the morning, and you can walk beside the lake. I often go there with my brother.\nWould you like to have dinner at my house on Saturday? My family would be happy to meet you. We can eat together and talk about your trip. Please let me know your arrival time.\nBest wishes,\nHuy",
+      "requirements": [
+        "Suggest best time and transport with reasons",
+        "Recommend two places and explain why",
+        "Invite Alex to an activity together"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 6,
+        "organization": 6,
+        "vocabulary": 5.5,
+        "grammar": 6,
+        "overall": 5.875
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "editorial_anchor",
+        "solid B1-like performance"
+      ],
+      "rationale": "{'task_fulfillment': 'All points reasonably covered, though reasons stay predictable.', 'organization': 'Clear groups and order, with simple rather than flexible cohesion.', 'vocabulary': 'Generally appropriate common vocabulary, limited precision and variation.', 'grammar': 'Mostly controlled simple structures; limited evidence of wider range.'}"
+    },
+    {
+      "id": "alex_manual_regression",
+      "task": 1,
+      "question": "Your English-speaking friend Alex is visiting your hometown next month and has asked for advice. Write an email to Alex.\nSuggest the best time and way to travel to your town.\nRecommend two places to visit and explain why.\nInvite your friend to do something with you.\nWrite at least 120 words.",
+      "answer": "Dear Alex,\n\nI am so happy to hear that you will visit my hometown next month. I write this email to share you some advice for your trip.\n\nI think the best time to visit is in spring because the weather is warm and not rain much. To get here, traveling by plane is the best way because it is very fast and comfortable.\n\nWhen you arrive, there are two nice places you should visit. First, you can go to the local market to buy cheap souvenirs and try many tasty street food. Another place is the old museum. It have many interesting things about the history and culture of my city.\n\nI would like to invite you to have dinner at my house with my family. We can talk a lot together.\n\nWrite back to me soon.\n\nBest wishes,\nHuy",
+      "requirements": [
+        "Suggest best time and transport with reasons",
+        "Recommend two places and explain why",
+        "Invite Alex to an activity together"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 6.5,
+        "organization": 6,
+        "vocabulary": 5.5,
+        "grammar": 5.5,
+        "overall": 5.875
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "editorial_anchor",
+        "borderline B2-like task coverage with weaker language"
+      ],
+      "rationale": "{'task_fulfillment': 'Reasonably covered and relevant, but recommendations have generic reasons. Spring may not match the next-month context; avoid inventing a date-based fault.', 'organization': 'Clear but simple paragraphing and First/Another sequencing, not a reason for 7.5.', 'vocabulary': \"Limited precision/repetition; 'share you some advice' is unnatural. Countability in 'many tasty street food' has one primary error, not two independent penalties.\", 'grammar': \"'not rain much' and 'It have' show basic construction/agreement issues; modest structure range. Understandability does not erase these errors.\"}"
+    },
+    {
+      "id": "solid_b2",
+      "task": 1,
+      "question": "Your English-speaking friend Alex is visiting your hometown next month and has asked for advice. Write an email to Alex.\nSuggest the best time and way to travel to your town.\nRecommend two places to visit and explain why.\nInvite your friend to do something with you.\nWrite at least 120 words.",
+      "answer": "Dear Alex,\nIt was lovely to hear that you are planning a visit. If your dates are flexible, I suggest arriving on a Friday morning, when the roads are quieter. The direct coach would be more convenient than flying: it stops in the town centre, so you would avoid an expensive airport transfer.\nFor your first afternoon, the riverside market is worth exploring. Besides tasting local dishes, you can watch craftspeople make the pottery for which our town is known. You might also enjoy the history museum. Its collection is fairly small, but the photographs show how the river has shaped people's lives over the years.\nWould you like to join my family for dinner on Saturday? My father has offered to cook his favourite dish, and afterwards I could take you for a walk along the river. Let me know whether that suits your plans.\nBest wishes,\nHuy",
+      "requirements": [
+        "Suggest best time and transport with reasons",
+        "Recommend two places and explain why",
+        "Invite Alex to an activity together"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 7.5,
+        "organization": 7.5,
+        "vocabulary": 7.5,
+        "grammar": 7.5,
+        "overall": 7.5
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "editorial_anchor",
+        "solid B2-like performance"
+      ],
+      "rationale": "{'task_fulfillment': 'Specific reasons and practical travel comparisons develop all requests.', 'organization': 'Purposeful progression with clear referencing and naturally connected details.', 'vocabulary': 'Appropriate precision and natural collocations across a familiar topic.', 'grammar': 'Controlled conditionals, relative clauses, comparison and varied sentence patterns.'}"
+    },
+    {
+      "id": "strong_b2_c1",
+      "task": 1,
+      "question": "Your English-speaking friend Alex is visiting your hometown next month and has asked for advice. Write an email to Alex.\nSuggest the best time and way to travel to your town.\nRecommend two places to visit and explain why.\nInvite your friend to do something with you.\nWrite at least 120 words.",
+      "answer": "Dear Alex,\nI'm delighted that you'll be visiting next month. If you can choose your arrival time, aim for Friday before midday: you'll miss the weekend traffic without losing an afternoon. I'd take the direct train rather than fly. Although the journey itself is longer, the station is central, whereas getting from the airport can take another hour.\nSince you enjoy discovering how people live, start with the covered market. Go early enough to see the stalls being set up, then have breakfast at one of the family-run counters; the owners are usually happy to explain their dishes. For a quieter contrast, try the local museum. The restored photographs are particularly worthwhile because they show the same streets before the riverfront was redeveloped.\nCould you keep Saturday evening free for dinner with us? My sister would love to meet you, and, weather permitting, we could walk to the river afterwards. Send me your train details once you've booked, and I'll meet you at the station.\nSee you soon,\nHuy",
+      "requirements": [
+        "Suggest best time and transport with reasons",
+        "Recommend two places and explain why",
+        "Invite Alex to an activity together"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 8.5,
+        "organization": 8.5,
+        "vocabulary": 8.5,
+        "grammar": 8.5,
+        "overall": 8.5
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "editorial_anchor",
+        "strong B2/C1-like performance"
+      ],
+      "rationale": "{'task_fulfillment': 'Precisely tailored, practical advice with sufficiently developed reasons and invitation.', 'organization': 'Sustained natural progression, contrast and referential cohesion without formulaic excess.', 'vocabulary': 'Flexible, precise, idiomatic but appropriate vocabulary, not needless complexity.', 'grammar': 'Varied complex structures handled accurately, with controlled qualification and comparison.'}"
+    },
+    {
+      "id": "essay_limited_development",
+      "task": 2,
+      "question": "TASK 2. Read the following statement about free public transport.\nSome cities are considering removing fares from buses to encourage residents to leave their cars at home.\nSupporters expect cleaner air and easier access to jobs, while critics believe that limited funds should first\nbe spent on reliable services. Write an essay to an educated reader discussing these two views and giving\nyour opinion. Include reasons and relevant examples. Write at least 250 words.",
+      "answer": "Free buses is a good idea for cities. Many people use cars and there are much pollution. Some people think buses should free but other people want good services. I will discuss both sides.\nFirst, free bus help people save money. They can go work and they do not pay. This is very good for students and poor people. For example my friend go to school by bus every day. If it free he save money. Also the environment will better because people do not drive cars.\nOn the other hand, bus services need be reliable. If the bus late, people are late too. People have jobs and they cannot wait long time. The government should buy more buses. More buses are better because it is convenient. Sometimes there are many passenger and we cannot get on.\nIn conclusion, both ideas have advantage. I think free buses is best because everybody can travel and the city have less pollution. The government should make good buses and free buses for all people.",
+      "requirements": [
+        "Discuss advantages of free public transport",
+        "Discuss investment in service quality",
+        "Explain your own view"
+      ],
+      "minimum_words": 250,
+      "reference": {
+        "task_fulfillment": 5,
+        "organization": 5,
+        "vocabulary": 4.5,
+        "grammar": 4,
+        "overall": 4.625
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "editorial_anchor",
+        "basic relevant argument with limited control"
+      ],
+      "rationale": "{'task_fulfillment': 'Both views and a position are present but largely asserted; the single example does little to develop the cost/reliability trade-off. The short response offers limited support.', 'organization': 'Predictable but identifiable progression; repeated claims and weak connections limit cohesion.', 'vocabulary': \"Relevant common terms but repeated 'good', 'people' and 'buses'; imprecise expressions and countability errors.\", 'grammar': 'Frequent agreement, missing auxiliary, infinitive and plural errors; a few basic conditionals do not establish broad control.'}"
+    },
+    {
+      "id": "essay_developed_controlled",
+      "task": 2,
+      "question": "TASK 2. Read the following statement about free public transport.\nSome cities are considering removing fares from buses to encourage residents to leave their cars at home.\nSupporters expect cleaner air and easier access to jobs, while critics believe that limited funds should first\nbe spent on reliable services. Write an essay to an educated reader discussing these two views and giving\nyour opinion. Include reasons and relevant examples. Write at least 250 words.",
+      "answer": "Removing bus fares could make daily travel easier for many residents, but cheaper journeys are not necessarily more attractive journeys. In my view, cities should improve reliability first while offering targeted discounts to people who find current fares difficult to afford.\nThe strongest argument for free buses concerns access. For a worker on a low income, several journeys each week can consume money needed for food or rent. Removing that cost may widen the range of jobs the worker can realistically accept. Students could benefit in a similar way, especially when their courses require travel between different sites. These gains matter even if the policy produces only a small reduction in car use.\nHowever, motorists often choose their cars because they cannot depend on the alternative. A free bus that arrives unpredictably may still be unsuitable for someone collecting a child after work. If fares disappear without replacement funding, operators could struggle to maintain frequent services, making the problem worse. Spending the same money on bus lanes or more frequent departures might therefore persuade more drivers to switch.\nThe appropriate choice depends partly on local conditions. A city with frequent but expensive buses may gain more from lower fares than one whose main problem is long gaps between services. Councils should consult passengers and compare these constraints before announcing a universal policy. They could also protect essential routes while testing reduced fares in a smaller area.\nOverall, affordable transport is an important public goal, but affordability includes the time and uncertainty involved in travelling. Reliable services, combined with support for those who need it most, would offer a more convincing starting point than free travel alone.",
+      "requirements": [
+        "Discuss advantages of free public transport",
+        "Discuss investment in service quality",
+        "Explain your own view"
+      ],
+      "minimum_words": 250,
+      "reference": {
+        "task_fulfillment": 8,
+        "organization": 8,
+        "vocabulary": 8,
+        "grammar": 8,
+        "overall": 8.0
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "editorial_anchor",
+        "developed argument with controlled range"
+      ],
+      "rationale": "{'task_fulfillment': 'Discusses both views, develops mechanisms with concrete examples, qualifies the recommendation by local conditions and sustains a clear position.', 'organization': 'Purposeful paragraph progression; reference, contrast and conditional links connect the affordability and reliability arguments.', 'vocabulary': \"Precise accessible phrases such as 'replacement funding' and 'long gaps between services'; natural collocations without unnecessary rarity.\", 'grammar': 'Controlled conditionals, relative clauses, qualification and varied sentence patterns; accuracy is sustained across the argument.'}"
+    },
+    {
+      "id": "t1_short_controlled",
+      "task": 1,
+      "question": "Your English-speaking friend Alex is visiting your hometown next month and has asked for advice. Write an email to Alex.\nSuggest the best time and way to travel to your town.\nRecommend two places to visit and explain why.\nInvite your friend to do something with you.\nWrite at least 120 words.",
+      "answer": "Dear Alex,\nI suggest coming on Saturday because I can meet you at the station. Take the direct train; it is cheaper than flying. Visit the market for local food and the museum to learn about our town. Would you like to join my family for dinner? Let me know when you arrive.\nBest wishes,\nMai",
+      "requirements": [
+        "Suggest best time and transport with reasons",
+        "Recommend two places and explain why",
+        "Invite Alex to an activity together"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 4.5,
+        "organization": 5.5,
+        "vocabulary": 5,
+        "grammar": 6,
+        "overall": 5.25
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "short_task1",
+        "accurate_but_undeveloped"
+      ],
+      "rationale": "Clear and mostly accurate; only about half the required length, little support and limited grammatical range."
+    },
+    {
+      "id": "t1_long_repetitive",
+      "task": 1,
+      "question": "Your English-speaking friend Alex is visiting your hometown next month and has asked for advice. Write an email to Alex.\nSuggest the best time and way to travel to your town.\nRecommend two places to visit and explain why.\nInvite your friend to do something with you.\nWrite at least 120 words.",
+      "answer": "Dear Alex,\nThank you for your email. I am very happy about your visit and I want to give you some ideas. I think Saturday is a good day because Saturday is a good day for visiting. I am free on Saturday and many other people are free on Saturday too. You can come by bus. The bus is good because it is cheap. It takes two hours, so you can leave early and arrive before lunch.\nThe market is a good place to visit. There are many shops and many people. You can buy food and clothes. I go to this market every week and I think it is a good market. Another place is the museum. The museum has pictures and old things. The pictures are interesting and the old things are interesting too. You can see many things and learn about our town.\nI want to invite you to dinner at my house. My mother can cook some food. We can eat the food and talk about your trip. After dinner, we can watch television. It will be a good evening because we can spend time together. Please tell me what time you will arrive. I am looking forward to seeing you and I hope you will enjoy the trip.\nBest wishes,\nMai",
+      "requirements": [
+        "Suggest best time and transport with reasons",
+        "Recommend two places and explain why",
+        "Invite Alex to an activity together"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 6,
+        "organization": 5.5,
+        "vocabulary": 4.5,
+        "grammar": 5.5,
+        "overall": 5.375
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "long_task1",
+        "basic_vocabulary",
+        "repetition"
+      ],
+      "rationale": "Length does not establish sophistication: all requests addressed with generic reasons, repeated lexis and almost exclusively simple structures."
+    },
+    {
+      "id": "t1_grammar_strong_task_weak",
+      "task": 1,
+      "question": "You recently attended a weekend photography course. Write to the manager explaining two problems with the course, describing their effects, and requesting a reasonable solution. Write at least 120 words.",
+      "answer": "Dear Manager,\nI am writing to thank you for the photography course that I attended last weekend. Although I had previously taken photographs with my phone, I had never used a professional camera, so the opportunity was particularly welcome.\nThe building, which stands near the railway station, was easy to find. I arrived early and spent some time looking at the photographs displayed in the entrance hall. Their striking colours encouraged me to experiment with different settings during the afternoon. I also enjoyed meeting the other participants, several of whom had travelled from neighbouring towns.\nSince returning home, I have practised taking pictures of the garden whenever the light has been suitable. I would be grateful if you could let me know when your next course will be offered, as I would like to develop these skills further.\nYours faithfully,\nLan",
+      "requirements": [
+        "Explain two problems with the course",
+        "Describe effects of those problems",
+        "Request a reasonable solution"
+      ],
+      "minimum_words": 120,
+      "reference": {
+        "task_fulfillment": 2.5,
+        "organization": 7,
+        "vocabulary": 7,
+        "grammar": 7.5,
+        "overall": 6.0
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "strong_grammar_weak_task",
+        "register"
+      ],
+      "rationale": "Well-controlled formal letter; does not identify the requested course problems, effects or remedy. Language must not compensate for task failure."
+    },
+    {
+      "id": "t2_content_good_language_weak",
+      "task": 2,
+      "question": "Some people believe university students should work part-time while studying. Others think they should focus entirely on their studies. Discuss both views and give your own opinion. Write at least 250 words.",
+      "answer": "Many student work when they study at university. Some people thinks this is useful while others says students should only learning. I believe a small job can help, but university work must be first because students come there for education.\nThere are several reason to take a job. First, students can earn money for food and books. For example, my cousin work in a cafe on Saturday and she use this money to buy her textbooks. Her parents does not have to pay all her costs. Working also teach responsibility. When a customer complain, students must listen and solve the problem. These experience may help them in a future job where teamwork are important.\nHowever, a job can create serious problems if it takes too much time. A student who works every evening may sleep less and cannot concentrate in class. My friend missed a laboratory session because his manager ask him to cover another worker. He had to repeat the work and his result was lower. Students in medicine or engineering may need many hours for practical work, so a regular job is not always possible.\nIn my opinion, the best choice depend on the student and the course. Universities could help students find flexible jobs on campus. Employers should allow them reduce their hours before exams. Students should also check their marks and stop working if their study becomes worse.\nIn conclusion, part-time work offer useful money and practical skills, but too many hours can damage education. A limited and flexible job is sensible when the student can still meet the requirements of the course.",
+      "requirements": [
+        "Discuss reasons for part-time work",
+        "Discuss reasons to focus only on studies",
+        "Give and support your own opinion"
+      ],
+      "minimum_words": 250,
+      "reference": {
+        "task_fulfillment": 7,
+        "organization": 6.5,
+        "vocabulary": 5.5,
+        "grammar": 4.5,
+        "overall": 5.875
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "task2",
+        "good_content_poor_grammar",
+        "multiple_basic_errors"
+      ],
+      "rationale": "Relevant position, both views and concrete mechanisms/examples; repeated subject-verb, determiner, plural and infinitive errors materially restrict grammar."
+    },
+    {
+      "id": "t2_collocation_boundary",
+      "task": 2,
+      "question": "Some people believe university students should work part-time while studying. Others think they should focus entirely on their studies. Discuss both views and give your own opinion. Write at least 250 words.",
+      "answer": "Whether students should combine paid employment with university study is a difficult question. A job can give useful experience, but it can also make pressure on students. I think students should work only a few hours each week, and they should stop when examinations are close.\nSupporters of part-time work often point to financial benefits. Students can make an income and pay for small daily expenses without asking their parents for everything. They can also obtain practical experience. For instance, a student working in a shop may learn to communicate with customers and organise tasks. This can make advantages when the student later applies for a full-time position. Work may therefore connect classroom learning with real situations.\nOn the other hand, studying already requires a considerable amount of time. If students accept too many shifts, they may not have enough time to prepare assignments. Some students also become tired and lose attention during lectures. This can cause a negative consequence on their academic results. A difficult course with long laboratory sessions may leave almost no space for regular employment. Financial independence is useful, but it should not be reached by damaging education.\nI believe universities should give advice about balancing these responsibilities. Jobs on campus may be suitable because managers understand examination schedules. Students should choose a realistic number of hours and review this decision if their grades begin to fall. They should not feel that everyone must have a job simply because some classmates work.\nTo conclude, part-time work can benefit students, provided that it remains manageable. Flexible hours and careful planning are more important than earning as much money as possible.",
+      "requirements": [
+        "Discuss reasons for part-time work",
+        "Discuss reasons to focus only on studies",
+        "Give and support your own opinion"
+      ],
+      "minimum_words": 250,
+      "reference": {
+        "task_fulfillment": 7,
+        "organization": 7,
+        "vocabulary": 5.5,
+        "grammar": 6.5,
+        "overall": 6.5
+      },
+      "source": "internal_reference",
+      "reviewer_count": 0,
+      "tags": [
+        "task2",
+        "unnatural_collocations",
+        "boundary_b2"
+      ],
+      "rationale": "Developed balanced discussion and generally controlled syntax, but repeated unnatural combinations and predictable range restrict lexical score."
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 from sqlalchemy import select
 
 from app.common.errors import AppError
-from app.core.config import settings
 from app.learning import EXERCISE_VERSION
 from app.learning.coaching import PersonalizedCoachService
 from app.learning.taxonomy.reading import TYPES
+from app.llm.routing import route_for
 from app.models.learning import PersonalizedExercise
 from app.schemas.api import ExamCreate
 from app.schemas.reading import ReadingGenerateRequest, ReadingSessionCreate
@@ -62,7 +62,7 @@ class TargetedPracticeService:
             concept_key=w.concept_key,
             exercise_type="TRANSFER",
             version=EXERCISE_VERSION,
-            model=settings.openai_model,
+            model=route_for("learning_exercises").model,
             client_request_id=str(data.client_request_id),
         )
         row.content = {

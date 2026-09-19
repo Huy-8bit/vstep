@@ -45,6 +45,10 @@ class WritingEvidenceAnalysisService:
         payload = {**payload, "sentences": sentence_segments(payload["user_answer"])}
         result = await self.llm.analyze_writing(payload, user_id)
         validate_analysis(result, payload)
+        return self.aggregate(result, payload)
+
+    @staticmethod
+    def aggregate(result, payload):
         # Collapse overlapping descriptions of one local error. Detection is model-assisted; counting is Python.
         retained, occupied = [], {}
         severity = {"critical": 3, "major": 2, "minor": 1}

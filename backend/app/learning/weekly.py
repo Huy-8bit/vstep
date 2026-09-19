@@ -5,9 +5,9 @@ from zoneinfo import ZoneInfo
 from sqlalchemy import select
 
 from app.common.errors import AppError
-from app.core.config import settings
 from app.db.base import utcnow
 from app.learning import ANALYSIS_VERSION, TAXONOMY_VERSION
+from app.llm.routing import route_for
 from app.models.learning import UserLearningEvent, UserLearningProfile
 from app.schemas.learning import WeeklyCoachOutput
 from app.services.speech_transcription_service import speech_lock
@@ -21,7 +21,7 @@ async def summary_key(db, user_id):
         select(UserLearningProfile.revision).where(UserLearningProfile.user_id == user_id)
     )
     day = utcnow().astimezone(ZoneInfo("Asia/Ho_Chi_Minh")).date()
-    return f"weekly:{day}:{revision or 0}:{SUMMARY_VERSION}:{settings.openai_model}"
+    return f"weekly:{day}:{revision or 0}:{SUMMARY_VERSION}:{route_for('learning_weekly_summary').identity}"
 
 
 async def cached_summary(db, user_id):
@@ -112,7 +112,7 @@ async def generate_summary(db, llm, user_id):
                 "analysis_version": ANALYSIS_VERSION,
                 "taxonomy_version": TAXONOMY_VERSION,
                 "summary_prompt_version": SUMMARY_VERSION,
-                "model": settings.openai_model,
+                "model": route_for("learning_weekly_summary").model,
             },
         )
     )

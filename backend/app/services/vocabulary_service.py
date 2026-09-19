@@ -3,7 +3,7 @@ import hashlib
 from sqlalchemy import select
 
 from app.common.errors import AppError
-from app.core.config import settings
+from app.llm.routing import route_for
 from app.models.reading import ReadingPassage
 from app.prompts.reading_vocabulary_explanation import READING_VOCABULARY_PROMPT_VERSION
 from app.services.reading_exam_service import ReadingExamService
@@ -32,7 +32,7 @@ class VocabularyService:
         ):
             raise AppError(422, "Chọn một từ hoặc cụm từ ngắn có trong đoạn văn.")
         key = hashlib.sha256(
-            f"{request.paragraph_id}:{term.casefold()}:{settings.openai_model}:{READING_VOCABULARY_PROMPT_VERSION}".encode()
+            f"{request.paragraph_id}:{term.casefold()}:{route_for('reading_vocabulary').identity}:{READING_VOCABULARY_PROMPT_VERSION}".encode()
         ).hexdigest()
         if key in passage.vocabulary_cache:
             return passage.vocabulary_cache[key]

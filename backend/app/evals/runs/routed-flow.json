@@ -1,0 +1,75 @@
+{
+  "attempt_0": {
+    "scores": {
+      "task_fulfillment": 6.0,
+      "organization": 5.5,
+      "vocabulary": 5.5,
+      "grammar": 5.0,
+      "overall": 5.5
+    },
+    "model": "gpt-5.4-mini-2026-03-17"
+  },
+  "attempt_1": {
+    "scores": {
+      "task_fulfillment": 6.0,
+      "organization": 5.5,
+      "vocabulary": 5.5,
+      "grammar": 5.0,
+      "overall": 5.5
+    },
+    "model": "gpt-5.4-mini-2026-03-17"
+  },
+  "core_calls": [
+    {
+      "operation": "writing_core",
+      "model": "gpt-5.4-mini-2026-03-17",
+      "cost_usd": 0.0161688
+    }
+  ],
+  "cost_ledger": {
+    "attempt_id": "80e309ef-1c9b-4cef-89fe-4dd0a397b7da",
+    "known_total_usd": 0.01777455,
+    "unknown_cost_calls": 0,
+    "calls": [
+      {
+        "id": "5ecd24f4-b6b2-4637-ac55-222c0463514d",
+        "operation": "writing_core",
+        "model": "gpt-5.4-mini-2026-03-17",
+        "reasoning_effort": "low",
+        "input_tokens": 3196,
+        "cached_input_tokens": 2304,
+        "output_tokens": 3406,
+        "reasoning_tokens": 585,
+        "estimated_cost_usd": 0.0161688,
+        "status": "success",
+        "latency_ms": 22798,
+        "created_at": "2026-09-19T14:39:52.936230+00:00"
+      },
+      {
+        "id": "cc671161-b0d8-454a-a211-30be7611e7da",
+        "operation": "writing_corrected",
+        "model": "gpt-5.4-mini-2026-03-17",
+        "reasoning_effort": "low",
+        "input_tokens": 893,
+        "cached_input_tokens": 0,
+        "output_tokens": 208,
+        "reasoning_tokens": 17,
+        "estimated_cost_usd": 0.00160575,
+        "status": "success",
+        "latency_ms": 1960,
+        "created_at": "2026-09-19T14:39:55.386123+00:00"
+      }
+    ]
+  },
+  "checks": [
+    "core-only initial grading",
+    "identical grade replay",
+    "cross-attempt content cache",
+    "lazy corrected answer",
+    "optional replay cache",
+    "scores unchanged",
+    "admin authorization",
+    "per-attempt ledger",
+    "learning integration"
+  ]
+}

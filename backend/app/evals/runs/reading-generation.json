@@ -1,0 +1,2165 @@
+{
+  "cases": [
+    {
+      "id": "inference-work",
+      "mode": "QUESTION_TYPE_PRACTICE",
+      "topic": "work",
+      "question_count": 5,
+      "target_question_types": [
+        "inference"
+      ]
+    },
+    {
+      "id": "attitude-education",
+      "mode": "QUESTION_TYPE_PRACTICE",
+      "topic": "education",
+      "question_count": 5,
+      "target_question_types": [
+        "attitude"
+      ]
+    },
+    {
+      "id": "mixed-environment",
+      "mode": "PASSAGE_PRACTICE",
+      "topic": "environment",
+      "question_count": 10,
+      "target_question_types": []
+    }
+  ],
+  "results": [
+    {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "case": "inference-work",
+      "reviewer": "gpt-5.4-mini-2026-03-17",
+      "valid": true,
+      "review": {
+        "generator_version": "3.0.0",
+        "validator_version": "3.0.0",
+        "generation_model": "gpt-5.4-mini-2026-03-17",
+        "review_model": "gpt-5.4-mini-2026-03-17",
+        "format_valid": true,
+        "quality_valid": true,
+        "quality_method": "independent_llm_review",
+        "validation_notes": [
+          "Clear reading passage with a realistic workplace topic and accessible language.",
+          "Practice context is consistent: five inference questions are acceptable for targeted item practice.",
+          "No obvious answer leaks or contradictory instructions detected.",
+          "All five items have one best answer with plausible distractors; evidence is present and matches the keyed responses.",
+          "Minor note: several distractors are fairly easy, but still plausible enough for VSTEP-style practice."
+        ],
+        "quality_review": {
+          "accepted": true,
+          "confidence": 0.95,
+          "realistic_context": true,
+          "no_specialist_knowledge": true,
+          "no_embedded_answer": true,
+          "requirements_consistent": true,
+          "notes": [
+            "Clear reading passage with a realistic workplace topic and accessible language.",
+            "Practice context is consistent: five inference questions are acceptable for targeted item practice.",
+            "No obvious answer leaks or contradictory instructions detected.",
+            "All five items have one best answer with plausible distractors; evidence is present and matches the keyed responses.",
+            "Minor note: several distractors are fairly easy, but still plausible enough for VSTEP-style practice."
+          ],
+          "reading_items": [
+            {
+              "question_number": 1,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "A",
+              "confidence": 0.98,
+              "notes": "Supported directly by p2; other options are clearly unsupported."
+            },
+            {
+              "question_number": 2,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.93,
+              "notes": "Best inference from p2. Option A is somewhat adjacent but goes beyond the text."
+            },
+            {
+              "question_number": 3,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.97,
+              "notes": "Purpose of the sentence is clear from the negative effect described immediately after it."
+            },
+            {
+              "question_number": 4,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "C",
+              "confidence": 0.97,
+              "notes": "Directly supported by p4; the wording clearly implies additional contributing factors."
+            },
+            {
+              "question_number": 5,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "D",
+              "confidence": 0.95,
+              "notes": "Strongly supported by p4's list of expected outcomes."
+            }
+          ]
+        }
+      },
+      "passage": {
+        "title": "The Changing Role of Workplace Mentors",
+        "topic": "work",
+        "test_profile": "VSTEP_3_5",
+        "internal_difficulty_band": "MODERATE",
+        "paragraphs": [
+          {
+            "id": "p1",
+            "text": "Many companies once treated mentoring as an informal activity that depended on a generous and experienced colleague. Today, however, some organizations are designing mentoring programs deliberately. They pair newer employees with more experienced workers, often from different departments. The purpose is not simply to teach technical procedures. Mentors may also explain unwritten workplace expectations, such as how decisions are made, how meetings are conducted, and when it is appropriate to ask for assistance."
+          },
+          {
+            "id": "p2",
+            "text": "This arrangement can benefit both sides. New employees usually gain confidence because they have someone to consult before a small problem becomes a serious one. They may also understand the organization more quickly than they would through written instructions alone. Experienced employees, meanwhile, often discover that explaining familiar tasks forces them to examine their own habits. In addition, conversations with younger colleagues can introduce them to new software, communication styles, or customer expectations."
+          },
+          {
+            "id": "p3",
+            "text": "Nevertheless, a mentoring program does not automatically produce these results. A mentor who sees the role as another administrative duty may offer only hurried advice. Similarly, a new employee who expects the mentor to solve every difficulty may fail to develop independence. For this reason, effective programs establish clear boundaries: mentors provide guidance and perspective, but they do not make decisions on behalf of their partners. Regular meetings are useful, yet the relationship also needs enough flexibility to respond to genuine concerns."
+          },
+          {
+            "id": "p4",
+            "text": "The strongest programs therefore measure success in broader ways than counting meetings. Managers may look at whether new employees become comfortable seeking information, cooperating across departments, and taking responsibility for their work. These outcomes take time and cannot be attributed entirely to mentoring, since training and personal effort also matter. Even so, a well-supported mentoring relationship can make the workplace easier to understand while encouraging experienced employees to remain active learners."
+          }
+        ],
+        "questions": [
+          {
+            "internal_difficulty_band": "ACCESSIBLE",
+            "question_number": 1,
+            "question_type": "inference",
+            "question_text": "What can be inferred about new employees who have a mentor to consult before a minor problem becomes serious?",
+            "options": {
+              "A": "They are likely to receive help early enough to handle difficulties more effectively.",
+              "B": "They will no longer need formal training from the company.",
+              "C": "They are expected to transfer to a different department soon.",
+              "D": "They will usually ask the mentor to make all important decisions for them."
+            },
+            "correct_answer": "A",
+            "explanation_vi": "Đoạn văn cho biết nhân viên mới có thể hỏi người cố vấn trước khi vấn đề nhỏ trở nên nghiêm trọng, vì vậy có thể suy ra họ có cơ hội xử lý khó khăn hiệu quả hơn từ sớm.",
+            "option_explanations": {
+              "A": {
+                "is_correct": true,
+                "explanation_vi": "Đúng, việc được tư vấn sớm giúp nhân viên mới giải quyết vấn đề trước khi chúng trở nên nghiêm trọng."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai, bài đọc không nói mentoring thay thế hoàn toàn đào tạo chính thức."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai, việc chuyển sang bộ phận khác không được đề cập."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai, đoạn p3 cảnh báo rằng nhân viên không nên mong người cố vấn giải quyết mọi khó khăn."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p2",
+              "quote": "New employees usually gain confidence because they have someone to consult before a small problem becomes a serious one."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 2,
+            "question_type": "inference",
+            "question_text": "What does the passage suggest about experienced employees who explain familiar tasks to newer colleagues?",
+            "options": {
+              "A": "They may realize that their usual methods are less efficient than they believed.",
+              "B": "They may understand their own working habits more clearly.",
+              "C": "They are likely to become responsible for all training in the company.",
+              "D": "They will probably stop using older workplace procedures."
+            },
+            "correct_answer": "B",
+            "explanation_vi": "Việc giải thích các nhiệm vụ quen thuộc buộc nhân viên giàu kinh nghiệm xem xét lại thói quen của chính mình, nên có thể suy ra họ hiểu các thói quen đó rõ hơn.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai, bài không khẳng định phương pháp quen thuộc của họ kém hiệu quả."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng, quá trình giải thích khiến họ kiểm tra và nhận thức rõ hơn về thói quen làm việc của mình."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai, họ chỉ tham gia mentoring, không chịu trách nhiệm cho toàn bộ hoạt động đào tạo."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai, bài chỉ nói nhân viên mới có thể giới thiệu phần mềm hoặc cách giao tiếp mới, không nói người cố vấn sẽ ngừng dùng quy trình cũ."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p2",
+              "quote": "Experienced employees, meanwhile, often discover that explaining familiar tasks forces them to examine their own habits."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 3,
+            "question_type": "inference",
+            "question_text": "Why does the author mention that a mentor may regard the role as “another administrative duty”?",
+            "options": {
+              "A": "To suggest that mentoring should be managed entirely by administrators.",
+              "B": "To explain why some mentors may provide limited or low-quality support.",
+              "C": "To show that administrative work is more valuable than mentoring.",
+              "D": "To argue that mentors should avoid having regular meetings."
+            },
+            "correct_answer": "B",
+            "explanation_vi": "Tác giả đưa ra trường hợp này để giải thích rằng nếu coi mentoring chỉ là một nhiệm vụ hành chính, người cố vấn có thể đưa ra lời khuyên vội vàng và kém hiệu quả.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai, bài không đề xuất quản lý mentoring hoàn toàn bởi nhân viên hành chính."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng, thái độ xem mentoring là gánh nặng hành chính có thể dẫn đến sự hỗ trợ hời hợt."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai, tác giả không so sánh giá trị của công việc hành chính với mentoring."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai, bài nói các cuộc gặp thường xuyên hữu ích, dù mối quan hệ cần linh hoạt."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p3",
+              "quote": "A mentor who sees the role as another administrative duty may offer only hurried advice."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 4,
+            "question_type": "inference",
+            "question_text": "What can be inferred from the statement that mentoring outcomes “cannot be attributed entirely to mentoring”?",
+            "options": {
+              "A": "Mentoring programs rarely have any measurable effect on employees.",
+              "B": "Managers should judge mentoring only by the number of meetings held.",
+              "C": "Other factors may also contribute to the progress of new employees.",
+              "D": "Personal effort is generally less important than workplace training."
+            },
+            "correct_answer": "C",
+            "explanation_vi": "Bài đọc nêu rõ đào tạo và nỗ lực cá nhân cũng ảnh hưởng đến kết quả, vì vậy tiến bộ của nhân viên mới không thể chỉ quy cho mentoring.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai, tác giả vẫn cho rằng mentoring có thể làm nơi làm việc dễ hiểu hơn."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai, bài phản đối việc chỉ đếm số cuộc họp để đánh giá thành công."
+              },
+              "C": {
+                "is_correct": true,
+                "explanation_vi": "Đúng, đào tạo và nỗ lực cá nhân là những yếu tố khác cũng có thể tạo ra tiến bộ."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai, bài không cho rằng nỗ lực cá nhân kém quan trọng hơn đào tạo."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "These outcomes take time and cannot be attributed entirely to mentoring, since training and personal effort also matter."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 5,
+            "question_type": "inference",
+            "question_text": "What is most likely to happen in a workplace with a well-supported mentoring relationship?",
+            "options": {
+              "A": "Employees will depend on mentors for every workplace decision.",
+              "B": "Experienced employees will no longer need to learn new skills.",
+              "C": "New employees will avoid communicating with other departments.",
+              "D": "Employees may become more willing to seek information and take responsibility."
+            },
+            "correct_answer": "D",
+            "explanation_vi": "Một mối quan hệ mentoring được hỗ trợ tốt có thể giúp nhân viên mới tự tin tìm kiếm thông tin, hợp tác và chịu trách nhiệm hơn.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai, mentoring hiệu quả phải khuyến khích tính độc lập chứ không tạo sự phụ thuộc."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai, đoạn cuối cho biết nhân viên giàu kinh nghiệm vẫn có thể trở thành người học tích cực."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai, một kết quả mong đợi là hợp tác giữa các phòng ban tốt hơn."
+              },
+              "D": {
+                "is_correct": true,
+                "explanation_vi": "Đúng, đây là những kết quả được nêu trực tiếp khi đánh giá các chương trình mentoring."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "Managers may look at whether new employees become comfortable seeking information, cooperating across departments, and taking responsibility for their work."
+            },
+            "placement": null
+          }
+        ]
+      },
+      "calls": [
+        {
+          "input_tokens": 2037,
+          "output_tokens": 2094,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 62,
+          "estimated_cost_usd": 0.0029202,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.2,
+              "cached": 0.02,
+              "output": 1.2
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0b5ca072ac5c7d65016aae9ceb185887d08770db82da4a3f1b"
+          },
+          "user_id": null,
+          "operation": "reading_generate",
+          "model": "gpt-5.6-luna",
+          "reasoning_effort": "low",
+          "latency_ms": 15617,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "efccfe5e-6fe4-4777-98b2-b20b00fc3980",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 2937,
+          "output_tokens": 496,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 71,
+          "estimated_cost_usd": 0.00443475,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_046bbd1f91cf56f7016aae9cf8eae487d0bdded2c4c89fe473"
+          },
+          "user_id": null,
+          "operation": "question_quality",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 3714,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "efccfe5e-6fe4-4777-98b2-b20b00fc3980",
+          "category": "evaluation"
+        }
+      ],
+      "cost_usd": 0.007354950000000001,
+      "latency_ms": 19331
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "case": "attitude-education",
+      "reviewer": "gpt-5.4-mini-2026-03-17",
+      "valid": true,
+      "review": {
+        "generator_version": "3.0.0",
+        "validator_version": "3.0.0",
+        "generation_model": "gpt-5.4-mini-2026-03-17",
+        "review_model": "gpt-5.4-mini-2026-03-17",
+        "format_valid": true,
+        "quality_valid": true,
+        "quality_method": "independent_llm_review",
+        "validation_notes": [
+          "This is a coherent reading passage with 5 attitude questions, which fits the stated practice context.",
+          "Each item has one clear best answer supported by the passage and plausible distractors.",
+          "No specialist knowledge is required.",
+          "No contradictory instructions or invalid question type issues detected."
+        ],
+        "quality_review": {
+          "accepted": true,
+          "confidence": 0.93,
+          "realistic_context": true,
+          "no_specialist_knowledge": true,
+          "no_embedded_answer": true,
+          "requirements_consistent": true,
+          "notes": [
+            "This is a coherent reading passage with 5 attitude questions, which fits the stated practice context.",
+            "Each item has one clear best answer supported by the passage and plausible distractors.",
+            "No specialist knowledge is required.",
+            "No contradictory instructions or invalid question type issues detected."
+          ],
+          "reading_items": [
+            {
+              "question_number": 1,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "A",
+              "confidence": 0.98,
+              "notes": "Paragraph 1 presents benefits of digital tools but clearly qualifies them with limitations."
+            },
+            {
+              "question_number": 2,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.95,
+              "notes": "Paragraph 2 says the approach can be effective, but depends on internet access and student understanding."
+            },
+            {
+              "question_number": 3,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "A",
+              "confidence": 0.97,
+              "notes": "Paragraph 3 is positive about off-screen tasks while noting assessment difficulties."
+            },
+            {
+              "question_number": 4,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "C",
+              "confidence": 0.97,
+              "notes": "Paragraph 4 explicitly rejects choosing between digital and traditional homework in favor of a goal-based approach."
+            },
+            {
+              "question_number": 5,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "A",
+              "confidence": 0.96,
+              "notes": "Overall conclusion is practical and balanced, focusing on usefulness, information value, and manageability."
+            }
+          ]
+        }
+      },
+      "passage": {
+        "title": "Rethinking Homework in the Digital Classroom",
+        "topic": "education",
+        "test_profile": "VSTEP_3_5",
+        "internal_difficulty_band": "MODERATE",
+        "paragraphs": [
+          {
+            "id": "p1",
+            "text": "As digital tools become common in schools, teachers are reconsidering the role of homework. Online platforms can make assignments easier to distribute and allow students to receive quick feedback. They can also help teachers notice which questions cause difficulty. However, technology does not automatically make homework more useful. An activity placed online may still be repetitive, confusing, or unrelated to what students need to learn."
+          },
+          {
+            "id": "p2",
+            "text": "Some teachers now use short online tasks before a lesson. Students may watch a brief explanation, answer a few questions, or collect an example from daily life. The teacher then uses their responses to adjust the lesson. This approach can be effective because it gives students a reason to prepare and gives teachers information in advance. Nevertheless, it depends on reliable internet access and on students understanding what they are expected to do."
+          },
+          {
+            "id": "p3",
+            "text": "Other educators prefer assignments that require students to work away from a screen. A student might interview a family member about a local tradition, measure objects at home, or explain a scientific idea in a notebook. Such tasks can connect school subjects with ordinary experience. They are not necessarily easier to assess, however, since students may receive different kinds of help at home. For this reason, teachers often combine these activities with a short in-class discussion."
+          },
+          {
+            "id": "p4",
+            "text": "The most promising approach is therefore not to choose between digital and traditional homework. Instead, teachers can select the format according to the learning goal. An online quiz may suit factual review, while a conversation or practical task may better develop communication and observation. Good homework is not defined by its appearance but by whether it helps students think, gives teachers useful information, and remains manageable for learners with different circumstances."
+          }
+        ],
+        "questions": [
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 1,
+            "question_type": "attitude",
+            "question_text": "What is the author’s attitude toward the increasing use of digital tools for homework?",
+            "options": {
+              "A": "Generally supportive, but aware that digital tools have limitations",
+              "B": "Strongly opposed because digital homework is always repetitive",
+              "C": "Indifferent because technology has no effect on learning",
+              "D": "Unreservedly enthusiastic because online tasks solve teachers’ problems"
+            },
+            "correct_answer": "A",
+            "explanation_vi": "Tác giả nhìn nhận tích cực nhưng có điều kiện: công cụ số có ích cho việc giao bài và phản hồi, song không tự động làm bài tập tốt hơn.",
+            "option_explanations": {
+              "A": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Bài viết nêu các lợi ích của nền tảng trực tuyến nhưng cũng cảnh báo rằng công nghệ không bảo đảm bài tập hữu ích."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả chỉ nói bài tập trực tuyến có thể lặp lại hoặc khó hiểu, không nói chúng luôn như vậy."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả thừa nhận công nghệ có thể hỗ trợ phản hồi và giúp giáo viên phát hiện khó khăn."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả không hoàn toàn nhiệt tình mà nhấn mạnh các giới hạn và điều kiện cần thiết."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p1",
+              "quote": "Online platforms can make assignments easier to distribute and allow students to receive quick feedback. They can also help teachers notice which questions cause difficulty. However, technology does not automatically make homework more useful."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 2,
+            "question_type": "attitude",
+            "question_text": "How does the author view short online tasks completed before a lesson?",
+            "options": {
+              "A": "As an outdated method that should be replaced by classroom teaching",
+              "B": "As a potentially useful method whose success depends on certain conditions",
+              "C": "As a completely reliable way to measure every student’s preparation",
+              "D": "As an unfair method because students should never prepare at home"
+            },
+            "correct_answer": "B",
+            "explanation_vi": "Tác giả đánh giá các nhiệm vụ trực tuyến ngắn là có thể hiệu quả vì hỗ trợ học sinh và giáo viên, nhưng cũng nêu sự phụ thuộc vào internet và hướng dẫn rõ ràng.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả trình bày phương pháp này như một cách có thể hiệu quả, không phải phương pháp lỗi thời."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Từ “can be effective” đi kèm các điều kiện về kết nối internet và việc học sinh hiểu yêu cầu."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả không cho rằng phương pháp này hoàn toàn đáng tin cậy; ngược lại, ông/bà nêu rõ các điều kiện hạn chế."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài viết không phản đối việc chuẩn bị ở nhà mà chỉ phân tích một hình thức chuẩn bị."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p2",
+              "quote": "This approach can be effective because it gives students a reason to prepare and gives teachers information in advance. Nevertheless, it depends on reliable internet access and on students understanding what they are expected to do."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 3,
+            "question_type": "attitude",
+            "question_text": "What attitude does the author express toward homework activities conducted away from a screen?",
+            "options": {
+              "A": "Cautiously positive, while recognizing difficulties in assessing them",
+              "B": "Entirely negative because they do not involve modern technology",
+              "C": "Highly critical because family members should not assist students",
+              "D": "Completely confident that they are easier to grade than online quizzes"
+            },
+            "correct_answer": "A",
+            "explanation_vi": "Tác giả đánh giá tích cực các hoạt động ngoài màn hình vì chúng gắn việc học với đời sống, nhưng thừa nhận việc chấm điểm có thể khó hơn.",
+            "option_explanations": {
+              "A": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Các nhiệm vụ được mô tả là có khả năng kết nối môn học với trải nghiệm đời thường, nhưng việc đánh giá chúng không đơn giản."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả không phản đối vì thiếu công nghệ; bài viết còn nêu rõ lợi ích của các hoạt động này."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả không chỉ trích sự hỗ trợ của gia đình mà lo ngại học sinh có thể nhận những mức hỗ trợ khác nhau."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả nói ngược lại: những nhiệm vụ này không nhất thiết dễ đánh giá."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p3",
+              "quote": "Such tasks can connect school subjects with ordinary experience. They are not necessarily easier to assess, however, since students may receive different kinds of help at home."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 4,
+            "question_type": "attitude",
+            "question_text": "How does the author regard the idea that teachers should choose either digital or traditional homework?",
+            "options": {
+              "A": "As a sensible rule that makes homework simpler to manage",
+              "B": "As an attractive theory, although it is rarely possible in practice",
+              "C": "As an unnecessarily narrow choice that should be replaced by a goal-based approach",
+              "D": "As a necessary decision because the two formats cannot support the same learners"
+            },
+            "correct_answer": "C",
+            "explanation_vi": "Tác giả bác bỏ việc phải chọn một trong hai hình thức và ủng hộ lựa chọn dựa trên mục tiêu học tập.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả không coi việc chọn một hình thức duy nhất là quy tắc hợp lý."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài viết không xem đây là một lý thuyết hấp dẫn; tác giả trực tiếp cho rằng không nên lựa chọn theo cách đó."
+              },
+              "C": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Kết luận nêu rõ cách hứa hẹn nhất là không chọn giữa hai loại mà chọn định dạng theo mục tiêu học tập."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả cho rằng cả hai hình thức đều có thể phù hợp với các mục tiêu khác nhau, không phải không thể hỗ trợ cùng người học."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "The most promising approach is therefore not to choose between digital and traditional homework. Instead, teachers can select the format according to the learning goal."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "ADVANCED",
+            "question_number": 5,
+            "question_type": "attitude",
+            "question_text": "What is the author’s overall attitude toward the search for “good homework”?",
+            "options": {
+              "A": "Practical and balanced, emphasizing usefulness over appearance",
+              "B": "Suspicious, suggesting that homework is generally harmful to learners",
+              "C": "Idealistic, assuming that one perfect format will work for every student",
+              "D": "Dismissive, implying that teachers cannot meaningfully improve assignments"
+            },
+            "correct_answer": "A",
+            "explanation_vi": "Tác giả có thái độ thực tế và cân bằng: không tuyệt đối hóa hình thức nào mà tập trung vào mục tiêu, thông tin hữu ích và khả năng tiếp cận của người học.",
+            "option_explanations": {
+              "A": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Kết luận đánh giá bài tập dựa trên tác dụng thực tế và khả năng phù hợp với hoàn cảnh khác nhau, không dựa trên hình thức."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả không cho rằng bài tập nói chung có hại; bài viết phân tích cách thiết kế bài tập hiệu quả hơn."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả không tìm kiếm một hình thức hoàn hảo mà đề xuất thay đổi định dạng theo mục tiêu."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả tin giáo viên có thể lựa chọn và điều chỉnh bài tập để hỗ trợ việc học."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "Good homework is not defined by its appearance but by whether it helps students think, gives teachers useful information, and remains manageable for learners with different circumstances."
+            },
+            "placement": null
+          }
+        ]
+      },
+      "calls": [
+        {
+          "input_tokens": 2037,
+          "output_tokens": 2267,
+          "cached_input_tokens": 1819,
+          "reasoning_tokens": 67,
+          "estimated_cost_usd": 0.00280038,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.2,
+              "cached": 0.02,
+              "output": 1.2
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_09c63db2f5d327e1016aae9cfc9a2487d097afdd7ce2353c4e"
+          },
+          "user_id": null,
+          "operation": "reading_generate",
+          "model": "gpt-5.6-luna",
+          "reasoning_effort": "low",
+          "latency_ms": 13965,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "dc9cb8db-d995-47a3-8d84-2953efea46f4",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3099,
+          "output_tokens": 510,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 97,
+          "estimated_cost_usd": 0.00461925,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0685da990c6a0474016aae9d0aba1c87d0af1fd46e7acc943d"
+          },
+          "user_id": null,
+          "operation": "question_quality",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 3916,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "dc9cb8db-d995-47a3-8d84-2953efea46f4",
+          "category": "evaluation"
+        }
+      ],
+      "cost_usd": 0.00741963,
+      "latency_ms": 17881
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "reasoning_effort": "low",
+      "case": "mixed-environment",
+      "reviewer": "gpt-5.4-mini-2026-03-17",
+      "valid": true,
+      "review": {
+        "generator_version": "3.0.0",
+        "validator_version": "3.0.0",
+        "generation_model": "gpt-5.4-mini-2026-03-17",
+        "review_model": "gpt-5.4-mini-2026-03-17",
+        "format_valid": true,
+        "quality_valid": true,
+        "quality_method": "independent_llm_review",
+        "validation_notes": [
+          "The passage is coherent, realistic, and accessible without specialist knowledge.",
+          "All 10 questions have one clear best answer and the distractors are plausible and mutually exclusive.",
+          "No embedded answer leaks were found in the candidate-visible text beyond normal passage evidence.",
+          "The task matches reading practice format; no writing/speaking/chart issues apply."
+        ],
+        "quality_review": {
+          "accepted": true,
+          "confidence": 0.95,
+          "realistic_context": true,
+          "no_specialist_knowledge": true,
+          "no_embedded_answer": true,
+          "requirements_consistent": true,
+          "notes": [
+            "The passage is coherent, realistic, and accessible without specialist knowledge.",
+            "All 10 questions have one clear best answer and the distractors are plausible and mutually exclusive.",
+            "No embedded answer leaks were found in the candidate-visible text beyond normal passage evidence.",
+            "The task matches reading practice format; no writing/speaking/chart issues apply."
+          ],
+          "reading_items": [
+            {
+              "question_number": 1,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.97,
+              "notes": "Main idea matches the passage’s broad argument about benefits plus careful long-term planning."
+            },
+            {
+              "question_number": 2,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "A",
+              "confidence": 0.99,
+              "notes": "Directly stated in paragraph 1."
+            },
+            {
+              "question_number": 3,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.95,
+              "notes": "Inference is well-supported by the reduced effectiveness of wetlands covered with concrete."
+            },
+            {
+              "question_number": 4,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "C",
+              "confidence": 0.98,
+              "notes": "Vocabulary in context is clear."
+            },
+            {
+              "question_number": 5,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "D",
+              "confidence": 0.96,
+              "notes": "Reference word clearly points to the restoration actions just listed."
+            },
+            {
+              "question_number": 6,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "A",
+              "confidence": 0.94,
+              "notes": "Purpose question is clear and supported by the accessibility discussion in paragraph 3."
+            },
+            {
+              "question_number": 7,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "D",
+              "confidence": 0.98,
+              "notes": "Negative detail is well-formed; option D is the only one not mentioned."
+            },
+            {
+              "question_number": 8,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.98,
+              "notes": "Sentence meaning is unambiguous."
+            },
+            {
+              "question_number": 9,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "C",
+              "confidence": 0.95,
+              "notes": "Organization matches the paragraph progression."
+            },
+            {
+              "question_number": 10,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "A",
+              "confidence": 0.96,
+              "notes": "Tone is balanced/cautiously supportive rather than extreme."
+            }
+          ]
+        }
+      },
+      "passage": {
+        "title": "Restoring Urban Wetlands",
+        "topic": "environment",
+        "test_profile": "VSTEP_3_5",
+        "internal_difficulty_band": "MODERATE",
+        "paragraphs": [
+          {
+            "id": "p1",
+            "text": "For much of the twentieth century, wetlands inside or near cities were treated as useless land. They were drained for roads, factories, and housing, partly because planners associated standing water with disease and unpleasant smells. Today, however, many cities are reconsidering this approach. Urban wetlands can absorb rainwater, support wildlife, reduce heat, and provide residents with places to walk and observe nature. Their value is not simply decorative: when heavy rain falls, the plants and soft soil of a wetland can temporarily hold water that might otherwise flood streets and buildings."
+          },
+          {
+            "id": "p2",
+            "text": "The flood-control function of a wetland depends on its condition. A healthy wetland contains layers of plants, open water, and waterlogged soil, each slowing the movement of water in a different way. If people cover too much of the area with concrete, or if polluted water enters it, this system becomes less effective. Restoration therefore involves more than removing rubbish. Engineers may reshape channels, reconnect a wetland to a river, and create shallow areas where native plants can grow. These changes are usually designed to work with natural processes rather than replace them."
+          },
+          {
+            "id": "p3",
+            "text": "Wetlands also influence the temperature of urban neighborhoods. Water releases heat slowly, while vegetation provides shade and cools the air through evaporation. As a result, a restored wetland may make nearby streets more comfortable during a heat wave. This benefit is not distributed equally, however. A wetland surrounded by busy roads may offer little relief to residents who cannot safely reach it. For that reason, some projects include footpaths, shaded entrances, and public transport links. Access is considered part of environmental planning, not an optional extra."
+          },
+          {
+            "id": "p4",
+            "text": "Restoration can bring difficulties as well as benefits. New ponds may attract insects, and poorly maintained areas can become clogged with invasive plants. Nearby residents may also worry that a project will increase mosquitoes or reduce land available for construction. These concerns should not simply be dismissed. Regular monitoring, careful water circulation, and clear information can reduce some risks, while early consultation can reveal practical problems before construction begins. In this way, community involvement improves not only public support but also the design itself."
+          },
+          {
+            "id": "p5",
+            "text": "The success of an urban wetland should therefore be judged over time and by several measures. Scientists may record water levels, plant diversity, and the number of animal species, while local authorities may examine flood damage and maintenance costs. Residents’ experiences matter too: a wetland that performs well ecologically but feels unsafe or inaccessible will not serve the whole community. Urban wetland restoration is consequently neither a quick engineering fix nor a purely recreational project. It is a long-term attempt to connect natural processes with the practical needs of city life."
+          }
+        ],
+        "questions": [
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 1,
+            "question_type": "main_idea",
+            "question_text": "What is the main idea of the passage?",
+            "options": {
+              "A": "Urban wetlands are mainly valuable because they provide attractive places for recreation.",
+              "B": "Urban wetland restoration can provide several environmental and social benefits, but it requires careful, long-term planning.",
+              "C": "City planners should replace concrete roads with wetlands whenever heavy rain is expected.",
+              "D": "The main purpose of restoring wetlands is to protect native plants from invasive species."
+            },
+            "correct_answer": "B",
+            "explanation_vi": "B đúng vì toàn bài trình bày nhiều lợi ích của đất ngập nước đô thị đồng thời nhấn mạnh các điều kiện, rủi ro và việc đánh giá lâu dài.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì giải trí chỉ là một phần nhỏ; bài còn nói về lũ lụt, nhiệt độ, sinh thái và khả năng tiếp cận."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng vì bao quát cả lợi ích môi trường-xã hội và yêu cầu quy hoạch, giám sát lâu dài."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài không đề xuất thay thế đường phố bất cứ khi nào có mưa lớn."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì kiểm soát cây xâm lấn chỉ là một khó khăn trong quá trình phục hồi."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p5",
+              "quote": "Urban wetland restoration is consequently neither a quick engineering fix nor a purely recreational project."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "ACCESSIBLE",
+            "question_number": 2,
+            "question_type": "detail",
+            "question_text": "According to paragraph 1, what can wetland plants and soft soil do during heavy rain?",
+            "options": {
+              "A": "Temporarily hold water",
+              "B": "Remove all unpleasant smells",
+              "C": "Prevent roads from being built",
+              "D": "Increase the speed of flowing water"
+            },
+            "correct_answer": "A",
+            "explanation_vi": "A đúng vì đoạn 1 nói rõ cây và đất mềm có thể tạm thời giữ nước.",
+            "option_explanations": {
+              "A": {
+                "is_correct": true,
+                "explanation_vi": "Đúng, đây là chức năng được nêu trực tiếp trong đoạn 1."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai; mùi khó chịu được nhắc như định kiến cũ, không phải chức năng của cây."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bài không nói đất ngập nước ngăn việc xây đường."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai; hệ thống này làm nước di chuyển chậm hơn."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p1",
+              "quote": "the plants and soft soil of a wetland can temporarily hold water that might otherwise flood streets and buildings."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 3,
+            "question_type": "inference",
+            "question_text": "What can be inferred about a wetland covered extensively with concrete?",
+            "options": {
+              "A": "It will probably attract more kinds of wildlife.",
+              "B": "It may lose part of its ability to control flooding.",
+              "C": "It will become easier for native plants to grow.",
+              "D": "It will provide greater cooling through evaporation."
+            },
+            "correct_answer": "B",
+            "explanation_vi": "B đúng vì bê tông làm mất các lớp đất, cây và vùng nước cần thiết để làm chậm dòng nước.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bê tông thường làm giảm môi trường sống, không làm tăng đa dạng động vật."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng; đoạn 2 cho biết phủ quá nhiều bê tông khiến hệ thống kém hiệu quả."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bê tông làm giảm không gian cho cây bản địa."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bê tông không tạo ra sự bay hơi của thực vật và nước."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p2",
+              "quote": "If people cover too much of the area with concrete, or if polluted water enters it, this system becomes less effective."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 4,
+            "question_type": "vocabulary",
+            "question_text": "The word “distributed” in paragraph 3 is closest in meaning to",
+            "options": {
+              "A": "measured",
+              "B": "hidden",
+              "C": "shared or spread",
+              "D": "repaired"
+            },
+            "correct_answer": "C",
+            "explanation_vi": "Trong ngữ cảnh, lợi ích không được phân bố đồng đều giữa các cư dân, nên “distributed” nghĩa là được chia sẻ hoặc phân bổ.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai; “measured” là được đo lường, không phù hợp với lợi ích."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai; “hidden” là bị che giấu, không có nghĩa trong câu."
+              },
+              "C": {
+                "is_correct": true,
+                "explanation_vi": "Đúng; lợi ích được phân bổ hoặc trải rộng giữa các nhóm người."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai; “repaired” là được sửa chữa."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p3",
+              "quote": "This benefit is not distributed equally, however."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 5,
+            "question_type": "reference",
+            "question_text": "In paragraph 2, the word “These” in “These changes are usually designed...” refers to",
+            "options": {
+              "A": "layers of plants and open water",
+              "B": "polluted water and concrete areas",
+              "C": "the problems caused by standing water",
+              "D": "the engineering changes made during restoration"
+            },
+            "correct_answer": "D",
+            "explanation_vi": "“These changes” chỉ các hành động như định hình lại kênh, nối lại với sông và tạo vùng nước nông vừa được nêu.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai; đây là các thành phần của vùng đất ngập nước, không phải các thay đổi."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai; đây là những yếu tố làm hệ thống kém hiệu quả."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai; các vấn đề này thuộc quan niệm cũ, không phải đối tượng của “These”."
+              },
+              "D": {
+                "is_correct": true,
+                "explanation_vi": "Đúng; đại từ chỉ các thay đổi kỹ thuật được liệt kê ngay trước đó."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p2",
+              "quote": "Engineers may reshape channels, reconnect a wetland to a river, and create shallow areas where native plants can grow. These changes are usually designed to work with natural processes rather than replace them."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 6,
+            "question_type": "purpose",
+            "question_text": "Why does the author mention footpaths, shaded entrances, and public transport links in paragraph 3?",
+            "options": {
+              "A": "To show how wetlands can be made more accessible to local residents",
+              "B": "To explain why wetlands are usually surrounded by busy roads",
+              "C": "To prove that transport links cool the air through evaporation",
+              "D": "To suggest that recreation is more important than flood control"
+            },
+            "correct_answer": "A",
+            "explanation_vi": "Các hạng mục này được nêu để minh họa cách dự án giúp người dân tiếp cận lợi ích làm mát của đất ngập nước.",
+            "option_explanations": {
+              "A": {
+                "is_correct": true,
+                "explanation_vi": "Đúng; chúng giải quyết vấn đề cư dân không thể đến khu vực này an toàn."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai; đoạn không nói các hạng mục này gây ra đường đông."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bay hơi liên quan đến nước và thực vật, không phải giao thông công cộng."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai; tác giả không đặt giải trí cao hơn kiểm soát lũ."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p3",
+              "quote": "For that reason, some projects include footpaths, shaded entrances, and public transport links."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "ACCESSIBLE",
+            "question_number": 7,
+            "question_type": "negative_detail",
+            "question_text": "According to the passage, all of the following are mentioned as possible difficulties of restoration EXCEPT",
+            "options": {
+              "A": "invasive plants",
+              "B": "insects around new ponds",
+              "C": "opposition from nearby residents",
+              "D": "a permanent loss of water in the wetland"
+            },
+            "correct_answer": "D",
+            "explanation_vi": "D đúng vì bài không nói phục hồi gây mất nước vĩnh viễn; ba lựa chọn còn lại đều được nêu ở đoạn 4.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì cây xâm lấn được nêu trực tiếp là vấn đề bảo trì."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì côn trùng quanh ao mới được đề cập."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì cư dân có thể lo ngại về muỗi hoặc mất đất xây dựng."
+              },
+              "D": {
+                "is_correct": true,
+                "explanation_vi": "Đúng; không có chi tiết nào nói việc phục hồi làm mất nước vĩnh viễn."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "New ponds may attract insects, and poorly maintained areas can become clogged with invasive plants."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 8,
+            "question_type": "sentence_meaning",
+            "question_text": "What does the sentence “These concerns should not simply be dismissed” in paragraph 4 mean?",
+            "options": {
+              "A": "Residents should be required to solve every problem themselves.",
+              "B": "Possible negative effects should be considered seriously rather than ignored.",
+              "C": "Restoration projects should always be cancelled when residents complain.",
+              "D": "Scientists have already proved that the concerns are completely false."
+            },
+            "correct_answer": "B",
+            "explanation_vi": "Câu này có nghĩa là các lo ngại về muỗi, cây xâm lấn hay đất xây dựng cần được xem xét nghiêm túc, không bị gạt bỏ.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai; câu không giao toàn bộ trách nhiệm cho cư dân."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng; “not dismissed” nghĩa là không phớt lờ mà cần xem xét và xử lý."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai; tác giả đề xuất giám sát và tham vấn, không phải luôn hủy dự án."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai; tác giả thừa nhận các lo ngại có thể có cơ sở."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "These concerns should not simply be dismissed."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 9,
+            "question_type": "organization",
+            "question_text": "How is the passage mainly organized?",
+            "options": {
+              "A": "It compares two cities and then recommends one of them.",
+              "B": "It describes the history of wetlands, followed by a fictional future prediction.",
+              "C": "It introduces benefits, explains conditions and difficulties, and ends with ways to judge success.",
+              "D": "It lists several engineering machines in order of increasing cost."
+            },
+            "correct_answer": "C",
+            "explanation_vi": "Bài bắt đầu bằng giá trị và lợi ích, sau đó trình bày điều kiện phục hồi, các khó khăn, rồi kết thúc bằng tiêu chí đánh giá.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bài không so sánh hai thành phố."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bài không đưa ra dự đoán hư cấu về tương lai."
+              },
+              "C": {
+                "is_correct": true,
+                "explanation_vi": "Đúng; đây là trình tự phát triển ý của năm đoạn."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bài không liệt kê máy móc hay chi phí."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p5",
+              "quote": "The success of an urban wetland should therefore be judged over time and by several measures."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "ADVANCED",
+            "question_number": 10,
+            "question_type": "attitude",
+            "question_text": "Which best describes the author’s attitude toward urban wetland restoration?",
+            "options": {
+              "A": "Cautiously supportive, recognizing benefits while emphasizing limitations and practical concerns",
+              "B": "Entirely negative, because wetlands cannot be maintained in cities",
+              "C": "Uncritically enthusiastic, since restoration solves all urban environmental problems",
+              "D": "Indifferent, because the author focuses only on historical planning decisions"
+            },
+            "correct_answer": "A",
+            "explanation_vi": "Tác giả ủng hộ có điều kiện: nêu nhiều lợi ích nhưng cũng thừa nhận rủi ro, vấn đề tiếp cận, bảo trì và nhu cầu đánh giá dài hạn.",
+            "option_explanations": {
+              "A": {
+                "is_correct": true,
+                "explanation_vi": "Đúng; giọng điệu cân bằng giữa lợi ích và các giới hạn thực tế."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai; bài nêu rõ nhiều lợi ích và cách giảm rủi ro."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai; tác giả không cho rằng phục hồi giải quyết mọi vấn đề."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai; tác giả quan tâm rõ ràng đến hiệu quả hiện tại và tương lai."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "Restoration can bring difficulties as well as benefits."
+            },
+            "placement": null
+          }
+        ]
+      },
+      "calls": [
+        {
+          "input_tokens": 2034,
+          "output_tokens": 3577,
+          "cached_input_tokens": 1819,
+          "reasoning_tokens": 65,
+          "estimated_cost_usd": 0.00437178,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.2,
+              "cached": 0.02,
+              "output": 1.2
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0adad1c532df75ed016aae9d0eac7087d083418c0c41c1b2bd"
+          },
+          "user_id": null,
+          "operation": "reading_generate",
+          "model": "gpt-5.6-luna",
+          "reasoning_effort": "low",
+          "latency_ms": 21299,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "fb36de9a-03c6-4cf6-aa8f-da4d857dc34f",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 4623,
+          "output_tokens": 711,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 40,
+          "estimated_cost_usd": 0.00666675,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0d46e3325e0b0243016aae9d23f31487d0b6d79f2d05c09034"
+          },
+          "user_id": null,
+          "operation": "question_quality",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 4777,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "fb36de9a-03c6-4cf6-aa8f-da4d857dc34f",
+          "category": "evaluation"
+        }
+      ],
+      "cost_usd": 0.01103853,
+      "latency_ms": 26076
+    },
+    {
+      "model": "gpt-5.4-mini-2026-03-17",
+      "reasoning_effort": "low",
+      "case": "inference-work",
+      "reviewer": "gpt-5.4-mini-2026-03-17",
+      "valid": true,
+      "review": {
+        "generator_version": "3.0.0",
+        "validator_version": "3.0.0",
+        "generation_model": "gpt-5.4-mini-2026-03-17",
+        "review_model": "gpt-5.4-mini-2026-03-17",
+        "format_valid": true,
+        "quality_valid": true,
+        "quality_method": "independent_llm_review",
+        "validation_notes": [
+          "Passage is clear, realistic, and accessible without specialist knowledge.",
+          "Practice context is valid: five inference questions only; this is acceptable for targeted practice.",
+          "Each question has one best answer supported by the passage, and distractors are plausible enough.",
+          "No contradictory instructions or embedded answers were detected.",
+          "Minor note: question 4 and 5 are somewhat broad, but still answerable from the final paragraph and overall passage."
+        ],
+        "quality_review": {
+          "accepted": true,
+          "confidence": 0.94,
+          "realistic_context": true,
+          "no_specialist_knowledge": true,
+          "no_embedded_answer": true,
+          "requirements_consistent": true,
+          "notes": [
+            "Passage is clear, realistic, and accessible without specialist knowledge.",
+            "Practice context is valid: five inference questions only; this is acceptable for targeted practice.",
+            "Each question has one best answer supported by the passage, and distractors are plausible enough.",
+            "No contradictory instructions or embedded answers were detected.",
+            "Minor note: question 4 and 5 are somewhat broad, but still answerable from the final paragraph and overall passage."
+          ],
+          "reading_items": [
+            {
+              "question_number": 1,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "A",
+              "confidence": 0.98,
+              "notes": "Planning the first 20 minutes is linked to feeling less rushed and the morning feeling more manageable; A is the best inference."
+            },
+            {
+              "question_number": 2,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.98,
+              "notes": "The passage explicitly says the mind returns to the task with more focus after a brief break."
+            },
+            {
+              "question_number": 3,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "C",
+              "confidence": 0.97,
+              "notes": "One shared update place reduces confusion and helps accuracy; C matches both points."
+            },
+            {
+              "question_number": 4,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.93,
+              "notes": "The final paragraph clearly frames the changes as modest but cumulatively helpful."
+            },
+            {
+              "question_number": 5,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "C",
+              "confidence": 0.96,
+              "notes": "This is the best overall conclusion from the passage's repeated emphasis on simple habits easing work demands."
+            }
+          ]
+        }
+      },
+      "passage": {
+        "title": "How Small Changes Improve a Workday",
+        "topic": "work",
+        "test_profile": "VSTEP_3_5",
+        "internal_difficulty_band": "MODERATE",
+        "paragraphs": [
+          {
+            "id": "p1",
+            "text": "Many people think a better workday begins with a louder alarm or a stronger cup of coffee, but small habits often matter more than dramatic changes. In several offices, workers who start by planning the first 20 minutes of the day usually feel less rushed. They are not doing extra work; instead, they are deciding what deserves attention first. This simple habit can reduce the time spent switching between emails, messages, and unfinished tasks. When people know the first step, the rest of the morning may feel more manageable."
+          },
+          {
+            "id": "p2",
+            "text": "Breaks also shape how people perform. A short pause away from the screen can help a person notice mistakes that were easy to miss a few minutes earlier. Some employees avoid breaks because they worry about seeming unproductive, yet constant concentration is not always efficient. After a brief walk, stretch, or quiet moment, the mind often returns to the task with more focus. The benefit is not that the break itself solves the job, but that it gives the brain a chance to recover from fatigue."
+          },
+          {
+            "id": "p3",
+            "text": "Workplaces that improve communication often do so in practical ways. For example, teams may agree on one place to share updates, rather than sending the same information in several chat groups. This does not make communication faster only because there are fewer messages; it also reduces confusion about which version is final. When instructions are clear, workers spend less time checking details and more time completing tasks correctly. In this way, order in communication can support both speed and accuracy."
+          },
+          {
+            "id": "p4",
+            "text": "These changes are usually modest, but they can have a noticeable effect over a week. A worker who plans the morning, takes a short break, and receives clearer messages may still face busy days and unexpected problems. However, the day may end with less stress and fewer unfinished tasks. The lesson is not that simple habits remove all pressure from work. Rather, they make demanding schedules easier to handle by preventing small problems from growing into bigger ones."
+          }
+        ],
+        "questions": [
+          {
+            "internal_difficulty_band": "ACCESSIBLE",
+            "question_number": 1,
+            "question_type": "inference",
+            "question_text": "What can be inferred about workers who plan the first 20 minutes of their day?",
+            "options": {
+              "A": "They are likely to feel more in control of their morning tasks.",
+              "B": "They always finish more work than other employees.",
+              "C": "They usually avoid using email during the whole day.",
+              "D": "They need a longer workday to complete the same tasks."
+            },
+            "correct_answer": "A",
+            "explanation_vi": "Đoạn 1 cho thấy việc lên kế hoạch cho 20 phút đầu giúp người lao động bớt vội và biết việc nào cần làm trước, nên có thể suy ra họ cảm thấy kiểm soát buổi sáng tốt hơn.",
+            "option_explanations": {
+              "A": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Bài đọc nói họ biết bước đầu tiên và cảm thấy buổi sáng “more manageable,” nên suy ra họ thấy mình kiểm soát công việc tốt hơn."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc không nói họ luôn hoàn thành nhiều việc hơn người khác, chỉ nói họ bớt rối và bớt chuyển qua lại giữa các việc."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Đoạn văn có nhắc đến email và tin nhắn, nhưng không nói họ tránh email cả ngày."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Không có thông tin nào cho thấy họ cần làm việc lâu hơn để xong việc như cũ."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p1",
+              "quote": "When people know the first step, the rest of the morning may feel more manageable."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 2,
+            "question_type": "inference",
+            "question_text": "What does the passage suggest about short breaks during work?",
+            "options": {
+              "A": "They are useful mainly because they make the screen easier to see.",
+              "B": "They can help workers return to tasks with better focus.",
+              "C": "They are necessary only for workers who do physical jobs.",
+              "D": "They usually waste time without improving performance."
+            },
+            "correct_answer": "B",
+            "explanation_vi": "Đoạn 2 nêu rằng sau một nghỉ ngắn, đầu óc thường quay lại công việc với sự tập trung tốt hơn. Vì vậy có thể suy ra nghỉ ngắn giúp làm việc hiệu quả hơn khi quay lại.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc không nói nghỉ ngắn giúp nhìn màn hình rõ hơn."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Đoạn 2 nói rõ sau khi nghỉ ngắn, tâm trí thường trở lại nhiệm vụ với “more focus.”"
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Đoạn văn áp dụng cho nhân viên nói chung, không chỉ người làm công việc chân tay."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Tác giả mô tả nghỉ ngắn là hữu ích, không phải lãng phí thời gian."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p2",
+              "quote": "After a brief walk, stretch, or quiet moment, the mind often returns to the task with more focus."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 3,
+            "question_type": "inference",
+            "question_text": "Why does using one place for team updates help a workplace?",
+            "options": {
+              "A": "It makes employees spend more time checking messages.",
+              "B": "It encourages workers to write longer instructions.",
+              "C": "It reduces confusion and helps people work more accurately.",
+              "D": "It allows teams to avoid planning their tasks."
+            },
+            "correct_answer": "C",
+            "explanation_vi": "Đoạn 3 cho biết một nơi duy nhất để chia sẻ cập nhật giúp giảm nhầm lẫn về phiên bản cuối cùng, từ đó tiết kiệm thời gian kiểm tra và tăng độ chính xác. Vì vậy đáp án C là suy ra hợp lý nhất.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc nói cách này làm giảm việc kiểm tra, không làm tăng."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Không có ý nào cho thấy nó khiến hướng dẫn dài hơn."
+              },
+              "C": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Đoạn văn nói rõ nó giảm nhầm lẫn và giúp công việc được hoàn thành đúng hơn."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc không nói việc này thay thế cho kế hoạch công việc."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p3",
+              "quote": "When instructions are clear, workers spend less time checking details and more time completing tasks correctly."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "ADVANCED",
+            "question_number": 4,
+            "question_type": "inference",
+            "question_text": "What is implied about the changes described in the passage?",
+            "options": {
+              "A": "They solve every problem in a busy workplace.",
+              "B": "They are small but can add up to a useful difference.",
+              "C": "They matter only when a job is very simple.",
+              "D": "They work best when employees do not communicate with one another."
+            },
+            "correct_answer": "B",
+            "explanation_vi": "Đoạn 4 nhấn mạnh các thay đổi là “modest” nhưng vẫn có tác động đáng chú ý trong một tuần. Điều này cho thấy từng thay đổi nhỏ có thể cộng lại thành khác biệt hữu ích.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc nói rõ các thay đổi không loại bỏ mọi áp lực hay mọi vấn đề."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Tác giả mô tả chúng là nhỏ nhưng có hiệu quả đáng kể khi lặp lại."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc không giới hạn tác dụng của chúng vào công việc đơn giản."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc nhấn mạnh giao tiếp rõ ràng, không phải tránh giao tiếp."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "These changes are usually modest, but they can have a noticeable effect over a week."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 5,
+            "question_type": "inference",
+            "question_text": "Which conclusion about the passage is best supported?",
+            "options": {
+              "A": "A better workday usually depends on expensive tools and major office reforms.",
+              "B": "Work becomes easier when people ignore small problems until the end of the week.",
+              "C": "Simple routines can make a demanding schedule easier to handle.",
+              "D": "The main cause of stress at work is always the number of tasks."
+            },
+            "correct_answer": "C",
+            "explanation_vi": "Toàn bài cho thấy kế hoạch nhỏ, nghỉ ngắn và giao tiếp rõ ràng đều giúp ngày làm việc đỡ căng thẳng hơn. Vì vậy kết luận tốt nhất là các thói quen đơn giản có thể làm lịch làm việc nặng nề dễ xử lý hơn.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc nói ngược lại: những thay đổi nhỏ quan trọng hơn các thay đổi lớn hay ồn ào."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc khuyên ngăn vấn đề nhỏ phình to, không phải bỏ qua chúng."
+              },
+              "C": {
+                "is_correct": true,
+                "explanation_vi": "Đúng. Đây là ý chính được lặp lại ở toàn bài và được tổng kết ở đoạn cuối."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai. Bài đọc không nói stress chỉ do số lượng việc; còn có vấn đề về tổ chức và giao tiếp."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "Rather, they make demanding schedules easier to handle by preventing small problems from growing into bigger ones."
+            },
+            "placement": null
+          }
+        ]
+      },
+      "calls": [
+        {
+          "input_tokens": 2037,
+          "output_tokens": 2246,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 77,
+          "estimated_cost_usd": 0.01163475,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0cf6b2b269882752016aae9d28ad6087d0b6798259d6615bce"
+          },
+          "user_id": null,
+          "operation": "reading_generate",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 15526,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "851a4718-1ac0-4e84-b8ee-e57df0a23542",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 2054,
+          "output_tokens": 2218,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 86,
+          "estimated_cost_usd": 0.0115215,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_08cc1673d9f04530016aae9d38174087d0a2b45731bdbb14b8"
+          },
+          "user_id": null,
+          "operation": "reading_generate",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 15528,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "851a4718-1ac0-4e84-b8ee-e57df0a23542",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3034,
+          "output_tokens": 489,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 39,
+          "estimated_cost_usd": 0.004476,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0265ea0c15a2041a016aae9d47d63887d08788041a149bd9df"
+          },
+          "user_id": null,
+          "operation": "question_quality",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 3481,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "851a4718-1ac0-4e84-b8ee-e57df0a23542",
+          "category": "evaluation"
+        }
+      ],
+      "cost_usd": 0.02763225,
+      "latency_ms": 34535
+    },
+    {
+      "model": "gpt-5.4-mini-2026-03-17",
+      "reasoning_effort": "low",
+      "case": "attitude-education",
+      "reviewer": "gpt-5.4-mini-2026-03-17",
+      "valid": true,
+      "review": {
+        "generator_version": "3.0.0",
+        "validator_version": "3.0.0",
+        "generation_model": "gpt-5.4-mini-2026-03-17",
+        "review_model": "gpt-5.4-mini-2026-03-17",
+        "format_valid": true,
+        "quality_valid": true,
+        "quality_method": "independent_llm_review",
+        "validation_notes": [
+          "This is a valid reading practice set with one short passage and five attitude questions; the target question type practice context is respected.",
+          "All items appear to have exactly one best answer, with distractors that are plausible but clearly less supported by the passage.",
+          "No specialist knowledge is required, and the passage is coherent, natural, and accessible for the stated level.",
+          "No embedded answer leaks are present beyond normal passage evidence.",
+          "Question 5 is slightly more inferential than the others, but still clearly supported by the final paragraph."
+        ],
+        "quality_review": {
+          "accepted": true,
+          "confidence": 0.96,
+          "realistic_context": true,
+          "no_specialist_knowledge": true,
+          "no_embedded_answer": true,
+          "requirements_consistent": true,
+          "notes": [
+            "This is a valid reading practice set with one short passage and five attitude questions; the target question type practice context is respected.",
+            "All items appear to have exactly one best answer, with distractors that are plausible but clearly less supported by the passage.",
+            "No specialist knowledge is required, and the passage is coherent, natural, and accessible for the stated level.",
+            "No embedded answer leaks are present beyond normal passage evidence.",
+            "Question 5 is slightly more inferential than the others, but still clearly supported by the final paragraph."
+          ],
+          "reading_items": [
+            {
+              "question_number": 1,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.98,
+              "notes": "The passage consistently frames the author as favoring balance and moderate change."
+            },
+            {
+              "question_number": 2,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "C",
+              "confidence": 0.97,
+              "notes": "Positive but conditional view is directly supported by paragraph 2."
+            },
+            {
+              "question_number": 3,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "D",
+              "confidence": 0.97,
+              "notes": "Paragraph 3 explicitly rejects judging technology by novelty alone."
+            },
+            {
+              "question_number": 4,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "D",
+              "confidence": 0.98,
+              "notes": "Paragraph 4 presents homework as context-dependent rather than fixed-rule."
+            },
+            {
+              "question_number": 5,
+              "single_best_answer": true,
+              "supported_by_evidence": true,
+              "plausible_distractors": true,
+              "independently_selected_answer": "B",
+              "confidence": 0.94,
+              "notes": "‘Careful attitude’ is described as leading to practical decisions, so ‘practical’ is the best characterization."
+            }
+          ]
+        }
+      },
+      "passage": {
+        "title": "Finding Balance in Modern Classrooms",
+        "topic": "education",
+        "test_profile": "VSTEP_3_5",
+        "internal_difficulty_band": "MODERATE",
+        "paragraphs": [
+          {
+            "id": "p1",
+            "text": "In many schools, teachers are asked to do more than explain lessons. They are expected to help students solve problems, work in groups, and use digital tools while still mastering the basics of reading, writing, and mathematics. This change has led to lively debate. Some people think classrooms should look almost the same as they did twenty years ago. Others believe schools must change quickly to match the world outside. In practice, most educators now search for a middle path rather than a dramatic answer."
+          },
+          {
+            "id": "p2",
+            "text": "One popular idea is project-based learning, where students spend time investigating a question and creating something to share with the class. Supporters say it keeps learners interested because it connects schoolwork to real life. Critics worry that projects can become noisy and unfocused if they are not carefully planned. The strongest programs seem to combine both views: they give students freedom, but they also provide clear steps and regular feedback. In that sense, the method is less a replacement for teaching than a different way of organizing it."
+          },
+          {
+            "id": "p3",
+            "text": "Technology has created a similar mix of hope and caution. Digital exercises can give quick practice and immediate results, which helps teachers notice where students are struggling. However, a tablet does not automatically improve learning just because it is modern. If students click through activities without thinking, the device becomes a distraction instead of a tool. For that reason, many schools are learning to judge technology by how well it supports a lesson, not by how new it appears."
+          },
+          {
+            "id": "p4",
+            "text": "Even homework, often treated as a simple good-or-bad issue, is usually more complicated. Too much homework can leave students tired and unhappy, yet no homework at all may make it harder to build study habits. The most convincing approach is not to choose one extreme but to ask what kind of task fits the age of the learners and the goal of the lesson. That careful attitude may sound modest, but it often leads to more practical decisions than bold slogans do."
+          }
+        ],
+        "questions": [
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 1,
+            "question_type": "attitude",
+            "question_text": "What is the author’s attitude toward the changes happening in modern classrooms?",
+            "options": {
+              "A": "He is completely opposed to them and wants schools to return to old methods.",
+              "B": "He is cautiously positive and prefers balanced changes over extreme ones.",
+              "C": "He thinks the changes are exciting only because they are new.",
+              "D": "He feels the changes have already solved most classroom problems."
+            },
+            "correct_answer": "B",
+            "explanation_vi": "Tác giả không cực đoan ủng hộ hay phản đối, mà nhấn mạnh việc tìm “một con đường ở giữa” và chọn giải pháp cân bằng. Điều này cho thấy thái độ thận trọng nhưng tích cực.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài đọc không hề kêu gọi quay lại hoàn toàn phương pháp cũ; tác giả nói nhiều trường đang tìm cách thay đổi phù hợp."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng vì tác giả ủng hộ thay đổi nhưng luôn nhấn mạnh sự cân bằng, tránh các thái cực và chọn cách thực tế."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì tác giả không khen thay đổi chỉ vì nó mới; ở đoạn 3 còn cảnh báo công nghệ không tự động cải thiện học tập."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài đọc cho thấy nhiều vấn đề vẫn cần cân nhắc, chứ không nói các thay đổi đã giải quyết xong mọi khó khăn."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p1",
+              "quote": "In practice, most educators now search for a middle path rather than a dramatic answer."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 2,
+            "question_type": "attitude",
+            "question_text": "How does the author feel about project-based learning?",
+            "options": {
+              "A": "He sees it as useless unless it completely replaces traditional teaching.",
+              "B": "He thinks it is mainly a way to make classrooms quieter.",
+              "C": "He views it positively, but only when it is well planned and structured.",
+              "D": "He is convinced that it works equally well in every subject and class."
+            },
+            "correct_answer": "C",
+            "explanation_vi": "Tác giả đánh giá cao phương pháp này nhưng cũng nêu rõ rủi ro nếu thiếu kế hoạch. Vì vậy thái độ là ủng hộ có điều kiện, không phải ủng hộ tuyệt đối.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài đọc nói rõ phương pháp này không phải là sự thay thế hoàn toàn cho việc dạy học."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài đọc không nhấn mạnh sự yên tĩnh; trái lại, còn nói lớp học có thể trở nên ồn và thiếu tập trung nếu làm không tốt."
+              },
+              "C": {
+                "is_correct": true,
+                "explanation_vi": "Đúng vì tác giả nói phương pháp có ích, nhưng hiệu quả nhất khi có bước rõ ràng và phản hồi thường xuyên."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài đọc không khẳng định nó phù hợp như nhau với mọi môn học hay mọi lớp học."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p2",
+              "quote": "The strongest programs seem to combine both views: they give students freedom, but they also provide clear steps and regular feedback."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "CHALLENGING",
+            "question_number": 3,
+            "question_type": "attitude",
+            "question_text": "What is the author’s attitude toward technology in schools?",
+            "options": {
+              "A": "He is enthusiastic about it no matter how it is used.",
+              "B": "He is doubtful that any digital tool can ever be useful.",
+              "C": "He thinks it should replace most classroom activities.",
+              "D": "He supports it when it helps learning, but not simply because it is modern."
+            },
+            "correct_answer": "D",
+            "explanation_vi": "Tác giả không phản đối công nghệ, nhưng cũng không tin rằng mọi thiết bị hiện đại đều tốt. Ông ủng hộ công nghệ khi nó phục vụ bài học một cách hiệu quả.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì tác giả cảnh báo rằng thiết bị có thể trở thành sự xao nhãng nếu học sinh dùng máy móc."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì tác giả thừa nhận công nghệ có thể giúp luyện tập nhanh và cho kết quả ngay."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài đọc không nói công nghệ nên thay thế hầu hết hoạt động trên lớp."
+              },
+              "D": {
+                "is_correct": true,
+                "explanation_vi": "Đúng vì tác giả đánh giá công nghệ theo tác dụng thực sự với việc học, chứ không theo sự mới mẻ của nó."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p3",
+              "quote": "many schools are learning to judge technology by how well it supports a lesson, not by how new it appears."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "MODERATE",
+            "question_number": 4,
+            "question_type": "attitude",
+            "question_text": "What does the author think about homework?",
+            "options": {
+              "A": "He believes homework is always harmful to students.",
+              "B": "He thinks homework is simple and should be the same for all learners.",
+              "C": "He feels homework should never be used in modern education.",
+              "D": "He sees it as a matter that needs careful judgment rather than a fixed rule."
+            },
+            "correct_answer": "D",
+            "explanation_vi": "Tác giả không xem bài tập về nhà là hoàn toàn tốt hay hoàn toàn xấu. Ông nhấn mạnh phải cân nhắc độ tuổi và mục tiêu bài học, tức là cần đánh giá linh hoạt.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài đọc chỉ nói quá nhiều bài tập có thể làm học sinh mệt, không phải luôn luôn có hại."
+              },
+              "B": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì tác giả cho rằng vấn đề này phức tạp, không thể áp dụng một công thức giống nhau cho mọi người."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì bài đọc không phản đối hoàn toàn homework; ngược lại, còn thừa nhận nó có thể giúp xây dựng thói quen học tập."
+              },
+              "D": {
+                "is_correct": true,
+                "explanation_vi": "Đúng vì tác giả khuyến nghị xem xét loại bài tập phù hợp thay vì áp dụng một quy tắc cứng nhắc."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "The most convincing approach is not to choose one extreme but to ask what kind of task fits the age of the learners and the goal of the lesson."
+            },
+            "placement": null
+          },
+          {
+            "internal_difficulty_band": "ADVANCED",
+            "question_number": 5,
+            "question_type": "attitude",
+            "question_text": "How would the author most likely describe the “careful attitude” mentioned in the last paragraph?",
+            "options": {
+              "A": "As a weak attitude that avoids making any decisions",
+              "B": "As a practical attitude that aims for useful decisions",
+              "C": "As an old-fashioned attitude that rejects all innovation",
+              "D": "As a confusing attitude that makes lessons harder to plan"
+            },
+            "correct_answer": "B",
+            "explanation_vi": "Ở cuối bài, tác giả nói thái độ thận trọng tuy nghe có vẻ khiêm tốn nhưng thường dẫn đến quyết định thực tế hơn các khẩu hiệu lớn. Vì thế, đó là thái độ thực dụng và hữu ích.",
+            "option_explanations": {
+              "A": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì tác giả không cho rằng thận trọng là né tránh quyết định; ngược lại, nó giúp chọn giải pháp tốt hơn."
+              },
+              "B": {
+                "is_correct": true,
+                "explanation_vi": "Đúng vì bài đọc trực tiếp nói thái độ này thường dẫn đến những quyết định thực tế hơn."
+              },
+              "C": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì tác giả không xem sự thận trọng là chống đổi mới; ông nhấn mạnh cân bằng và phù hợp."
+              },
+              "D": {
+                "is_correct": false,
+                "explanation_vi": "Sai vì đoạn cuối đánh giá thái độ này là hữu ích, không phải gây rối cho việc lập kế hoạch."
+              }
+            },
+            "evidence": {
+              "paragraph_id": "p4",
+              "quote": "That careful attitude may sound modest, but it often leads to more practical decisions than bold slogans do."
+            },
+            "placement": null
+          }
+        ]
+      },
+      "calls": [
+        {
+          "input_tokens": 2037,
+          "output_tokens": 2359,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 142,
+          "estimated_cost_usd": 0.01214325,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0d7e10861d5257cf016aae9d4b46bc87d0b8820b53534b0fdf"
+          },
+          "user_id": null,
+          "operation": "reading_generate",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 20170,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "1605178c-e2b5-41aa-be8f-ea9db4c62b54",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3119,
+          "output_tokens": 523,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 71,
+          "estimated_cost_usd": 0.00469275,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_096225eff25b03a8016aae9d5f804c87d0b5ab2c39da9d9d0b"
+          },
+          "user_id": null,
+          "operation": "question_quality",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 3765,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "1605178c-e2b5-41aa-be8f-ea9db4c62b54",
+          "category": "evaluation"
+        }
+      ],
+      "cost_usd": 0.016836,
+      "latency_ms": 23935
+    },
+    {
+      "model": "gpt-5.4-mini-2026-03-17",
+      "reasoning_effort": "low",
+      "case": "mixed-environment",
+      "reviewer": "gpt-5.4-mini-2026-03-17",
+      "valid": false,
+      "error_code": "question_quality_rejected",
+      "calls": [
+        {
+          "input_tokens": 2034,
+          "output_tokens": 3645,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 69,
+          "estimated_cost_usd": 0.017928,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0fa7dd3e0c8f8bf2016aae9d63524c87d0922dd26455d8f749"
+          },
+          "user_id": null,
+          "operation": "reading_generate",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 23981,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "b90b9a87-3011-49f5-b9f7-c4d23294d41f",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 2055,
+          "output_tokens": 3911,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 102,
+          "estimated_cost_usd": 0.01914075,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0175fabe4a502bac016aae9d7b1e2887d09b0648a532bfd82e"
+          },
+          "user_id": null,
+          "operation": "reading_generate",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 29123,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "b90b9a87-3011-49f5-b9f7-c4d23294d41f",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 4919,
+          "output_tokens": 940,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 270,
+          "estimated_cost_usd": 0.00791925,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0b8f1f52bb2c2a4e016aae9d98782c87d082d21f46e69797fa"
+          },
+          "user_id": null,
+          "operation": "question_quality",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 6205,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "b90b9a87-3011-49f5-b9f7-c4d23294d41f",
+          "category": "evaluation"
+        }
+      ],
+      "cost_usd": 0.044988,
+      "latency_ms": 59309
+    }
+  ]
+}

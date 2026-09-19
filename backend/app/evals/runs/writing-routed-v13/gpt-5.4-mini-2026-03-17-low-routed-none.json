@@ -1,0 +1,2552 @@
+{
+  "id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+  "model": "gpt-5.4-mini-2026-03-17+conditional-gpt-5.6-terra",
+  "reasoning_effort": "low",
+  "dataset_version": "editorial-writing-2026-09-v1",
+  "dataset_hash": "9883bafbf43f3a69c3a9213591aa6e9d77dfb9cd41ca94b975caa7c8bdef5080",
+  "created_at": "2026-09-19T15:03:26.949496+00:00",
+  "versions": {
+    "core_prompt": "4.1.0",
+    "price": "openai-standard-2026-09-19",
+    "model_version": "2026-09-19-routing-v1",
+    "escalation": "1.3.0",
+    "escalation_model": "gpt-5.6-terra",
+    "escalation_effort": "none"
+  },
+  "results": [
+    {
+      "sample_id": "alex_manual_regression",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 6.5,
+        "organization": 6,
+        "vocabulary": 5.5,
+        "grammar": 5.5,
+        "overall": 5.875
+      },
+      "tags": [
+        "editorial_anchor",
+        "borderline B2-like task coverage with weaker language"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 898,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3175,
+          "output_tokens": 2282,
+          "cached_input_tokens": 2533,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": 0.0291746,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_09203c7f47e58dd9016aaea4421c2887d0819ce71026642753"
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 21472,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "scores": {
+        "task_fulfillment": 6.0,
+        "organization": 6.0,
+        "vocabulary": 5.5,
+        "grammar": 5.0,
+        "overall": 5.625
+      },
+      "result": {
+        "analysis": {
+          "evidence": {
+            "task": 1,
+            "task_coverage": [
+              {
+                "requirement": "Suggest best time and transport with reasons",
+                "coverage": "developed",
+                "evidence": [
+                  {
+                    "quote": "I think the best time to visit is in spring because the weather is warm and not rain much.",
+                    "explanation_vi": "Nêu mùa xuân và lý do thời tiết."
+                  },
+                  {
+                    "quote": "To get here, traveling by plane is the best way because it is very fast and comfortable.",
+                    "explanation_vi": "Đề xuất đi máy bay, kèm hai lý do về tốc độ và sự thoải mái."
+                  }
+                ]
+              },
+              {
+                "requirement": "Recommend two places and explain why",
+                "coverage": "developed",
+                "evidence": [
+                  {
+                    "quote": "First, you can go to the local market to buy cheap souvenirs and try many tasty street food.",
+                    "explanation_vi": "Giới thiệu chợ địa phương cùng các hoạt động mua quà và ăn đồ ăn đường phố."
+                  },
+                  {
+                    "quote": "It have many interesting things about the history and culture of my city.",
+                    "explanation_vi": "Nêu bảo tàng cũ và giá trị về lịch sử, văn hóa."
+                  }
+                ]
+              },
+              {
+                "requirement": "Invite Alex to an activity together",
+                "coverage": "developed",
+                "evidence": [
+                  {
+                    "quote": "I would like to invite you to have dinner at my house with my family.",
+                    "explanation_vi": "Mời Alex dùng bữa tối với người viết và gia đình."
+                  },
+                  {
+                    "quote": "We can talk a lot together.",
+                    "explanation_vi": "Bổ sung hoạt động trò chuyện cùng nhau."
+                  }
+                ]
+              }
+            ],
+            "idea_development": "adequate",
+            "cohesion": "basic",
+            "lexical_range": "basic",
+            "criteria": {
+              "task_fulfillment": {
+                "positive_evidence": [
+                  {
+                    "quote": "I think the best time to visit is in spring because the weather is warm and not rain much.",
+                    "explanation_vi": "Trả lời trực tiếp thời điểm phù hợp và có giải thích."
+                  },
+                  {
+                    "quote": "I would like to invite you to have dinner at my house with my family.",
+                    "explanation_vi": "Lời mời cụ thể, phù hợp ngữ cảnh email thân mật."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "Another place is the old museum.",
+                    "explanation_vi": "Lý do cho địa điểm thứ hai chỉ được nêu khái quát ở câu sau, chưa làm rõ điểm hấp dẫn cụ thể của bảo tàng."
+                  }
+                ],
+                "assessment_vi": "Đủ ba yêu cầu, đúng độ dài 141 từ và nhìn chung bám sát mục đích tư vấn. Các lý do ngắn, khá chung chung; phần giới thiệu bảo tàng đặc biệt ít phát triển."
+              },
+              "organization": {
+                "positive_evidence": [
+                  {
+                    "quote": "To get here, traveling by plane is the best way because it is very fast and comfortable.",
+                    "explanation_vi": "Chuyển từ thời điểm sang phương tiện trong cùng phần tư vấn một cách dễ theo dõi."
+                  },
+                  {
+                    "quote": "First, you can go to the local market to buy cheap souvenirs and try many tasty street food.",
+                    "explanation_vi": "Dùng tín hiệu liệt kê để mở đầu địa điểm thứ nhất."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "Another place is the old museum.",
+                    "explanation_vi": "Liên kết “Another” đơn giản và cấu trúc triển khai hai địa điểm còn theo mẫu liệt kê."
+                  },
+                  {
+                    "quote": "I write this email to share you some advice for your trip.",
+                    "explanation_vi": "Câu nêu mục đích diễn đạt chưa chuẩn, làm giảm độ rõ ràng ở phần mở đầu."
+                  }
+                ],
+                "assessment_vi": "Bố cục email rõ: mở đầu, tư vấn di chuyển, tham quan, lời mời và kết thư. Trình tự logic nhưng phương tiện liên kết chủ yếu là nối ý đơn giản; tham chiếu và chuyển đoạn chưa linh hoạt."
+              },
+              "vocabulary": {
+                "positive_evidence": [
+                  {
+                    "quote": "First, you can go to the local market to buy cheap souvenirs and try many tasty street food.",
+                    "explanation_vi": "Có một số từ vựng đúng chủ đề du lịch như “local market”, “souvenirs” và “street food”."
+                  },
+                  {
+                    "quote": "It have many interesting things about the history and culture of my city.",
+                    "explanation_vi": "Dùng đúng các từ chủ đề “history” và “culture”."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "First, you can go to the local market to buy cheap souvenirs and try many tasty street food.",
+                    "explanation_vi": "Cụm danh từ về đồ ăn mắc lỗi countability."
+                  },
+                  {
+                    "quote": "I write this email to share you some advice for your trip.",
+                    "explanation_vi": "Cách kết hợp động từ với tân ngữ không tự nhiên/không đúng."
+                  }
+                ],
+                "assessment_vi": "Từ vựng đủ để hoàn thành chủ đề quen thuộc nhưng chủ yếu thông dụng và ít chính xác linh hoạt. Có lỗi kết hợp từ và danh từ đếm được/không đếm được."
+              },
+              "grammar": {
+                "positive_evidence": [
+                  {
+                    "quote": "I am so happy to hear that you will visit my hometown next month.",
+                    "explanation_vi": "Câu phức với mệnh đề tân ngữ và mệnh đề “that” được kiểm soát tốt."
+                  },
+                  {
+                    "quote": "To get here, traveling by plane is the best way because it is very fast and comfortable.",
+                    "explanation_vi": "Cấu trúc động danh từ làm chủ ngữ và mệnh đề chỉ nguyên nhân được dùng đúng."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "I think the best time to visit is in spring because the weather is warm and not rain much.",
+                    "explanation_vi": "Phủ định của động từ chỉ thời tiết dùng sai dạng động từ."
+                  },
+                  {
+                    "quote": "It have many interesting things about the history and culture of my city.",
+                    "explanation_vi": "Lỗi hòa hợp chủ ngữ–động từ cơ bản với “It”."
+                  }
+                ],
+                "assessment_vi": "Có một số câu phức cơ bản và đa số câu đơn rõ nghĩa, nhưng bài ngắn vẫn có các lỗi cơ bản về dạng động từ, hòa hợp chủ-vị và cấu trúc động từ. Phạm vi cấu trúc chưa rộng."
+              }
+            },
+            "sentences": [
+              {
+                "sentence_id": 1,
+                "structure": "fragment",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 2,
+                "structure": "complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 3,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "partly_controlled"
+              },
+              {
+                "sentence_id": 4,
+                "structure": "complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "partly_controlled"
+              },
+              {
+                "sentence_id": 5,
+                "structure": "complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 6,
+                "structure": "complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 7,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "partly_controlled"
+              },
+              {
+                "sentence_id": 8,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 9,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "partly_controlled"
+              },
+              {
+                "sentence_id": 10,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 11,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 12,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 13,
+                "structure": "fragment",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 14,
+                "structure": "fragment",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              }
+            ],
+            "errors": [
+              {
+                "category": "grammar",
+                "subtype": "verb pattern",
+                "original": "share you some advice",
+                "corrected": "share some advice with you",
+                "explanation_vi": "Động từ “share” không đi trực tiếp với người nhận theo cấu trúc này; cần dùng “share something with someone”.",
+                "severity": "major",
+                "sentence_id": 3,
+                "primary_criterion": "grammar"
+              },
+              {
+                "category": "grammar",
+                "subtype": "verb form after do",
+                "original": "not rain much",
+                "corrected": "does not rain much",
+                "explanation_vi": "Với chủ ngữ “the weather”, phủ định ở hiện tại đơn cần “does not” và động từ nguyên mẫu “rain”.",
+                "severity": "major",
+                "sentence_id": 4,
+                "primary_criterion": "grammar"
+              },
+              {
+                "category": "grammar",
+                "subtype": "countability",
+                "original": "many tasty street food",
+                "corrected": "much tasty street food",
+                "explanation_vi": "“Street food” thường là danh từ không đếm được, nên không dùng “many”.",
+                "severity": "major",
+                "sentence_id": 7,
+                "primary_criterion": "grammar"
+              },
+              {
+                "category": "grammar",
+                "subtype": "subject-verb agreement",
+                "original": "It have",
+                "corrected": "It has",
+                "explanation_vi": "Chủ ngữ số ít “It” cần động từ “has” ở hiện tại đơn.",
+                "severity": "major",
+                "sentence_id": 9,
+                "primary_criterion": "grammar"
+              }
+            ],
+            "relevance_vi": "Bài viết liên quan trực tiếp đến chuyến thăm của Alex và đáp ứng yêu cầu tư vấn, giới thiệu địa điểm, cũng như lời mời.",
+            "register_vi": "Giọng điệu thân mật, phù hợp email gửi bạn bè; cách mở đầu và kết thư phù hợp."
+          },
+          "metrics": {
+            "word_count": 141,
+            "sentence_count": 14,
+            "number_of_detected_errors": 4,
+            "major_error_count": 4,
+            "minor_error_count": 0,
+            "estimated_error_density": 2.84,
+            "errors_by_primary_criterion": {
+              "grammar": 4
+            },
+            "structures": {
+              "fragment": 3,
+              "complex": 4,
+              "simple": 7
+            },
+            "relative_clauses": 0,
+            "conditionals": 0,
+            "subordination": 4,
+            "controlled_complex_sentences": 3,
+            "note_vi": "Số lỗi/cấu trúc được tổng hợp từ phân tích AI đã đối chiếu trích dẫn. Mật độ tính trên 100 từ; không phải bộ dò lỗi hoàn hảo hay công thức trừ điểm. Số câu có thể gồm lời chào/kết thư."
+          }
+        },
+        "assessment": {
+          "task_fulfillment": {
+            "positive_evidence": [
+              {
+                "quote": "I think the best time to visit is in spring because the weather is warm and not rain much.",
+                "explanation_vi": "Trả lời trực tiếp thời điểm phù hợp và có giải thích."
+              },
+              {
+                "quote": "I would like to invite you to have dinner at my house with my family.",
+                "explanation_vi": "Lời mời cụ thể, phù hợp ngữ cảnh email thân mật."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "Another place is the old museum.",
+                "explanation_vi": "Lý do cho địa điểm thứ hai chỉ được nêu khái quát ở câu sau, chưa làm rõ điểm hấp dẫn cụ thể của bảo tàng."
+              }
+            ],
+            "assessment_vi": "Đủ ba yêu cầu, đúng độ dài 141 từ và nhìn chung bám sát mục đích tư vấn. Các lý do ngắn, khá chung chung; phần giới thiệu bảo tàng đặc biệt ít phát triển.",
+            "initial_score": 6.0,
+            "score": 6.0,
+            "score_justification_vi": "Bài đáp ứng đầy đủ ba ý bắt buộc, có lý do cho thời điểm, phương tiện và hai nơi nên đến. Tuy nhiên, các giải thích còn ngắn và khá chung, nhất là bảo tàng, nên chưa thể hiện phát triển ý thuyết phục.",
+            "consistency_review_vi": "Bài đáp ứng đầy đủ ba ý bắt buộc, có lý do cho thời điểm, phương tiện và hai nơi nên đến. Tuy nhiên, các giải thích còn ngắn và khá chung, nhất là bảo tàng, nên chưa thể hiện phát triển ý thuyết phục.",
+            "high_score_justification_vi": ""
+          },
+          "organization": {
+            "positive_evidence": [
+              {
+                "quote": "To get here, traveling by plane is the best way because it is very fast and comfortable.",
+                "explanation_vi": "Chuyển từ thời điểm sang phương tiện trong cùng phần tư vấn một cách dễ theo dõi."
+              },
+              {
+                "quote": "First, you can go to the local market to buy cheap souvenirs and try many tasty street food.",
+                "explanation_vi": "Dùng tín hiệu liệt kê để mở đầu địa điểm thứ nhất."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "Another place is the old museum.",
+                "explanation_vi": "Liên kết “Another” đơn giản và cấu trúc triển khai hai địa điểm còn theo mẫu liệt kê."
+              },
+              {
+                "quote": "I write this email to share you some advice for your trip.",
+                "explanation_vi": "Câu nêu mục đích diễn đạt chưa chuẩn, làm giảm độ rõ ràng ở phần mở đầu."
+              }
+            ],
+            "assessment_vi": "Bố cục email rõ: mở đầu, tư vấn di chuyển, tham quan, lời mời và kết thư. Trình tự logic nhưng phương tiện liên kết chủ yếu là nối ý đơn giản; tham chiếu và chuyển đoạn chưa linh hoạt.",
+            "initial_score": 6.0,
+            "score": 6.0,
+            "score_justification_vi": "Trình tự thông tin và các đoạn phù hợp với email, có mở đầu/kết thư rõ. Liên kết vẫn chủ yếu dựa vào liệt kê đơn giản, còn ít tham chiếu và chuyển ý linh hoạt.",
+            "consistency_review_vi": "Trình tự thông tin và các đoạn phù hợp với email, có mở đầu/kết thư rõ. Liên kết vẫn chủ yếu dựa vào liệt kê đơn giản, còn ít tham chiếu và chuyển ý linh hoạt.",
+            "high_score_justification_vi": ""
+          },
+          "vocabulary": {
+            "positive_evidence": [
+              {
+                "quote": "First, you can go to the local market to buy cheap souvenirs and try many tasty street food.",
+                "explanation_vi": "Có một số từ vựng đúng chủ đề du lịch như “local market”, “souvenirs” và “street food”."
+              },
+              {
+                "quote": "It have many interesting things about the history and culture of my city.",
+                "explanation_vi": "Dùng đúng các từ chủ đề “history” và “culture”."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "First, you can go to the local market to buy cheap souvenirs and try many tasty street food.",
+                "explanation_vi": "Cụm danh từ về đồ ăn mắc lỗi countability."
+              },
+              {
+                "quote": "I write this email to share you some advice for your trip.",
+                "explanation_vi": "Cách kết hợp động từ với tân ngữ không tự nhiên/không đúng."
+              }
+            ],
+            "assessment_vi": "Từ vựng đủ để hoàn thành chủ đề quen thuộc nhưng chủ yếu thông dụng và ít chính xác linh hoạt. Có lỗi kết hợp từ và danh từ đếm được/không đếm được.",
+            "initial_score": 5.5,
+            "score": 5.5,
+            "score_justification_vi": "Từ vựng chủ đề du lịch đáp ứng nhu cầu giao tiếp cơ bản, nhưng phạm vi hẹp và chủ yếu là từ quen thuộc. Lỗi kết hợp từ và countability làm giảm độ chính xác.",
+            "consistency_review_vi": "Từ vựng chủ đề du lịch đáp ứng nhu cầu giao tiếp cơ bản, nhưng phạm vi hẹp và chủ yếu là từ quen thuộc. Lỗi kết hợp từ và countability làm giảm độ chính xác.",
+            "high_score_justification_vi": ""
+          },
+          "grammar": {
+            "positive_evidence": [
+              {
+                "quote": "I am so happy to hear that you will visit my hometown next month.",
+                "explanation_vi": "Câu phức với mệnh đề tân ngữ và mệnh đề “that” được kiểm soát tốt."
+              },
+              {
+                "quote": "To get here, traveling by plane is the best way because it is very fast and comfortable.",
+                "explanation_vi": "Cấu trúc động danh từ làm chủ ngữ và mệnh đề chỉ nguyên nhân được dùng đúng."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "I think the best time to visit is in spring because the weather is warm and not rain much.",
+                "explanation_vi": "Phủ định của động từ chỉ thời tiết dùng sai dạng động từ."
+              },
+              {
+                "quote": "It have many interesting things about the history and culture of my city.",
+                "explanation_vi": "Lỗi hòa hợp chủ ngữ–động từ cơ bản với “It”."
+              }
+            ],
+            "assessment_vi": "Có một số câu phức cơ bản và đa số câu đơn rõ nghĩa, nhưng bài ngắn vẫn có các lỗi cơ bản về dạng động từ, hòa hợp chủ-vị và cấu trúc động từ. Phạm vi cấu trúc chưa rộng.",
+            "initial_score": 5.0,
+            "score": 5.0,
+            "score_justification_vi": "Có kiểm soát được một số câu phức cơ bản, nhưng bài ngắn vẫn có nhiều lỗi nền tảng về mẫu động từ, phủ định, hòa hợp chủ-vị và danh từ không đếm được. Điều này giới hạn độ chính xác và phạm vi ngữ pháp thể hiện.",
+            "consistency_review_vi": "Có kiểm soát được một số câu phức cơ bản, nhưng bài ngắn vẫn có nhiều lỗi nền tảng về mẫu động từ, phủ định, hòa hợp chủ-vị và danh từ không đếm được. Điều này giới hạn độ chính xác và phạm vi ngữ pháp thể hiện.",
+            "high_score_justification_vi": ""
+          },
+          "calibration_summary_vi": "Email đủ độ dài, đúng trọng tâm và có bố cục thư thân mật rõ ràng. Điểm hạn chế chính là ý giải thích còn sơ lược, vốn từ chưa linh hoạt và một số lỗi ngữ pháp cơ bản xuất hiện trong bài ngắn."
+        },
+        "confidence": 0.94,
+        "uncertainties": [],
+        "feedback": {
+          "summary_vi": "Email đủ độ dài, đúng trọng tâm và có bố cục thư thân mật rõ ràng. Điểm hạn chế chính là ý giải thích còn sơ lược, vốn từ chưa linh hoạt và một số lỗi ngữ pháp cơ bản xuất hiện trong bài ngắn.",
+          "priority_improvements": [
+            {
+              "title_vi": "Phát triển lý do cụ thể hơn",
+              "explanation_vi": "Mỗi gợi ý nên nêu một lợi ích rõ ràng, thay vì chỉ dùng nhận xét chung như “interesting” hoặc “nice”.",
+              "example": "Nêu một điểm trưng bày hoặc trải nghiệm đặc biệt tại bảo tàng."
+            },
+            {
+              "title_vi": "Kiểm tra cấu trúc động từ cơ bản",
+              "explanation_vi": "Rà soát mẫu động từ, trợ động từ trong phủ định và hòa hợp chủ-vị trước khi nộp bài.",
+              "example": "does not + động từ nguyên mẫu; It has."
+            },
+            {
+              "title_vi": "Dùng danh từ và cụm từ chính xác",
+              "explanation_vi": "Chú ý danh từ không đếm được và mẫu kết hợp từ thông dụng để câu tự nhiên hơn.",
+              "example": "share some advice with someone; much street food."
+            }
+          ],
+          "strengths": [
+            "Trả lời trực tiếp thời điểm phù hợp và có giải thích.",
+            "Chuyển từ thời điểm sang phương tiện trong cùng phần tư vấn một cách dễ theo dõi.",
+            "Có một số từ vựng đúng chủ đề du lịch như “local market”, “souvenirs” và “street food”."
+          ],
+          "structure_feedback": [
+            {
+              "title_vi": "Bố cục và phát triển ý",
+              "explanation_vi": "Bố cục email rõ: mở đầu, tư vấn di chuyển, tham quan, lời mời và kết thư. Trình tự logic nhưng phương tiện liên kết chủ yếu là nối ý đơn giản; tham chiếu và chuyển đoạn chưa linh hoạt.",
+              "example": ""
+            }
+          ],
+          "task_fulfillment_feedback": [
+            {
+              "title_vi": "Đáp ứng yêu cầu",
+              "explanation_vi": "Đủ ba yêu cầu, đúng độ dài 141 từ và nhìn chung bám sát mục đích tư vấn. Các lý do ngắn, khá chung chung; phần giới thiệu bảo tàng đặc biệt ít phát triển.",
+              "example": ""
+            }
+          ],
+          "vocabulary_suggestions": []
+        }
+      },
+      "final_consistency_reasons": []
+    },
+    {
+      "sample_id": "borderline_b1",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 5,
+        "organization": 4.5,
+        "vocabulary": 4,
+        "grammar": 3.5,
+        "overall": 4.25
+      },
+      "tags": [
+        "editorial_anchor",
+        "borderline B1-like performance"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 1011,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 927,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "essay_developed_controlled",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 8,
+        "organization": 8,
+        "vocabulary": 8,
+        "grammar": 8,
+        "overall": 8.0
+      },
+      "tags": [
+        "editorial_anchor",
+        "developed argument with controlled range"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 986,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 815,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "essay_limited_development",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 5,
+        "organization": 5,
+        "vocabulary": 4.5,
+        "grammar": 4,
+        "overall": 4.625
+      },
+      "tags": [
+        "editorial_anchor",
+        "basic relevant argument with limited control"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 1004,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 889,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "solid_b1",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 6,
+        "organization": 6,
+        "vocabulary": 5.5,
+        "grammar": 6,
+        "overall": 5.875
+      },
+      "tags": [
+        "editorial_anchor",
+        "solid B1-like performance"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 947,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 769,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "solid_b2",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 7.5,
+        "organization": 7.5,
+        "vocabulary": 7.5,
+        "grammar": 7.5,
+        "overall": 7.5
+      },
+      "tags": [
+        "editorial_anchor",
+        "solid B2-like performance"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 886,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 910,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "strong_b2_c1",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 8.5,
+        "organization": 8.5,
+        "vocabulary": 8.5,
+        "grammar": 8.5,
+        "overall": 8.5
+      },
+      "tags": [
+        "editorial_anchor",
+        "strong B2/C1-like performance"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 880,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 1092,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "t1_grammar_strong_task_weak",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 2.5,
+        "organization": 7,
+        "vocabulary": 7,
+        "grammar": 7.5,
+        "overall": 6.0
+      },
+      "tags": [
+        "strong_grammar_weak_task",
+        "register"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 863,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 998,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "t1_long_repetitive",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 6,
+        "organization": 5.5,
+        "vocabulary": 4.5,
+        "grammar": 5.5,
+        "overall": 5.375
+      },
+      "tags": [
+        "long_task1",
+        "basic_vocabulary",
+        "repetition"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 1494,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3467,
+          "output_tokens": 2504,
+          "cached_input_tokens": 2533,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": 0.0324226,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0a1f179f22ffe9b4016aaea44c759087d0b8b6941f887dc0ee"
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 24240,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "scores": {
+        "task_fulfillment": 6.0,
+        "organization": 6.0,
+        "vocabulary": 5.5,
+        "grammar": 6.5,
+        "overall": 6.0
+      },
+      "result": {
+        "analysis": {
+          "evidence": {
+            "task": 1,
+            "task_coverage": [
+              {
+                "requirement": "Suggest best time and transport with reasons",
+                "coverage": "developed",
+                "evidence": [
+                  {
+                    "quote": "I think Saturday is a good day because Saturday is a good day for visiting.",
+                    "explanation_vi": "Nêu thời điểm đến và lý do về sự thuận tiện của người viết/người dân."
+                  },
+                  {
+                    "quote": "It takes two hours, so you can leave early and arrive before lunch.",
+                    "explanation_vi": "Nêu phương tiện, thời lượng và lợi ích đến sớm trước bữa trưa."
+                  }
+                ]
+              },
+              {
+                "requirement": "Recommend two places and explain why",
+                "coverage": "developed",
+                "evidence": [
+                  {
+                    "quote": "The market is a good place to visit.",
+                    "explanation_vi": "Giới thiệu chợ; các câu sau nêu hoạt động mua sắm."
+                  },
+                  {
+                    "quote": "Another place is the museum.",
+                    "explanation_vi": "Giới thiệu bảo tàng; các câu sau nêu nội dung và giá trị tìm hiểu thị trấn."
+                  }
+                ]
+              },
+              {
+                "requirement": "Invite Alex to an activity together",
+                "coverage": "developed",
+                "evidence": [
+                  {
+                    "quote": "I want to invite you to dinner at my house.",
+                    "explanation_vi": "Mời Alex ăn tối tại nhà."
+                  },
+                  {
+                    "quote": "It will be a good evening because we can spend time together.",
+                    "explanation_vi": "Nêu hoạt động chung và mục đích dành thời gian cùng nhau."
+                  }
+                ]
+              }
+            ],
+            "idea_development": "adequate",
+            "cohesion": "basic",
+            "lexical_range": "basic",
+            "criteria": {
+              "task_fulfillment": {
+                "positive_evidence": [
+                  {
+                    "quote": "It takes two hours, so you can leave early and arrive before lunch.",
+                    "explanation_vi": "Cung cấp lựa chọn xe buýt, thời gian đi và gợi ý giờ khởi hành."
+                  },
+                  {
+                    "quote": "I want to invite you to dinner at my house.",
+                    "explanation_vi": "Lời mời ăn tối trực tiếp, phù hợp mục đích email."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "I think Saturday is a good day because Saturday is a good day for visiting.",
+                    "explanation_vi": "Lý do chọn thứ Bảy lặp lại cùng một ý và chưa cho thấy rõ đây là thời điểm tốt nhất đối với Alex."
+                  },
+                  {
+                    "quote": "The pictures are interesting and the old things are interesting too.",
+                    "explanation_vi": "Giải thích về bảo tàng rất chung chung, chủ yếu lặp lại tính từ “interesting”."
+                  }
+                ],
+                "assessment_vi": "Email đáp ứng đủ ba yêu cầu và có lời chào/kết thư phù hợp. Tuy nhiên, các lý do và mô tả địa điểm còn đơn giản, lặp ý; mục đích tư vấn được thể hiện rõ nhưng chưa phát triển thuyết phục."
+              },
+              "organization": {
+                "positive_evidence": [
+                  {
+                    "quote": "The market is a good place to visit.",
+                    "explanation_vi": "Mở đoạn tham quan bằng địa điểm thứ nhất rõ ràng."
+                  },
+                  {
+                    "quote": "I want to invite you to dinner at my house.",
+                    "explanation_vi": "Chuyển sang lời mời với mục đích đoạn rõ ràng."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "I think Saturday is a good day because Saturday is a good day for visiting.",
+                    "explanation_vi": "Lặp cấu trúc và nội dung làm mạch thông tin về thời gian thiếu gọn gàng."
+                  },
+                  {
+                    "quote": "Another place is the museum.",
+                    "explanation_vi": "Cụm chuyển ý “Another place” chỉ tạo liên kết cơ bản giữa hai gợi ý."
+                  }
+                ],
+                "assessment_vi": "Bố cục theo trình tự tư vấn đi lại, tham quan rồi gặp gỡ là hợp lý; các đoạn có chức năng nhận biết được. Liên kết chủ yếu dựa vào trình tự đơn giản và lặp từ, chưa có tham chiếu hay chuyển ý linh hoạt."
+              },
+              "vocabulary": {
+                "positive_evidence": [
+                  {
+                    "quote": "It takes two hours, so you can leave early and arrive before lunch.",
+                    "explanation_vi": "Dùng một số từ/cụm đúng ngữ cảnh tư vấn lịch trình như “leave early” và “arrive before lunch”."
+                  },
+                  {
+                    "quote": "You can see many things and learn about our town.",
+                    "explanation_vi": "Cụm “learn about our town” phù hợp khi giới thiệu bảo tàng."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "There are many shops and many people.",
+                    "explanation_vi": "Lặp nhiều từ chung chung như “many” và “people”, làm mô tả thiếu cụ thể."
+                  },
+                  {
+                    "quote": "The pictures are interesting and the old things are interesting too.",
+                    "explanation_vi": "Lặp “interesting” và “old things”, cho thấy vốn từ mô tả hạn chế."
+                  }
+                ],
+                "assessment_vi": "Từ vựng quen thuộc nhìn chung đúng và phù hợp email thân mật, nhưng phạm vi hẹp và lặp dày các từ như “good”, “many”, “things”, “food”, “interesting”. Mô tả chưa đủ chính xác hoặc sinh động để thể hiện khả năng dùng từ linh hoạt."
+              },
+              "grammar": {
+                "positive_evidence": [
+                  {
+                    "quote": "It takes two hours, so you can leave early and arrive before lunch.",
+                    "explanation_vi": "Câu ghép với “so” và các động từ nguyên mẫu sau “can” được kiểm soát đúng."
+                  },
+                  {
+                    "quote": "I am looking forward to seeing you and I hope you will enjoy the trip.",
+                    "explanation_vi": "Dùng đúng hiện tại tiếp diễn trong cấu trúc “looking forward to” và mệnh đề sau “hope”."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "I think Saturday is a good day because Saturday is a good day for visiting.",
+                    "explanation_vi": "Mệnh đề nguyên nhân đúng ngữ pháp nhưng lặp nguyên ý, nên chưa chứng tỏ khả năng phát triển cấu trúc đa dạng."
+                  },
+                  {
+                    "quote": "The pictures are interesting and the old things are interesting too.",
+                    "explanation_vi": "Hai mệnh đề đơn phối hợp bằng “and” lặp cùng khuôn câu, hạn chế phạm vi cấu trúc."
+                  }
+                ],
+                "assessment_vi": "Không có lỗi ngữ pháp cơ bản rõ ràng trong bài. Người viết kiểm soát tốt câu đơn, câu ghép và một số mệnh đề với “because/so”; tuy nhiên, cấu trúc chủ yếu quen thuộc, lặp lại và ít mệnh đề phụ đa dạng."
+              }
+            },
+            "sentences": [
+              {
+                "sentence_id": 1,
+                "structure": "fragment",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 2,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 3,
+                "structure": "compound",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 4,
+                "structure": "complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 5,
+                "structure": "compound",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 6,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 7,
+                "structure": "complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 8,
+                "structure": "compound",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 9,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 10,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 11,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 12,
+                "structure": "compound",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 13,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 14,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 15,
+                "structure": "compound",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 16,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 17,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 18,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 19,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 20,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 21,
+                "structure": "complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 22,
+                "structure": "complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 23,
+                "structure": "compound_complex",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 1,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 24,
+                "structure": "fragment",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              },
+              {
+                "sentence_id": 25,
+                "structure": "fragment",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              }
+            ],
+            "errors": [],
+            "relevance_vi": "Hoàn toàn liên quan đề bài: thư trả lời Alex tập trung vào thời điểm/di chuyển, hai địa điểm và lời mời gặp gỡ.",
+            "register_vi": "Giọng văn thân mật, lịch sự và phù hợp thư gửi bạn bè; lời chào và kết thư được dùng đúng ngữ cảnh."
+          },
+          "metrics": {
+            "word_count": 216,
+            "sentence_count": 25,
+            "number_of_detected_errors": 0,
+            "major_error_count": 0,
+            "minor_error_count": 0,
+            "estimated_error_density": 0.0,
+            "errors_by_primary_criterion": {},
+            "structures": {
+              "fragment": 3,
+              "simple": 12,
+              "compound": 5,
+              "complex": 4,
+              "compound_complex": 1
+            },
+            "relative_clauses": 0,
+            "conditionals": 0,
+            "subordination": 5,
+            "controlled_complex_sentences": 5,
+            "note_vi": "Số lỗi/cấu trúc được tổng hợp từ phân tích AI đã đối chiếu trích dẫn. Mật độ tính trên 100 từ; không phải bộ dò lỗi hoàn hảo hay công thức trừ điểm. Số câu có thể gồm lời chào/kết thư."
+          }
+        },
+        "assessment": {
+          "task_fulfillment": {
+            "positive_evidence": [
+              {
+                "quote": "It takes two hours, so you can leave early and arrive before lunch.",
+                "explanation_vi": "Cung cấp lựa chọn xe buýt, thời gian đi và gợi ý giờ khởi hành."
+              },
+              {
+                "quote": "I want to invite you to dinner at my house.",
+                "explanation_vi": "Lời mời ăn tối trực tiếp, phù hợp mục đích email."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "I think Saturday is a good day because Saturday is a good day for visiting.",
+                "explanation_vi": "Lý do chọn thứ Bảy lặp lại cùng một ý và chưa cho thấy rõ đây là thời điểm tốt nhất đối với Alex."
+              },
+              {
+                "quote": "The pictures are interesting and the old things are interesting too.",
+                "explanation_vi": "Giải thích về bảo tàng rất chung chung, chủ yếu lặp lại tính từ “interesting”."
+              }
+            ],
+            "assessment_vi": "Email đáp ứng đủ ba yêu cầu và có lời chào/kết thư phù hợp. Tuy nhiên, các lý do và mô tả địa điểm còn đơn giản, lặp ý; mục đích tư vấn được thể hiện rõ nhưng chưa phát triển thuyết phục.",
+            "initial_score": 6.0,
+            "score": 6.0,
+            "score_justification_vi": "Đủ ba nội dung bắt buộc, có thông tin cụ thể về xe buýt, hai địa điểm và bữa tối. Tuy vậy, lý do chọn thời điểm và mô tả các địa điểm còn lặp, chung chung nên mức phát triển chỉ ở mức cơ bản-khá.",
+            "consistency_review_vi": "Đủ ba nội dung bắt buộc, có thông tin cụ thể về xe buýt, hai địa điểm và bữa tối. Tuy vậy, lý do chọn thời điểm và mô tả các địa điểm còn lặp, chung chung nên mức phát triển chỉ ở mức cơ bản-khá.",
+            "high_score_justification_vi": ""
+          },
+          "organization": {
+            "positive_evidence": [
+              {
+                "quote": "The market is a good place to visit.",
+                "explanation_vi": "Mở đoạn tham quan bằng địa điểm thứ nhất rõ ràng."
+              },
+              {
+                "quote": "I want to invite you to dinner at my house.",
+                "explanation_vi": "Chuyển sang lời mời với mục đích đoạn rõ ràng."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "I think Saturday is a good day because Saturday is a good day for visiting.",
+                "explanation_vi": "Lặp cấu trúc và nội dung làm mạch thông tin về thời gian thiếu gọn gàng."
+              },
+              {
+                "quote": "Another place is the museum.",
+                "explanation_vi": "Cụm chuyển ý “Another place” chỉ tạo liên kết cơ bản giữa hai gợi ý."
+              }
+            ],
+            "assessment_vi": "Bố cục theo trình tự tư vấn đi lại, tham quan rồi gặp gỡ là hợp lý; các đoạn có chức năng nhận biết được. Liên kết chủ yếu dựa vào trình tự đơn giản và lặp từ, chưa có tham chiếu hay chuyển ý linh hoạt.",
+            "initial_score": 6.0,
+            "score": 6.0,
+            "score_justification_vi": "Trình tự các đoạn hợp lý và dễ theo dõi, nhưng liên kết chủ yếu là liệt kê, lặp từ và chuyển ý đơn giản. Bố cục rõ không bù được sự thiếu linh hoạt trong liên kết và tham chiếu.",
+            "consistency_review_vi": "Trình tự các đoạn hợp lý và dễ theo dõi, nhưng liên kết chủ yếu là liệt kê, lặp từ và chuyển ý đơn giản. Bố cục rõ không bù được sự thiếu linh hoạt trong liên kết và tham chiếu.",
+            "high_score_justification_vi": ""
+          },
+          "vocabulary": {
+            "positive_evidence": [
+              {
+                "quote": "It takes two hours, so you can leave early and arrive before lunch.",
+                "explanation_vi": "Dùng một số từ/cụm đúng ngữ cảnh tư vấn lịch trình như “leave early” và “arrive before lunch”."
+              },
+              {
+                "quote": "You can see many things and learn about our town.",
+                "explanation_vi": "Cụm “learn about our town” phù hợp khi giới thiệu bảo tàng."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "There are many shops and many people.",
+                "explanation_vi": "Lặp nhiều từ chung chung như “many” và “people”, làm mô tả thiếu cụ thể."
+              },
+              {
+                "quote": "The pictures are interesting and the old things are interesting too.",
+                "explanation_vi": "Lặp “interesting” và “old things”, cho thấy vốn từ mô tả hạn chế."
+              }
+            ],
+            "assessment_vi": "Từ vựng quen thuộc nhìn chung đúng và phù hợp email thân mật, nhưng phạm vi hẹp và lặp dày các từ như “good”, “many”, “things”, “food”, “interesting”. Mô tả chưa đủ chính xác hoặc sinh động để thể hiện khả năng dùng từ linh hoạt.",
+            "initial_score": 5.5,
+            "score": 5.5,
+            "score_justification_vi": "Từ vựng nhìn chung đúng, dễ hiểu và hợp ngữ cảnh, song chủ yếu là vốn từ quen thuộc. Sự lặp lại dày của các từ chung như “good”, “many”, “things” và “interesting” hạn chế độ chính xác, phong phú.",
+            "consistency_review_vi": "Từ vựng nhìn chung đúng, dễ hiểu và hợp ngữ cảnh, song chủ yếu là vốn từ quen thuộc. Sự lặp lại dày của các từ chung như “good”, “many”, “things” và “interesting” hạn chế độ chính xác, phong phú.",
+            "high_score_justification_vi": ""
+          },
+          "grammar": {
+            "positive_evidence": [
+              {
+                "quote": "It takes two hours, so you can leave early and arrive before lunch.",
+                "explanation_vi": "Câu ghép với “so” và các động từ nguyên mẫu sau “can” được kiểm soát đúng."
+              },
+              {
+                "quote": "I am looking forward to seeing you and I hope you will enjoy the trip.",
+                "explanation_vi": "Dùng đúng hiện tại tiếp diễn trong cấu trúc “looking forward to” và mệnh đề sau “hope”."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "I think Saturday is a good day because Saturday is a good day for visiting.",
+                "explanation_vi": "Mệnh đề nguyên nhân đúng ngữ pháp nhưng lặp nguyên ý, nên chưa chứng tỏ khả năng phát triển cấu trúc đa dạng."
+              },
+              {
+                "quote": "The pictures are interesting and the old things are interesting too.",
+                "explanation_vi": "Hai mệnh đề đơn phối hợp bằng “and” lặp cùng khuôn câu, hạn chế phạm vi cấu trúc."
+              }
+            ],
+            "assessment_vi": "Không có lỗi ngữ pháp cơ bản rõ ràng trong bài. Người viết kiểm soát tốt câu đơn, câu ghép và một số mệnh đề với “because/so”; tuy nhiên, cấu trúc chủ yếu quen thuộc, lặp lại và ít mệnh đề phụ đa dạng.",
+            "initial_score": 6.5,
+            "score": 6.5,
+            "score_justification_vi": "Ngữ pháp cơ bản được kiểm soát tốt, không thấy lỗi cục bộ cần sửa; có câu ghép và một số mệnh đề phụ đúng. Tuy nhiên, phần lớn câu theo mẫu quen thuộc và lặp, nên bằng chứng về phạm vi cấu trúc linh hoạt còn hạn chế.",
+            "consistency_review_vi": "Ngữ pháp cơ bản được kiểm soát tốt, không thấy lỗi cục bộ cần sửa; có câu ghép và một số mệnh đề phụ đúng. Tuy nhiên, phần lớn câu theo mẫu quen thuộc và lặp, nên bằng chứng về phạm vi cấu trúc linh hoạt còn hạn chế.",
+            "high_score_justification_vi": ""
+          },
+          "calibration_summary_vi": "Bài vượt yêu cầu độ dài và hoàn thành đầy đủ nhiệm vụ trong giọng email phù hợp. Điểm hạn chế chính là phát triển ý, liên kết và vốn từ còn cơ bản, lặp nhiều; ngữ pháp chính xác nhưng phạm vi cấu trúc chưa rộng."
+        },
+        "confidence": 0.94,
+        "uncertainties": [],
+        "feedback": {
+          "summary_vi": "Bài vượt yêu cầu độ dài và hoàn thành đầy đủ nhiệm vụ trong giọng email phù hợp. Điểm hạn chế chính là phát triển ý, liên kết và vốn từ còn cơ bản, lặp nhiều; ngữ pháp chính xác nhưng phạm vi cấu trúc chưa rộng.",
+          "priority_improvements": [
+            {
+              "title_vi": "Cụ thể hóa lý do tư vấn",
+              "explanation_vi": "Mỗi đề xuất nên có một lý do riêng, liên quan trực tiếp đến nhu cầu của Alex thay vì lặp cùng nhận định.",
+              "example": "Nêu lý do cụ thể về không khí, lịch hoạt động hoặc lợi ích thực tế của thời điểm/địa điểm."
+            },
+            {
+              "title_vi": "Giảm lặp từ mô tả",
+              "explanation_vi": "Thay các từ khái quát lặp lại bằng chi tiết quan sát được hoặc tên loại hàng hóa/hiện vật.",
+              "example": "Mô tả một nét đặc trưng của chợ và một điểm nổi bật của bảo tàng."
+            },
+            {
+              "title_vi": "Mở rộng liên kết câu",
+              "explanation_vi": "Kết nối nguyên nhân, kết quả và đối chiếu bằng các quan hệ ý nghĩa rõ hơn thay vì chỉ nối bằng “and”.",
+              "example": "Liên kết đặc điểm của địa điểm với lý do Alex nên ghé thăm."
+            }
+          ],
+          "strengths": [
+            "Cung cấp lựa chọn xe buýt, thời gian đi và gợi ý giờ khởi hành.",
+            "Mở đoạn tham quan bằng địa điểm thứ nhất rõ ràng.",
+            "Dùng một số từ/cụm đúng ngữ cảnh tư vấn lịch trình như “leave early” và “arrive before lunch”."
+          ],
+          "structure_feedback": [
+            {
+              "title_vi": "Bố cục và phát triển ý",
+              "explanation_vi": "Bố cục theo trình tự tư vấn đi lại, tham quan rồi gặp gỡ là hợp lý; các đoạn có chức năng nhận biết được. Liên kết chủ yếu dựa vào trình tự đơn giản và lặp từ, chưa có tham chiếu hay chuyển ý linh hoạt.",
+              "example": ""
+            }
+          ],
+          "task_fulfillment_feedback": [
+            {
+              "title_vi": "Đáp ứng yêu cầu",
+              "explanation_vi": "Email đáp ứng đủ ba yêu cầu và có lời chào/kết thư phù hợp. Tuy nhiên, các lý do và mô tả địa điểm còn đơn giản, lặp ý; mục đích tư vấn được thể hiện rõ nhưng chưa phát triển thuyết phục.",
+              "example": ""
+            }
+          ],
+          "vocabulary_suggestions": []
+        }
+      },
+      "final_consistency_reasons": [
+        "HIGH_LANGUAGE_SCORE_WITH_NARROW_STRUCTURE_EVIDENCE"
+      ]
+    },
+    {
+      "sample_id": "t1_short_controlled",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 4.5,
+        "organization": 5.5,
+        "vocabulary": 5,
+        "grammar": 6,
+        "overall": 5.25
+      },
+      "tags": [
+        "short_task1",
+        "accurate_but_undeveloped"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 957,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 826,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "t2_collocation_boundary",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 7,
+        "organization": 7,
+        "vocabulary": 5.5,
+        "grammar": 6.5,
+        "overall": 6.5
+      },
+      "tags": [
+        "task2",
+        "unnatural_collocations",
+        "boundary_b2"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 867,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 911,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "t2_content_good_language_weak",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 7,
+        "organization": 6.5,
+        "vocabulary": 5.5,
+        "grammar": 4.5,
+        "overall": 5.875
+      },
+      "tags": [
+        "task2",
+        "good_content_poor_grammar",
+        "multiple_basic_errors"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 1594,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 780,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "error_code": "ai_unavailable"
+    },
+    {
+      "sample_id": "weak",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 2.5,
+        "organization": 3,
+        "vocabulary": 2.5,
+        "grammar": 2,
+        "overall": 2.5
+      },
+      "tags": [
+        "editorial_anchor",
+        "weak response"
+      ],
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 935,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 2812,
+          "output_tokens": 2111,
+          "cached_input_tokens": 2809,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": 0.0258998,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 2,
+              "cached": 0.2,
+              "output": 12
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_03679b015f33a31f016aaea44064bc87d0999c3ce75f22fa6e"
+          },
+          "user_id": null,
+          "operation": "writing_escalation",
+          "model": "gpt-5.6-terra",
+          "reasoning_effort": "none",
+          "latency_ms": 20377,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "ef6c1e7d-3fe0-4deb-bbd7-1acdc04e1be5",
+          "category": "evaluation"
+        }
+      ],
+      "primary_result": null,
+      "primary_scores": null,
+      "primary_error": "ai_unavailable",
+      "scores": {
+        "task_fulfillment": 1.5,
+        "organization": 1.5,
+        "vocabulary": 1.5,
+        "grammar": 1.0,
+        "overall": 1.375
+      },
+      "result": {
+        "analysis": {
+          "evidence": {
+            "task": 1,
+            "task_coverage": [
+              {
+                "requirement": "Suggest best time and transport with reasons",
+                "coverage": "mentioned",
+                "evidence": [
+                  {
+                    "quote": "You come bus.",
+                    "explanation_vi": "Có nêu phương tiện bằng câu “You come bus.”, nhưng không nêu thời điểm tốt nhất hoặc lý do."
+                  }
+                ]
+              },
+              {
+                "requirement": "Recommend two places and explain why",
+                "coverage": "mentioned",
+                "evidence": [
+                  {
+                    "quote": "Market is buy and museum is old.",
+                    "explanation_vi": "Có nhắc đến hai địa điểm “Market” và “museum”, nhưng mô tả không diễn đạt được lý do khuyến nghị rõ ràng."
+                  }
+                ]
+              },
+              {
+                "requirement": "Invite Alex to an activity together",
+                "coverage": "mentioned",
+                "evidence": [
+                  {
+                    "quote": "We dinner.",
+                    "explanation_vi": "Câu “We dinner.” có vẻ nhằm đề xuất ăn tối cùng nhau, nhưng lời mời không hoàn chỉnh và không rõ nghĩa."
+                  }
+                ]
+              }
+            ],
+            "idea_development": "absent",
+            "cohesion": "limited",
+            "lexical_range": "very_limited",
+            "criteria": {
+              "task_fulfillment": {
+                "positive_evidence": [
+                  {
+                    "quote": "You come bus.",
+                    "explanation_vi": "Có đề cập một cách đi lại."
+                  },
+                  {
+                    "quote": "Market is buy and museum is old.",
+                    "explanation_vi": "Có đề cập hai nơi có thể tham quan."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "",
+                    "explanation_vi": "Bài chỉ có 23 từ, thấp hơn đáng kể mức tối thiểu 120 từ."
+                  },
+                  {
+                    "quote": "",
+                    "explanation_vi": "Không có thời điểm du lịch, lý do cho phương tiện/địa điểm, hay lời mời được diễn đạt hoàn chỉnh."
+                  }
+                ],
+                "assessment_vi": "Bài chạm tới các ý chính nhưng chỉ ở mức nêu từ khóa; không phát triển nội dung theo yêu cầu và quá ngắn."
+              },
+              "organization": {
+                "positive_evidence": [
+                  {
+                    "quote": "Dear Alex, My town good.",
+                    "explanation_vi": "Có lời chào hướng tới người nhận Alex."
+                  },
+                  {
+                    "quote": "Bye, Huy",
+                    "explanation_vi": "Có lời kết và chữ ký."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "",
+                    "explanation_vi": "Không có bố cục email hoặc trình tự ý rõ ràng; các câu rời rạc."
+                  },
+                  {
+                    "quote": "",
+                    "explanation_vi": "Không có liên kết ý nghĩa hiệu quả giữa các đề xuất."
+                  }
+                ],
+                "assessment_vi": "Hình thức có mở và kết thư, nhưng phần thân thư không được tổ chức thành thông điệp mạch lạc."
+              },
+              "vocabulary": {
+                "positive_evidence": [
+                  {
+                    "quote": "Market is buy and museum is old.",
+                    "explanation_vi": "Có dùng một số từ vựng đúng chủ đề du lịch như “Market” và “museum”."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "Market is buy and museum is old.",
+                    "explanation_vi": "Cụm “Market is buy” không truyền đạt ý nghĩa tự nhiên hoặc chính xác."
+                  },
+                  {
+                    "quote": "I like you visit.",
+                    "explanation_vi": "Cụm “I like you visit” dùng từ không đúng cấu trúc để nêu lời đề nghị."
+                  }
+                ],
+                "assessment_vi": "Vốn từ rất hạn chế; một vài từ theo chủ đề xuất hiện nhưng độ chính xác và khả năng diễn đạt ý còn thấp."
+              },
+              "grammar": {
+                "positive_evidence": [
+                  {
+                    "quote": "Market is buy and museum is old.",
+                    "explanation_vi": "Có thử dùng liên từ “and” để nối hai ý."
+                  }
+                ],
+                "negative_evidence": [
+                  {
+                    "quote": "Dear Alex, My town good.",
+                    "explanation_vi": "“My town good” thiếu động từ liên kết cơ bản."
+                  },
+                  {
+                    "quote": "You come bus.",
+                    "explanation_vi": "“You come bus” thiếu giới từ và cấu trúc đề xuất phù hợp."
+                  }
+                ],
+                "assessment_vi": "Các lỗi cấu trúc cơ bản xuất hiện ở hầu hết câu nội dung; bài chỉ cho thấy phạm vi ngữ pháp tối thiểu."
+              }
+            },
+            "sentences": [
+              {
+                "sentence_id": 1,
+                "structure": "compound",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "uncontrolled"
+              },
+              {
+                "sentence_id": 2,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "uncontrolled"
+              },
+              {
+                "sentence_id": 3,
+                "structure": "compound",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "uncontrolled"
+              },
+              {
+                "sentence_id": 4,
+                "structure": "simple",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "uncontrolled"
+              },
+              {
+                "sentence_id": 5,
+                "structure": "fragment",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "uncontrolled"
+              },
+              {
+                "sentence_id": 6,
+                "structure": "fragment",
+                "relative_clauses": 0,
+                "conditionals": 0,
+                "subordination": 0,
+                "control": "controlled"
+              }
+            ],
+            "errors": [
+              {
+                "category": "grammar",
+                "subtype": "missing linking verb",
+                "original": "My town good",
+                "corrected": "My town is good",
+                "explanation_vi": "Thiếu động từ “is” giữa chủ ngữ và tính từ.",
+                "severity": "major",
+                "sentence_id": 1,
+                "primary_criterion": "grammar"
+              },
+              {
+                "category": "grammar",
+                "subtype": "missing preposition",
+                "original": "come bus",
+                "corrected": "come by bus",
+                "explanation_vi": "Cần giới từ “by” khi nói về phương tiện đi lại.",
+                "severity": "major",
+                "sentence_id": 2,
+                "primary_criterion": "grammar"
+              },
+              {
+                "category": "word_choice",
+                "subtype": "incorrect predicate meaning",
+                "original": "Market is buy",
+                "corrected": "The market is a good place to buy things",
+                "explanation_vi": "“is buy” không phải cấu trúc diễn đạt đúng; cần danh từ hoặc cụm diễn tả hoạt động mua sắm.",
+                "severity": "major",
+                "sentence_id": 3,
+                "primary_criterion": "vocabulary"
+              },
+              {
+                "category": "grammar",
+                "subtype": "missing article",
+                "original": "museum is old",
+                "corrected": "the museum is old",
+                "explanation_vi": "Danh từ đếm được số ít “museum” cần mạo từ trong ngữ cảnh này.",
+                "severity": "minor",
+                "sentence_id": 3,
+                "primary_criterion": "grammar"
+              },
+              {
+                "category": "grammar",
+                "subtype": "incorrect verb pattern",
+                "original": "I like you visit",
+                "corrected": "I would like you to visit",
+                "explanation_vi": "Sau “would like” cần cấu trúc “someone to + verb”; câu hiện tại không diễn đạt được lời mời rõ ràng.",
+                "severity": "major",
+                "sentence_id": 4,
+                "primary_criterion": "grammar"
+              },
+              {
+                "category": "sentence_structure",
+                "subtype": "fragment",
+                "original": "We dinner",
+                "corrected": "We can have dinner together",
+                "explanation_vi": "Cụm này thiếu động từ nên không tạo thành câu hay lời mời hoàn chỉnh.",
+                "severity": "major",
+                "sentence_id": 5,
+                "primary_criterion": "grammar"
+              }
+            ],
+            "relevance_vi": "Nội dung liên quan chủ đề thăm quê, nhưng phản hồi quá ngắn và chỉ chạm bề mặt các yêu cầu nên mục đích giao tiếp chưa rõ ràng.",
+            "register_vi": "Lời chào và kết thư phù hợp ở mức tối thiểu cho email thân mật, nhưng phần thân không đủ ngôn ngữ để duy trì văn phong thư gửi bạn bè."
+          },
+          "metrics": {
+            "word_count": 23,
+            "sentence_count": 6,
+            "number_of_detected_errors": 6,
+            "major_error_count": 5,
+            "minor_error_count": 1,
+            "estimated_error_density": 26.09,
+            "errors_by_primary_criterion": {
+              "grammar": 5,
+              "vocabulary": 1
+            },
+            "structures": {
+              "compound": 2,
+              "simple": 2,
+              "fragment": 2
+            },
+            "relative_clauses": 0,
+            "conditionals": 0,
+            "subordination": 0,
+            "controlled_complex_sentences": 0,
+            "note_vi": "Số lỗi/cấu trúc được tổng hợp từ phân tích AI đã đối chiếu trích dẫn. Mật độ tính trên 100 từ; không phải bộ dò lỗi hoàn hảo hay công thức trừ điểm. Số câu có thể gồm lời chào/kết thư."
+          }
+        },
+        "assessment": {
+          "task_fulfillment": {
+            "positive_evidence": [
+              {
+                "quote": "You come bus.",
+                "explanation_vi": "Có đề cập một cách đi lại."
+              },
+              {
+                "quote": "Market is buy and museum is old.",
+                "explanation_vi": "Có đề cập hai nơi có thể tham quan."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "",
+                "explanation_vi": "Bài chỉ có 23 từ, thấp hơn đáng kể mức tối thiểu 120 từ."
+              },
+              {
+                "quote": "",
+                "explanation_vi": "Không có thời điểm du lịch, lý do cho phương tiện/địa điểm, hay lời mời được diễn đạt hoàn chỉnh."
+              }
+            ],
+            "assessment_vi": "Bài chạm tới các ý chính nhưng chỉ ở mức nêu từ khóa; không phát triển nội dung theo yêu cầu và quá ngắn.",
+            "initial_score": 1.5,
+            "score": 1.5,
+            "score_justification_vi": "Bài chỉ nêu rời rạc phương tiện, hai địa điểm và ý định ăn tối; thiếu thời điểm, lý do và phát triển ý. Với 23 từ so với yêu cầu tối thiểu 120 từ, mục đích email không được hoàn thành.",
+            "consistency_review_vi": "Bài chỉ nêu rời rạc phương tiện, hai địa điểm và ý định ăn tối; thiếu thời điểm, lý do và phát triển ý. Với 23 từ so với yêu cầu tối thiểu 120 từ, mục đích email không được hoàn thành.",
+            "high_score_justification_vi": ""
+          },
+          "organization": {
+            "positive_evidence": [
+              {
+                "quote": "Dear Alex, My town good.",
+                "explanation_vi": "Có lời chào hướng tới người nhận Alex."
+              },
+              {
+                "quote": "Bye, Huy",
+                "explanation_vi": "Có lời kết và chữ ký."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "",
+                "explanation_vi": "Không có bố cục email hoặc trình tự ý rõ ràng; các câu rời rạc."
+              },
+              {
+                "quote": "",
+                "explanation_vi": "Không có liên kết ý nghĩa hiệu quả giữa các đề xuất."
+              }
+            ],
+            "assessment_vi": "Hình thức có mở và kết thư, nhưng phần thân thư không được tổ chức thành thông điệp mạch lạc.",
+            "initial_score": 1.5,
+            "score": 1.5,
+            "score_justification_vi": "Có chào thư và ký tên, nhưng các câu nội dung rời rạc, không có trình tự hay liên kết rõ ràng. Đây chỉ là khung email tối thiểu, không phải tổ chức bài viết đầy đủ.",
+            "consistency_review_vi": "Có chào thư và ký tên, nhưng các câu nội dung rời rạc, không có trình tự hay liên kết rõ ràng. Đây chỉ là khung email tối thiểu, không phải tổ chức bài viết đầy đủ.",
+            "high_score_justification_vi": ""
+          },
+          "vocabulary": {
+            "positive_evidence": [
+              {
+                "quote": "Market is buy and museum is old.",
+                "explanation_vi": "Có dùng một số từ vựng đúng chủ đề du lịch như “Market” và “museum”."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "Market is buy and museum is old.",
+                "explanation_vi": "Cụm “Market is buy” không truyền đạt ý nghĩa tự nhiên hoặc chính xác."
+              },
+              {
+                "quote": "I like you visit.",
+                "explanation_vi": "Cụm “I like you visit” dùng từ không đúng cấu trúc để nêu lời đề nghị."
+              }
+            ],
+            "assessment_vi": "Vốn từ rất hạn chế; một vài từ theo chủ đề xuất hiện nhưng độ chính xác và khả năng diễn đạt ý còn thấp.",
+            "initial_score": 1.5,
+            "score": 1.5,
+            "score_justification_vi": "Từ vựng chủ đề rất ít và chỉ có một vài từ như địa điểm tham quan. Các kết hợp như “Market is buy” và cách diễn đạt lời mời thiếu chính xác làm hạn chế nghiêm trọng khả năng truyền đạt.",
+            "consistency_review_vi": "Từ vựng chủ đề rất ít và chỉ có một vài từ như địa điểm tham quan. Các kết hợp như “Market is buy” và cách diễn đạt lời mời thiếu chính xác làm hạn chế nghiêm trọng khả năng truyền đạt.",
+            "high_score_justification_vi": ""
+          },
+          "grammar": {
+            "positive_evidence": [
+              {
+                "quote": "Market is buy and museum is old.",
+                "explanation_vi": "Có thử dùng liên từ “and” để nối hai ý."
+              }
+            ],
+            "negative_evidence": [
+              {
+                "quote": "Dear Alex, My town good.",
+                "explanation_vi": "“My town good” thiếu động từ liên kết cơ bản."
+              },
+              {
+                "quote": "You come bus.",
+                "explanation_vi": "“You come bus” thiếu giới từ và cấu trúc đề xuất phù hợp."
+              }
+            ],
+            "assessment_vi": "Các lỗi cấu trúc cơ bản xuất hiện ở hầu hết câu nội dung; bài chỉ cho thấy phạm vi ngữ pháp tối thiểu.",
+            "initial_score": 1.0,
+            "score": 1.0,
+            "score_justification_vi": "Hầu hết câu nội dung có lỗi cấu trúc cơ bản, gồm thiếu động từ, giới từ, mạo từ và mẫu động từ; “We dinner” là mảnh câu. Phạm vi cấu trúc được thể hiện rất hạn chế và kiểm soát thấp.",
+            "consistency_review_vi": "Hầu hết câu nội dung có lỗi cấu trúc cơ bản, gồm thiếu động từ, giới từ, mạo từ và mẫu động từ; “We dinner” là mảnh câu. Phạm vi cấu trúc được thể hiện rất hạn chế và kiểm soát thấp.",
+            "high_score_justification_vi": ""
+          },
+          "calibration_summary_vi": "Bài trả lời có liên quan sơ bộ đến đề nhưng quá ngắn và chưa hoàn thành yêu cầu tối thiểu. Các ý chỉ được nêu bằng từ/cụm rời rạc, đồng thời lỗi ngữ pháp cơ bản xuất hiện dày đặc."
+        },
+        "confidence": 0.98,
+        "uncertainties": [
+          "Cụm “We dinner.” có thể được hiểu là ý định ăn tối cùng nhau, nhưng không đủ cấu trúc để xác định chính xác ý giao tiếp.",
+          "Câu “I like you visit.” có thể nhằm nói thích Alex đến thăm hoặc muốn mời Alex đến thăm."
+        ],
+        "feedback": {
+          "summary_vi": "Bài trả lời có liên quan sơ bộ đến đề nhưng quá ngắn và chưa hoàn thành yêu cầu tối thiểu. Các ý chỉ được nêu bằng từ/cụm rời rạc, đồng thời lỗi ngữ pháp cơ bản xuất hiện dày đặc.",
+          "priority_improvements": [
+            {
+              "title_vi": "Hoàn thành đủ từng yêu cầu của đề",
+              "explanation_vi": "Nêu thời điểm, phương tiện kèm lý do; giới thiệu từng địa điểm kèm lý do; sau đó đưa ra một lời mời rõ ràng.",
+              "example": "You should come in April because the weather is pleasant."
+            },
+            {
+              "title_vi": "Viết câu hoàn chỉnh",
+              "explanation_vi": "Mỗi câu tiếng Anh cần chủ ngữ và động từ; chú ý “be”, giới từ chỉ phương tiện và mẫu động từ sau “would like”.",
+              "example": "My town is beautiful, and you can come by bus."
+            },
+            {
+              "title_vi": "Phát triển thành email đủ độ dài",
+              "explanation_vi": "Dùng lời chào, các đoạn thân thư theo từng ý, và lời kết; cần đáp ứng ít nhất 120 từ thay vì chỉ liệt kê ý.",
+              "example": "I would also like to invite you to have dinner with my family."
+            }
+          ],
+          "strengths": [
+            "Có đề cập một cách đi lại.",
+            "Có lời chào hướng tới người nhận Alex.",
+            "Có dùng một số từ vựng đúng chủ đề du lịch như “Market” và “museum”."
+          ],
+          "structure_feedback": [
+            {
+              "title_vi": "Bố cục và phát triển ý",
+              "explanation_vi": "Hình thức có mở và kết thư, nhưng phần thân thư không được tổ chức thành thông điệp mạch lạc.",
+              "example": ""
+            }
+          ],
+          "task_fulfillment_feedback": [
+            {
+              "title_vi": "Đáp ứng yêu cầu",
+              "explanation_vi": "Bài chạm tới các ý chính nhưng chỉ ở mức nêu từ khóa; không phát triển nội dung theo yêu cầu và quá ngắn.",
+              "example": ""
+            }
+          ],
+          "vocabulary_suggestions": []
+        }
+      },
+      "final_consistency_reasons": []
+    }
+  ],
+  "metrics": {
+    "sample_count": 13,
+    "valid_samples": 3,
+    "overall_mae": 0.6666666666666666,
+    "criterion_mae": {
+      "task_fulfillment": 0.5,
+      "organization": 0.6666666666666666,
+      "vocabulary": 0.6666666666666666,
+      "grammar": 0.8333333333333334
+    },
+    "within_half_rate": 0.07692307692307693,
+    "within_one_rate": 0.15384615384615385,
+    "band_agreement": 0.15384615384615385,
+    "overscore_rate": 0.07692307692307693,
+    "underscore_rate": 0.07692307692307693,
+    "serious_overscore_rate": 0.0,
+    "mean_signed_error": -0.25,
+    "structured_success_rate": 0.23076923076923078,
+    "invalid_output_rate": 0.0,
+    "avg_latency_ms": 6794.461538461538,
+    "avg_input_tokens": 727.2307692307693,
+    "avg_cached_input_tokens": 605.7692307692307,
+    "avg_output_tokens": 530.5384615384615,
+    "avg_reasoning_tokens": 0,
+    "avg_requests": 2.0,
+    "avg_cost_usd": 0.006730538461538461,
+    "cost_per_100": 0.6730538461538461,
+    "cost_per_1000": 6.730538461538462,
+    "cost_fully_metered": false,
+    "escalation_rate": 1.0,
+    "quality_pass": false,
+    "checks": {
+      "overall_mae": false,
+      "criterion_mae": false,
+      "within_half": false,
+      "within_one": false,
+      "serious_overscore": true,
+      "structured_success": false,
+      "sample_count": true,
+      "reference_provenance": true
+    }
+  },
+  "source_counts": {
+    "internal_reference": 13
+  }
+}

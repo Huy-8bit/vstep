@@ -1,5 +1,5 @@
 from app.common.errors import AppError
-from app.core.config import settings
+from app.llm.routing import route_for
 from app.validators.questions import VALIDATOR_VERSION
 from app.vstep_reference.specification import REFERENCE_VERSION, SIMULATOR_HEURISTICS
 
@@ -64,7 +64,13 @@ async def validate_quality(llm, skill, payload, user_id, *, practice_context=Non
     return {
         "generator_version": REFERENCE_VERSION,
         "validator_version": VALIDATOR_VERSION,
-        "generation_model": settings.openai_model,
+        "generation_model": getattr(llm, "model_override", None)
+        or route_for(
+            {"WRITING": "generate_question", "SPEAKING": "speaking_question", "READING": "reading_generate"}[
+                skill
+            ]
+        ).model,
+        "review_model": route_for("question_quality").model,
         "format_valid": True,
         "quality_valid": True,
         "quality_method": "independent_llm_review",

@@ -1,0 +1,602 @@
+{
+  "model": "gpt-5.4-mini-2026-03-17",
+  "effort": "low",
+  "cases": [
+    {
+      "id": "basic-errors",
+      "part": 1,
+      "question": "What do you usually do at weekends, and why?",
+      "transcript": "I usually go park with my friend. We plays football because it make me happy. Last Sunday I go there and meet many people. I like this activity because good for health.",
+      "reference": {
+        "grammar": 4.0,
+        "vocabulary": 4.5,
+        "structures": 5.0
+      }
+    },
+    {
+      "id": "connected-simple-answer",
+      "part": 1,
+      "question": "Do you prefer studying alone or with other people? Why?",
+      "transcript": "I prefer studying alone because I can choose my own time. When I study with friends, we sometimes talk about other things and forget our work. Last week I had an English exam, so I studied in my room every evening. This helped me finish all the exercises. However, I sometimes ask a friend for help when I do not understand a difficult question.",
+      "reference": {
+        "grammar": 6.5,
+        "vocabulary": 6.0,
+        "structures": 6.5
+      }
+    },
+    {
+      "id": "developed-comparison",
+      "part": 2,
+      "question": "Your class has a free afternoon. Choose a museum visit, a picnic, or a sports tournament. Explain your choice and why the other options are less suitable.",
+      "transcript": "I would choose the museum visit, mainly because it combines a shared experience with something useful to learn. Our class has recently studied local history, so seeing the objects in person would make those lessons more memorable. It would also suit students who do not enjoy competitive sports. A picnic would certainly be relaxing, but the weather has been unpredictable, and we might end up cancelling at the last minute. A sports tournament could bring people together, although differences in fitness might leave some students feeling excluded. The museum does charge an entrance fee; however, if we booked as a school group, we could probably get a discount. On balance, it seems the most inclusive and reliable option.",
+      "reference": {
+        "grammar": 8.0,
+        "vocabulary": 7.5,
+        "structures": 8.0
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "basic-errors",
+      "reference": {
+        "grammar": 4.0,
+        "vocabulary": 4.5,
+        "structures": 5.0
+      },
+      "source": "internal_reference",
+      "scores": {
+        "grammar": 4.5,
+        "vocabulary": 4.5,
+        "structures": 4.5
+      },
+      "result": {
+        "part": 1,
+        "scores": {
+          "grammar": 4.5,
+          "vocabulary": 4.5,
+          "structures": 4.5
+        },
+        "confidence": 0.92,
+        "summary_vi": "Câu trả lời hiểu được và bám đề, nhưng còn nhiều lỗi ngữ pháp cơ bản như chia động từ, mạo từ, thì và cấu trúc câu. Từ vựng khá đơn giản, lặp lại ý quen thuộc. Cách phát triển ý còn ngắn, chủ yếu liệt kê hoạt động và lý do mà chưa mở rộng bằng ví dụ hoặc so sánh.",
+        "strengths": [
+          "Trả lời đúng chủ đề cuối tuần và nêu được lý do.",
+          "Có một vài ý phát triển bằng ví dụ thực tế như chơi bóng đá và gặp nhiều người.",
+          "Thông điệp nhìn chung rõ ràng, người nghe vẫn hiểu được ý chính."
+        ],
+        "priority_improvements": [
+          {
+            "title_vi": "Sửa lỗi ngữ pháp cơ bản",
+            "explanation_vi": "Cần chú ý chia động từ, dùng mạo từ và thì quá khứ/hiện tại cho đúng để câu tự nhiên hơn.",
+            "example": "I usually go to the park with my friend. We play football because it makes me happy."
+          },
+          {
+            "title_vi": "Nói dài hơn với lý do cụ thể",
+            "explanation_vi": "Không chỉ nói hoạt động, bạn nên thêm 1–2 câu giải thích vì sao thích hoạt động đó hoặc nó tốt như thế nào.",
+            "example": "I like it because it helps me relax and stay healthy."
+          },
+          {
+            "title_vi": "Dùng từ vựng đa dạng hơn một chút",
+            "explanation_vi": "Bạn đang dùng từ rất cơ bản. Hãy thêm các từ tự nhiên hơn như relax, active, fresh air, socialize để câu trả lời phong phú hơn.",
+            "example": "I often go to the park to get some fresh air and socialize with my friends."
+          }
+        ],
+        "grammar_errors": [
+          {
+            "sequence_number": 0,
+            "category": "grammar",
+            "subtype": "verb form / article",
+            "original": "I usually go park with my friend.",
+            "corrected": "I usually go to the park with my friend.",
+            "explanation_vi": "Cần có giới từ 'to' và mạo từ 'the' trước danh từ chỉ địa điểm cụ thể.",
+            "severity": "major",
+            "confidence": 0.99
+          },
+          {
+            "sequence_number": 0,
+            "category": "grammar",
+            "subtype": "subject-verb agreement",
+            "original": "We plays football because it make me happy.",
+            "corrected": "We play football because it makes me happy.",
+            "explanation_vi": "Chủ ngữ 'we' đi với động từ nguyên mẫu 'play'; 'it' đi với 'makes'.",
+            "severity": "major",
+            "confidence": 0.99
+          },
+          {
+            "sequence_number": 0,
+            "category": "grammar",
+            "subtype": "tense",
+            "original": "Last Sunday I go there and meet many people.",
+            "corrected": "Last Sunday I went there and met many people.",
+            "explanation_vi": "Có dấu hiệu quá khứ 'Last Sunday' nên động từ phải chia quá khứ.",
+            "severity": "major",
+            "confidence": 0.99
+          },
+          {
+            "sequence_number": 0,
+            "category": "grammar",
+            "subtype": "sentence structure",
+            "original": "I like this activity because good for health.",
+            "corrected": "I like this activity because it is good for my health.",
+            "explanation_vi": "Mệnh đề sau 'because' cần có chủ ngữ và động từ đầy đủ.",
+            "severity": "major",
+            "confidence": 0.98
+          }
+        ],
+        "other_errors": [],
+        "vocabulary_suggestions": [
+          {
+            "sequence_number": 0,
+            "original": "go park",
+            "suggestion": "go to the park",
+            "reason_vi": "Cụm từ tự nhiên và đúng hơn trong tiếng Anh.",
+            "example": "I usually go to the park with my friend."
+          },
+          {
+            "sequence_number": 0,
+            "original": "make me happy",
+            "suggestion": "make me feel happy / cheer me up",
+            "reason_vi": "Diễn đạt tự nhiên và giàu sắc thái hơn.",
+            "example": "Playing football makes me feel happy."
+          },
+          {
+            "sequence_number": 0,
+            "original": "good for health",
+            "suggestion": "good for my health / healthy",
+            "reason_vi": "Cụm này tự nhiên và chính xác hơn khi nói về lợi ích.",
+            "example": "It is good for my health."
+          }
+        ],
+        "structure_feedback": [
+          {
+            "title_vi": "Thêm câu mở rộng ngắn",
+            "explanation_vi": "Bạn đã trả lời đúng nhưng còn ngắn. Với Part 1, nên có 2–3 câu: nêu hoạt động, giải thích lý do, rồi thêm một ví dụ nhỏ.",
+            "example": "I usually go to the park with my friend. We play football there because it makes me feel happy. I also meet many people, so the weekend feels more interesting."
+          },
+          {
+            "title_vi": "Kết nối ý rõ hơn",
+            "explanation_vi": "Hãy dùng các từ nối đơn giản như because, also, so để thể hiện quan hệ giữa các ý.",
+            "example": "I like it because it is good for my health, and it also helps me relax."
+          }
+        ],
+        "content_feedback": [
+          {
+            "title_vi": "Nêu lý do cụ thể hơn",
+            "explanation_vi": "Bạn đã nói vì sao thích hoạt động này, nhưng lý do còn chung chung. Có thể thêm cảm giác, lợi ích hoặc thói quen cá nhân.",
+            "example": "I like it because it helps me stay active and spend time with my friends."
+          },
+          {
+            "title_vi": "Thêm một chi tiết cá nhân",
+            "explanation_vi": "Một chi tiết nhỏ về tần suất hoặc sở thích sẽ làm câu trả lời tự nhiên hơn.",
+            "example": "I usually go there every Saturday morning."
+          }
+        ],
+        "sentence_corrections": [
+          {
+            "sequence_number": 0,
+            "original": "I usually go park with my friend.",
+            "corrected": "I usually go to the park with my friend.",
+            "explanation_vi": "Cần thêm 'to' trước địa điểm và dùng 'the' trước danh từ chỉ nơi chốn cụ thể.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "We plays football because it make me happy.",
+            "corrected": "We play football because it makes me happy.",
+            "explanation_vi": "Sửa lỗi chia động từ theo chủ ngữ.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "Last Sunday I go there and meet many people.",
+            "corrected": "Last Sunday I went there and met many people.",
+            "explanation_vi": "Dùng thì quá khứ vì có mốc thời gian ở quá khứ.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "I like this activity because good for health.",
+            "corrected": "I like this activity because it is good for my health.",
+            "explanation_vi": "Cần có chủ ngữ và động từ sau 'because'.",
+            "start_seconds": null
+          }
+        ],
+        "answer_feedback": [
+          {
+            "sequence_number": 0,
+            "part": 1,
+            "summary_vi": "Bạn trả lời đúng câu hỏi và nêu được hoạt động cuối tuần, nhưng câu còn ngắn và có nhiều lỗi ngữ pháp cơ bản.",
+            "best_option_clearly_stated": null,
+            "reasons_developed_vi": "Bạn có đưa ra lý do là hoạt động này làm bạn hạnh phúc và tốt cho sức khỏe, nhưng các lý do chưa được phát triển rõ hơn bằng ví dụ hoặc chi tiết cá nhân.",
+            "other_options_discussed_vi": "Chưa có so sánh với hoạt động khác hoặc một lựa chọn thay thế nào khác.",
+            "corrected_transcript": "I usually go to the park with my friend. We play football because it makes me happy. Last Sunday I went there and met many people. I like this activity because it is good for my health.",
+            "improved_b2_answer": "I usually go to the park with my friend at weekends. We play football there because it makes me feel happy and active. Last Sunday, I went there and met many people, which was nice. I like this activity because it is good for my health and helps me relax."
+          }
+        ],
+        "speaking_frame": [
+          {
+            "title_vi": "Khung trả lời Part 1 ngắn gọn",
+            "explanation_vi": "Bạn có thể trả lời theo 3 bước: nói thói quen, giải thích lý do, thêm một chi tiết nhỏ.",
+            "example": "I usually... / I do it because... / For example, ..."
+          }
+        ],
+        "corrected_transcript": "[Part 1 - Sequence 0] I usually go to the park with my friend. We play football because it makes me happy. Last Sunday I went there and met many people. I like this activity because it is good for my health.",
+        "improved_b2_answer": "[Part 1 - Sequence 0] I usually go to the park with my friend at weekends. We play football there because it makes me feel happy and active. Last Sunday, I went there and met many people, which was nice. I like this activity because it is good for my health and helps me relax."
+      },
+      "no_acoustic_scores": true,
+      "calls": [
+        {
+          "input_tokens": 1842,
+          "output_tokens": 2247,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 35,
+          "estimated_cost_usd": 0.011493,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_05db4a99044e27f8016aaea12b6b1487d0863a6c2aa5a396ac"
+          },
+          "user_id": null,
+          "operation": "speaking_grade",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 9353,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "94387e0c-98ad-4236-b1e2-2ece95ed3d9b",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "id": "connected-simple-answer",
+      "reference": {
+        "grammar": 6.5,
+        "vocabulary": 6.0,
+        "structures": 6.5
+      },
+      "source": "internal_reference",
+      "scores": {
+        "grammar": 8.5,
+        "vocabulary": 7.0,
+        "structures": 8.0
+      },
+      "result": {
+        "part": 1,
+        "scores": {
+          "grammar": 8.5,
+          "vocabulary": 7.0,
+          "structures": 8.0
+        },
+        "confidence": 0.95,
+        "summary_vi": "Bài nói trả lời đúng trọng tâm, phát triển ý rõ ràng và có ví dụ cá nhân phù hợp. Ngữ pháp nhìn chung chính xác, chỉ có vài chỗ dùng từ chưa thật tự nhiên. Cấu trúc lập luận mạch lạc với lý do, ví dụ và một điểm bổ sung ở cuối.",
+        "strengths": [
+          "Trả lời trực tiếp câu hỏi và nêu rõ lựa chọn ngay từ đầu.",
+          "Có phát triển ý bằng lý do cụ thể và ví dụ cá nhân hợp lý.",
+          "Liên kết ý khá tự nhiên với 'However' và 'when', giúp câu trả lời mạch lạc."
+        ],
+        "priority_improvements": [
+          {
+            "title_vi": "Dùng từ tự nhiên hơn khi nói về thời gian học",
+            "explanation_vi": "Cụm 'choose my own time' hiểu được, nhưng trong nói tự nhiên thường dùng 'choose my own schedule' hoặc 'study whenever I want'.",
+            "example": "I prefer studying alone because I can choose my own schedule."
+          },
+          {
+            "title_vi": "Mở rộng thêm một chút về lý do chính",
+            "explanation_vi": "Bạn đã có lý do tốt, nhưng có thể thêm một câu ngắn giải thích vì sao học một mình hiệu quả hơn để câu trả lời giàu nội dung hơn.",
+            "example": "I prefer studying alone because I can focus better and work at my own pace."
+          },
+          {
+            "title_vi": "Dùng thêm một so sánh ngắn để làm nổi bật lựa chọn",
+            "explanation_vi": "Bạn đã nhắc đến việc học với bạn bè, nhưng có thể so sánh trực tiếp giữa hai cách học để ý rõ hơn và tự nhiên hơn.",
+            "example": "Studying with friends is useful sometimes, but I feel more productive when I study alone."
+          }
+        ],
+        "grammar_errors": [
+          {
+            "sequence_number": 0,
+            "category": "vocabulary",
+            "subtype": "collocation",
+            "original": "I can choose my own time.",
+            "corrected": "I can choose my own schedule.",
+            "explanation_vi": "'Choose my own time' hiểu được, nhưng 'choose my own schedule' tự nhiên và đúng ngữ cảnh hơn khi nói về việc học.",
+            "severity": "minor",
+            "confidence": 0.97
+          }
+        ],
+        "other_errors": [],
+        "vocabulary_suggestions": [
+          {
+            "sequence_number": 0,
+            "original": "I can choose my own time.",
+            "suggestion": "I can choose my own schedule.",
+            "reason_vi": "Cụm này tự nhiên hơn và phù hợp hơn khi nói về thói quen học tập.",
+            "example": "I like studying alone because I can choose my own schedule."
+          }
+        ],
+        "structure_feedback": [
+          {
+            "title_vi": "Giữ cấu trúc nguyên nhân - ví dụ - bổ sung như hiện tại",
+            "explanation_vi": "Câu trả lời đã có cấu trúc tốt: nêu lựa chọn, giải thích lý do, đưa ví dụ và thêm một ngoại lệ ở cuối. Đây là cách triển khai rất phù hợp cho Part 1.",
+            "example": "I prefer studying alone because... For example... However, I sometimes ask a friend for help..."
+          }
+        ],
+        "content_feedback": [
+          {
+            "title_vi": "Phát triển ý cá nhân vừa đủ",
+            "explanation_vi": "Bạn đã trả lời đúng trọng tâm và có ví dụ thực tế. Nếu muốn điểm nội dung cao hơn nữa, hãy thêm một chi tiết về lợi ích cụ thể như tiết kiệm thời gian hoặc tập trung tốt hơn.",
+            "example": "Studying alone helps me save time because I do not get distracted."
+          }
+        ],
+        "sentence_corrections": [
+          {
+            "sequence_number": 0,
+            "original": "I prefer studying alone because I can choose my own time.",
+            "corrected": "I prefer studying alone because I can choose my own schedule.",
+            "explanation_vi": "Sửa cách kết hợp từ để tự nhiên hơn trong tiếng Anh nói.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "When I study with friends, we sometimes talk about other things and forget our work.",
+            "corrected": "When I study with friends, we sometimes talk about other things and forget about our work.",
+            "explanation_vi": "Thêm 'about' để cụm từ tự nhiên và đúng hơn.",
+            "start_seconds": null
+          }
+        ],
+        "answer_feedback": [
+          {
+            "sequence_number": 0,
+            "part": 1,
+            "summary_vi": "Trả lời tốt, đúng trọng tâm, có lý do và ví dụ rõ ràng. Ý cuối về việc nhờ bạn giúp khi gặp câu khó làm câu trả lời cân bằng hơn.",
+            "best_option_clearly_stated": true,
+            "reasons_developed_vi": "Bạn nêu được lý do chính là học một mình giúp bạn chủ động thời gian và tránh bị xao nhãng. Sau đó bạn minh họa bằng kỳ thi tiếng Anh gần đây, nên câu trả lời có tính cá nhân và thuyết phục.",
+            "other_options_discussed_vi": "Bạn cũng đề cập rằng đôi khi vẫn nhờ bạn bè giúp khi gặp câu khó, cho thấy bạn không chọn một cách tuyệt đối mà biết kết hợp linh hoạt.",
+            "corrected_transcript": "I prefer studying alone because I can choose my own schedule. When I study with friends, we sometimes talk about other things and forget about our work. Last week I had an English exam, so I studied in my room every evening. This helped me finish all the exercises. However, I sometimes ask a friend for help when I do not understand a difficult question.",
+            "improved_b2_answer": "I prefer studying alone because I can choose my own schedule and focus better. When I study with friends, we sometimes start talking about other things and lose concentration. For example, last week I had an English exam, so I studied in my room every evening. That helped me finish all the exercises on time. However, if I do not understand a difficult question, I still ask a friend for help."
+          }
+        ],
+        "speaking_frame": [
+          {
+            "title_vi": "Khung nói ngắn cho Part 1",
+            "explanation_vi": "Nêu lựa chọn ngay lập tức, đưa 1–2 lý do, thêm một ví dụ cá nhân ngắn, rồi kết bằng một ngoại lệ hoặc chi tiết bổ sung.",
+            "example": "I prefer... because... For example... However, I sometimes..."
+          }
+        ],
+        "corrected_transcript": "[Part 1 - Sequence 0] I prefer studying alone because I can choose my own schedule. When I study with friends, we sometimes talk about other things and forget about our work. Last week I had an English exam, so I studied in my room every evening. This helped me finish all the exercises. However, I sometimes ask a friend for help when I do not understand a difficult question.",
+        "improved_b2_answer": "[Part 1 - Sequence 0] I prefer studying alone because I can choose my own schedule and focus better. When I study with friends, we sometimes start talking about other things and lose concentration. For example, last week I had an English exam, so I studied in my room every evening. That helped me finish all the exercises on time. However, if I do not understand a difficult question, I still ask a friend for help."
+      },
+      "no_acoustic_scores": true,
+      "calls": [
+        {
+          "input_tokens": 1879,
+          "output_tokens": 1581,
+          "cached_input_tokens": 1280,
+          "reasoning_tokens": 120,
+          "estimated_cost_usd": 0.00765975,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0b8ece9e70a5c6f9016aaea1347ca887d0a9afd19cd6a53413"
+          },
+          "user_id": null,
+          "operation": "speaking_grade",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 14519,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "f1bdd846-5e16-49a4-88b9-ffb1a2fbd5c4",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "id": "developed-comparison",
+      "reference": {
+        "grammar": 8.0,
+        "vocabulary": 7.5,
+        "structures": 8.0
+      },
+      "source": "internal_reference",
+      "scores": {
+        "grammar": 8.5,
+        "vocabulary": 8.0,
+        "structures": 8.5
+      },
+      "result": {
+        "part": 2,
+        "scores": {
+          "grammar": 8.5,
+          "vocabulary": 8.0,
+          "structures": 8.5
+        },
+        "confidence": 0.93,
+        "summary_vi": "Câu trả lời rất tốt: chọn đúng phương án, nêu lý do rõ ràng, so sánh hai विकल्प còn lại hợp lý và có kết luận mạch lạc. Ngôn ngữ nhìn chung chính xác, từ vựng phù hợp chủ đề học đường, và ý tưởng được phát triển tự nhiên.",
+        "strengths": [
+          "Nêu lựa chọn ngay từ đầu rất rõ ràng và bám sát đề.",
+          "Lý do được phát triển hợp lý bằng ví dụ và so sánh với các phương án khác.",
+          "Dùng cấu trúc liên kết tốt như 'mainly because', 'also', 'although', 'however', 'on balance'."
+        ],
+        "priority_improvements": [
+          {
+            "title_vi": "Đổi một vài cụm từ sang cách nói tự nhiên hơn",
+            "explanation_vi": "Một số cụm như 'something useful to learn' và 'differences in fitness' vẫn đúng, nhưng có thể tự nhiên hơn trong nói bằng miệng.",
+            "example": "Use: 'a chance to learn something useful' / 'differences in fitness levels'"
+          },
+          {
+            "title_vi": "Giữ câu ngắn hơn khi nói",
+            "explanation_vi": "Ý tưởng của bạn tốt, nhưng trong bài nói nên chia bớt câu dài để dễ nhấn ý và nghe mạch lạc hơn.",
+            "example": "Split: 'Our class has recently studied local history. Seeing the objects in person would make those lessons more memorable.'"
+          },
+          {
+            "title_vi": "Thêm một câu chốt mạnh hơn về lựa chọn",
+            "explanation_vi": "Bạn đã có kết luận, nhưng có thể làm nó dứt khoát hơn để người nghe thấy ưu tiên của bạn ngay lập tức.",
+            "example": "For example: 'So for me, the museum visit is clearly the best choice.'"
+          }
+        ],
+        "grammar_errors": [
+          {
+            "sequence_number": 0,
+            "category": "grammar",
+            "subtype": "word_form / noun phrase",
+            "original": "differences in fitness",
+            "corrected": "differences in fitness levels",
+            "explanation_vi": "Cụm này tự nhiên hơn khi nói về sự khác nhau giữa các bạn học. Thêm 'levels' giúp danh từ cụ thể và chính xác hơn.",
+            "severity": "minor",
+            "confidence": 0.88
+          }
+        ],
+        "other_errors": [],
+        "vocabulary_suggestions": [
+          {
+            "sequence_number": 0,
+            "original": "something useful to learn",
+            "suggestion": "a chance to learn something useful",
+            "reason_vi": "Cụm đề xuất tự nhiên hơn trong tiếng Anh nói và nghe mềm mại hơn.",
+            "example": "A museum visit gives us a chance to learn something useful."
+          },
+          {
+            "sequence_number": 0,
+            "original": "differences in fitness",
+            "suggestion": "differences in fitness levels",
+            "reason_vi": "Cụm này chính xác và tự nhiên hơn khi nói về thể lực của nhiều người.",
+            "example": "A sports tournament may not suit everyone because of differences in fitness levels."
+          }
+        ],
+        "structure_feedback": [
+          {
+            "title_vi": "Duy trì bố cục so sánh rất rõ",
+            "explanation_vi": "Bạn đã làm tốt phần mở bài, thân bài so sánh từng lựa chọn và kết luận cuối cùng. Đây là kiểu phát triển ý phù hợp cho Part 2.",
+            "example": "Choose one option, give reasons, compare the others, and finish with a clear final judgment."
+          }
+        ],
+        "content_feedback": [
+          {
+            "title_vi": "Lý do phù hợp và thuyết phục",
+            "explanation_vi": "Bạn giải thích không chỉ vì sao chọn bảo tàng mà còn vì sao hai phương án kia kém phù hợp hơn. Điều này giúp câu trả lời cân bằng và đúng yêu cầu đề.",
+            "example": "Mention practicality, learning value, and fairness for different students."
+          }
+        ],
+        "sentence_corrections": [
+          {
+            "sequence_number": 0,
+            "original": "I would choose the museum visit, mainly because it combines a shared experience with something useful to learn.",
+            "corrected": "I would choose the museum visit, mainly because it combines a shared experience with a chance to learn something useful.",
+            "explanation_vi": "Câu gốc đúng, nhưng cụm 'a chance to learn something useful' tự nhiên hơn trong tiếng Anh nói.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "Our class has recently studied local history, so seeing the objects in person would make those lessons more memorable.",
+            "corrected": "Our class has recently studied local history, so seeing the objects in person would make those lessons more memorable.",
+            "explanation_vi": "Câu này chính xác và tự nhiên, không cần sửa.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "It would also suit students who do not enjoy competitive sports.",
+            "corrected": "It would also suit students who do not enjoy competitive sports.",
+            "explanation_vi": "Câu này đúng và rõ nghĩa.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "A picnic would certainly be relaxing, but the weather has been unpredictable, and we might end up cancelling at the last minute.",
+            "corrected": "A picnic would certainly be relaxing, but the weather has been unpredictable, and we might end up cancelling at the last minute.",
+            "explanation_vi": "Câu này đúng ngữ pháp và mạch lạc.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "A sports tournament could bring people together, although differences in fitness might leave some students feeling excluded.",
+            "corrected": "A sports tournament could bring people together, although differences in fitness levels might leave some students feeling excluded.",
+            "explanation_vi": "Thêm 'levels' để cụm danh từ tự nhiên và chính xác hơn.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "The museum does charge an entrance fee; however, if we booked as a school group, we could probably get a discount.",
+            "corrected": "The museum does charge an entrance fee; however, if we booked as a school group, we could probably get a discount.",
+            "explanation_vi": "Câu này đúng và có cấu trúc rất tốt.",
+            "start_seconds": null
+          },
+          {
+            "sequence_number": 0,
+            "original": "On balance, it seems the most inclusive and reliable option.",
+            "corrected": "On balance, it seems the most inclusive and reliable option.",
+            "explanation_vi": "Câu kết luận rõ ràng, không cần sửa.",
+            "start_seconds": null
+          }
+        ],
+        "answer_feedback": [
+          {
+            "sequence_number": 0,
+            "part": 2,
+            "summary_vi": "Bạn chọn bảo tàng rất rõ ràng, giải thích hợp lý bằng lợi ích học tập và tính phù hợp với cả lớp.",
+            "best_option_clearly_stated": true,
+            "reasons_developed_vi": "Bạn phát triển lý do tốt bằng cách nói về giá trị học tập, sự phù hợp với học sinh không thích thể thao, và tính an toàn/thực tế của phương án.",
+            "other_options_discussed_vi": "Bạn cũng so sánh picnic với thời tiết và tournament với sự khác biệt về thể lực, nên phần phản biện hai lựa chọn còn lại rất đầy đủ.",
+            "corrected_transcript": "I would choose the museum visit, mainly because it combines a shared experience with a chance to learn something useful. Our class has recently studied local history, so seeing the objects in person would make those lessons more memorable. It would also suit students who do not enjoy competitive sports. A picnic would certainly be relaxing, but the weather has been unpredictable, and we might end up cancelling at the last minute. A sports tournament could bring people together, although differences in fitness levels might leave some students feeling excluded. The museum does charge an entrance fee; however, if we booked as a school group, we could probably get a discount. On balance, it seems the most inclusive and reliable option.",
+            "improved_b2_answer": "I would choose the museum visit because it gives the whole class a chance to learn something useful together. We have recently studied local history, so seeing the real objects would make the lesson more memorable. It is also a good choice for students who do not enjoy sports.\n\nI think a picnic is less suitable because the weather is not reliable, and the plan could be ruined at the last minute. A sports tournament is fun, but it may not work well for everyone, since students have different fitness levels. That is why I think the museum is the best option for a free afternoon."
+          }
+        ],
+        "speaking_frame": [
+          {
+            "title_vi": "Khung nói hữu ích cho Part 2",
+            "explanation_vi": "Có thể nói theo 4 bước: chọn phương án, nêu 2 lý do, so sánh 2 phương án còn lại, rồi chốt lại bằng kết luận ngắn.",
+            "example": "I would choose... because... Another reason is... I think the other options are less suitable because... So overall, ..."
+          }
+        ],
+        "corrected_transcript": "Sequence 0 (Part 2): I would choose the museum visit, mainly because it combines a shared experience with a chance to learn something useful. Our class has recently studied local history, so seeing the objects in person would make those lessons more memorable. It would also suit students who do not enjoy competitive sports. A picnic would certainly be relaxing, but the weather has been unpredictable, and we might end up cancelling at the last minute. A sports tournament could bring people together, although differences in fitness levels might leave some students feeling excluded. The museum does charge an entrance fee; however, if we booked as a school group, we could probably get a discount. On balance, it seems the most inclusive and reliable option.",
+        "improved_b2_answer": "Sequence 0 (Part 2): I would choose the museum visit because it gives the whole class a chance to learn something useful together. We have recently studied local history, so seeing the real objects would make the lesson more memorable. It is also a good choice for students who do not enjoy sports. I think a picnic is less suitable because the weather is not reliable, and the plan could be ruined at the last minute. A sports tournament is fun, but it may not work well for everyone, since students have different fitness levels. That is why I think the museum is the best option for a free afternoon."
+      },
+      "no_acoustic_scores": true,
+      "calls": [
+        {
+          "input_tokens": 1961,
+          "output_tokens": 2508,
+          "cached_input_tokens": 1280,
+          "reasoning_tokens": 89,
+          "estimated_cost_usd": 0.01189275,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0a35fcf9da59ee65016aaea143015087d0a58b63e613d552cd"
+          },
+          "user_id": null,
+          "operation": "speaking_grade",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 14472,
+          "status": "success",
+          "attempt_id": null,
+          "evaluation_id": "4751ec84-3aa6-4a0f-b815-99f28d4b780a",
+          "category": "evaluation"
+        }
+      ]
+    }
+  ],
+  "limitation": "Three internal references; no human ratings or audio. A routing/schema check, not full Speaking calibration."
+}

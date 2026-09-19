@@ -6,8 +6,7 @@ from openai import APIConnectionError, APIStatusError, APITimeoutError, AsyncOpe
 
 from app.common.errors import AppError
 from app.core.config import settings
-from app.db.session import SessionLocal
-from app.models import AIUsageLog
+from app.llm.usage import record_usage
 from app.schemas.speaking import TranscriptionResult
 from app.speech.base import SpeechClient
 
@@ -41,27 +40,17 @@ class OpenAISpeechClient(SpeechClient):
                 "speech_unavailable",
             ) from None
         finally:
-            try:
-                usage = getattr(result, "usage", None)
-                async with SessionLocal() as db:
-                    db.add(
-                        AIUsageLog(
-                            user_id=user_id,
-                            operation=operation,
-                            model=model,
-                            input_tokens=getattr(usage, "input_tokens", getattr(usage, "prompt_tokens", 0))
-                            or 0,
-                            output_tokens=getattr(
-                                usage, "output_tokens", getattr(usage, "completion_tokens", 0)
-                            )
-                            or 0,
-                            latency_ms=int((time.monotonic() - start) * 1000),
-                            status=status,
-                        )
-                    )
-                    await db.commit()
-            except Exception:
-                logger.error("Could not persist speech usage metadata")
+            await record_usage(
+                user_id=user_id,
+                operation=operation,
+                model=getattr(result, "model", None) or model,
+                reasoning_effort=None,
+                usage=getattr(result, "usage", None),
+                latency_ms=int((time.monotonic() - start) * 1000),
+                status=status,
+                category="transcription" if operation == "speaking_transcribe" else "audio",
+                response_id=getattr(result, "id", None),
+            )
 
     async def transcribe(self, audio_path: Path, user_id: str) -> TranscriptionResult:
         async def send(client):

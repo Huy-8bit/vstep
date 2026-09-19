@@ -1,0 +1,94 @@
+{
+  "attempt_0": {
+    "scores": {
+      "task_fulfillment": 6.0,
+      "organization": 6.0,
+      "vocabulary": 5.5,
+      "grammar": 5.0,
+      "overall": 5.625
+    },
+    "model": "gpt-5.6-terra"
+  },
+  "attempt_1": {
+    "scores": {
+      "task_fulfillment": 6.0,
+      "organization": 6.0,
+      "vocabulary": 5.5,
+      "grammar": 5.0,
+      "overall": 5.625
+    },
+    "model": "gpt-5.6-terra"
+  },
+  "core_calls": [
+    {
+      "operation": "writing_core",
+      "model": "gpt-5.6-luna",
+      "cost_usd": 0.00484046
+    },
+    {
+      "operation": "writing_escalation",
+      "model": "gpt-5.6-terra",
+      "cost_usd": 0.0360356
+    }
+  ],
+  "cost_ledger": {
+    "attempt_id": "23039f3b-54b9-4d4a-87a9-aae6576dd67e",
+    "known_total_usd": 0.04257931,
+    "unknown_cost_calls": 0,
+    "calls": [
+      {
+        "id": "8e1aab5b-d16b-47d1-9d07-7dab39c8ae56",
+        "operation": "writing_core",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "medium",
+        "input_tokens": 3196,
+        "cached_input_tokens": 2533,
+        "output_tokens": 3881,
+        "reasoning_tokens": 1277,
+        "estimated_cost_usd": 0.00484046,
+        "status": "success",
+        "latency_ms": 32218,
+        "created_at": "2026-09-19T16:08:11.799867+00:00"
+      },
+      {
+        "id": "a274bcad-b13a-46cb-89c6-027fcf23b77a",
+        "operation": "writing_escalation",
+        "model": "gpt-5.6-terra",
+        "reasoning_effort": "none",
+        "input_tokens": 5692,
+        "cached_input_tokens": 2858,
+        "output_tokens": 2483,
+        "reasoning_tokens": 0,
+        "estimated_cost_usd": 0.0360356,
+        "status": "success",
+        "latency_ms": 22811,
+        "created_at": "2026-09-19T16:08:34.630643+00:00"
+      },
+      {
+        "id": "db8a629d-5582-46cc-b436-bfe7e1472e1d",
+        "operation": "writing_corrected",
+        "model": "gpt-5.4-mini-2026-03-17",
+        "reasoning_effort": "low",
+        "input_tokens": 765,
+        "cached_input_tokens": 0,
+        "output_tokens": 251,
+        "reasoning_tokens": 60,
+        "estimated_cost_usd": 0.00170325,
+        "status": "success",
+        "latency_ms": 4914,
+        "created_at": "2026-09-19T16:08:40.177674+00:00"
+      }
+    ]
+  },
+  "checks": [
+    "core-only initial grading",
+    "identical grade replay",
+    "cross-attempt content cache",
+    "lazy corrected answer",
+    "optional replay cache",
+    "scores unchanged",
+    "admin authorization",
+    "per-attempt ledger",
+    "learning integration"
+  ]
+}

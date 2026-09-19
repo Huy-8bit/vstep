@@ -216,6 +216,7 @@ class SpeakingTextScores(StrictModel):
 class SpeakingTextGradingOutput(StrictModel):
     part: Literal[0, 1, 2, 3]
     scores: SpeakingTextScores
+    confidence: float = Field(default=0.8, ge=0, le=1)
     summary_vi: str
     strengths: list[str]
     priority_improvements: list[Improvement] = Field(min_length=3, max_length=3)

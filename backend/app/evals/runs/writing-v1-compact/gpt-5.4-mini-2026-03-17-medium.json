@@ -1,0 +1,1062 @@
+{
+  "id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+  "model": "gpt-5.4-mini-2026-03-17",
+  "reasoning_effort": "medium",
+  "dataset_version": "editorial-writing-2026-09-v1",
+  "dataset_hash": "9883bafbf43f3a69c3a9213591aa6e9d77dfb9cd41ca94b975caa7c8bdef5080",
+  "created_at": "2026-09-19T14:47:28.596126+00:00",
+  "versions": {
+    "core_prompt": "4.1.0",
+    "price": "openai-standard-2026-09-19"
+  },
+  "results": [
+    {
+      "sample_id": "alex_manual_regression",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 6.5,
+        "organization": 6,
+        "vocabulary": 5.5,
+        "grammar": 5.5,
+        "overall": 5.875
+      },
+      "tags": [
+        "editorial_anchor",
+        "borderline B2-like task coverage with weaker language"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3164,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0323178,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_07ab900f7fc36091016aaea0811d8487d0b11343339566cb3b"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33949,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3181,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03233055,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_03347e48f9d3bec3016aaea0a2ec1087d0b284370cfe8b30cc"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 32981,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "borderline_b1",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 5,
+        "organization": 4.5,
+        "vocabulary": 4,
+        "grammar": 3.5,
+        "overall": 4.25
+      },
+      "tags": [
+        "editorial_anchor",
+        "borderline B1-like performance"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3162,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0323163,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0fa52c956ae5ebe2016aaea0811cbc87d08180ad281c45d419"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34250,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3179,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03232905,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0d8e336cc2b91c89016aaea0a33b1087d0a939f9fd9239a2cd"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33663,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "essay_developed_controlled",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 8,
+        "organization": 8,
+        "vocabulary": 8,
+        "grammar": 8,
+        "overall": 8.0
+      },
+      "tags": [
+        "editorial_anchor",
+        "developed argument with controlled range"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3524,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0325878,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_05d7492df5aaa7e4016aaea0c47bf887d0bbeae8e9bd752d96"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33671,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3541,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03260055,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_05ced6f6681d824d016aaea0e5fb8087d08d5412a0cae979b7"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33669,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "essay_limited_development",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 5,
+        "organization": 5,
+        "vocabulary": 4.5,
+        "grammar": 4,
+        "overall": 4.625
+      },
+      "tags": [
+        "editorial_anchor",
+        "basic relevant argument with limited control"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3321,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03243555,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_056d13fbf028ea21016aaea0c417b887d0a10efa533b2951f0"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33355,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3338,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0324483,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0fdf269946bbed23016aaea0e552b087d0878206dd87c23b7b"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 32879,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "solid_b1",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 6,
+        "organization": 6,
+        "vocabulary": 5.5,
+        "grammar": 6,
+        "overall": 5.875
+      },
+      "tags": [
+        "editorial_anchor",
+        "solid B1-like performance"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3172,
+          "output_tokens": 7000,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.033879,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_01606981528ca8f0016aaea081238887d0b0638755c367219b"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34282,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3189,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03233655,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0b89b0995ed932b7016aaea0a3411887d080b9bfbfbdd7ab53"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33066,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "solid_b2",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 7.5,
+        "organization": 7.5,
+        "vocabulary": 7.5,
+        "grammar": 7.5,
+        "overall": 7.5
+      },
+      "tags": [
+        "editorial_anchor",
+        "solid B2-like performance"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3172,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0323238,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0e3f64e1a7e36121016aaea08120e087d08a49621b8180844c"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34179,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3189,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 5376,
+          "estimated_cost_usd": 0.03233655,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_074ab847989da8c0016aaea0a351bc87d08281dc9e16dcfb9a"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 31688,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "strong_b2_c1",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 8.5,
+        "organization": 8.5,
+        "vocabulary": 8.5,
+        "grammar": 8.5,
+        "overall": 8.5
+      },
+      "tags": [
+        "editorial_anchor",
+        "strong B2/C1-like performance"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3236,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0323718,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0e83bac0c7caa2f8016aaea0c304fc87d0a77f3ba0b0be17a2"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34034,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3253,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03238455,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0636260cc4a710d2016aaea0e5024487d09c10cfbf4b586623"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34700,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "t1_grammar_strong_task_weak",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 2.5,
+        "organization": 7,
+        "vocabulary": 7,
+        "grammar": 7.5,
+        "overall": 6.0
+      },
+      "tags": [
+        "strong_grammar_weak_task",
+        "register"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3092,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0322638,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_035894f583bab7be016aaea10662f487d0bc5d080c448cbef7"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34837,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3109,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03227655,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_02b94e403481d3e0016aaea129178087d0af00dbb03244677f"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33619,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "t1_long_repetitive",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 6,
+        "organization": 5.5,
+        "vocabulary": 4.5,
+        "grammar": 5.5,
+        "overall": 5.375
+      },
+      "tags": [
+        "long_task1",
+        "basic_vocabulary",
+        "repetition"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3456,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0325368,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0440f1bbaad39ca4016aaea0c5d9a487d081822b3a1933bf05"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33834,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3473,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03254955,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_01904369ceef54b6016aaea0e78c0087d0925ea4b0bd155f2d"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33978,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "t1_short_controlled",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 4.5,
+        "organization": 5.5,
+        "vocabulary": 5,
+        "grammar": 6,
+        "overall": 5.25
+      },
+      "tags": [
+        "short_task1",
+        "accurate_but_undeveloped"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 2894,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0321153,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_02ed082e381654d5016aaea0c5081087d08a45b47c80b0b06e"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34118,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 2911,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 6506,
+          "estimated_cost_usd": 0.03212805,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_06a52331e27de749016aaea0e6f98c87d0aea6cae964775c29"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33203,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "t2_collocation_boundary",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 7,
+        "organization": 7,
+        "vocabulary": 5.5,
+        "grammar": 6.5,
+        "overall": 6.5
+      },
+      "tags": [
+        "task2",
+        "unnatural_collocations",
+        "boundary_b2"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3522,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0325863,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_01a8511979eb3c89016aaea107e25c87d0830998a28e36b2bd"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34643,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3539,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03259905,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0efdc97cda05111e016aaea12a5f0887d0a5b0cd64fad936fc"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33719,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "t2_content_good_language_weak",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 7,
+        "organization": 6.5,
+        "vocabulary": 5.5,
+        "grammar": 4.5,
+        "overall": 5.875
+      },
+      "tags": [
+        "task2",
+        "good_content_poor_grammar",
+        "multiple_basic_errors"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 3508,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0325758,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0e3c77789f84b4f5016aaea107d20c87d0bf0c24c516d537da"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33830,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 3525,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03258855,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_00e988cfeb95db2d016aaea1297e8087d0a7ab0421b32e7d6d"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 33993,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "sample_id": "weak",
+      "source": "internal_reference",
+      "reference": {
+        "task_fulfillment": 2.5,
+        "organization": 3,
+        "vocabulary": 2.5,
+        "grammar": 2,
+        "overall": 2.5
+      },
+      "tags": [
+        "editorial_anchor",
+        "weak response"
+      ],
+      "error_code": "ai_invalid_output",
+      "escalation_reasons": [
+        "INVALID_PRIMARY_OUTPUT"
+      ],
+      "calls": [
+        {
+          "input_tokens": 2801,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.03204555,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_0c8abeeeb6d261bf016aaea0812a6c87d09f9928dea8d5c831"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34486,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        },
+        {
+          "input_tokens": 2818,
+          "output_tokens": 7000,
+          "cached_input_tokens": 2304,
+          "reasoning_tokens": 7000,
+          "estimated_cost_usd": 0.0320583,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": true,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": "resp_06370aec5db85539016aaea0a3759c87d0bb85789c6d6a3e51"
+          },
+          "user_id": null,
+          "operation": "writing_core",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "medium",
+          "latency_ms": 34247,
+          "status": "invalid_output",
+          "attempt_id": null,
+          "evaluation_id": "e72bbf22-42d8-4d67-b452-7b814309db1e",
+          "category": "evaluation"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "sample_count": 13,
+    "valid_samples": 0,
+    "overall_mae": null,
+    "criterion_mae": {
+      "task_fulfillment": null,
+      "organization": null,
+      "vocabulary": null,
+      "grammar": null
+    },
+    "within_half_rate": 0.0,
+    "within_one_rate": 0.0,
+    "band_agreement": 0.0,
+    "overscore_rate": 0.0,
+    "underscore_rate": 0.0,
+    "serious_overscore_rate": 0.0,
+    "mean_signed_error": null,
+    "structured_success_rate": 0.0,
+    "invalid_output_rate": 1.0,
+    "avg_latency_ms": 67605.61538461539,
+    "avg_input_tokens": 6482.2307692307695,
+    "avg_cached_input_tokens": 4430.7692307692305,
+    "avg_output_tokens": 14000,
+    "avg_reasoning_tokens": 13837.076923076924,
+    "avg_requests": 2.0,
+    "avg_cost_usd": 0.06487090384615385,
+    "cost_per_100": 6.487090384615385,
+    "cost_per_1000": 64.87090384615385,
+    "cost_fully_metered": true,
+    "escalation_rate": 1.0,
+    "quality_pass": false,
+    "checks": {
+      "overall_mae": false,
+      "criterion_mae": false,
+      "within_half": false,
+      "within_one": false,
+      "serious_overscore": true,
+      "structured_success": false,
+      "sample_count": true
+    }
+  },
+  "source_counts": {
+    "internal_reference": 13
+  }
+}

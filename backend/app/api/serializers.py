@@ -107,6 +107,8 @@ def attempt_view(a):
         },
         "question": question_view(a.question),
         "grading": grading_view(a.grading),
+        "optional_feedback_ready": list((a.grading_work or {}).get("optional_feedback", {}))
+        + (["detailed"] if (a.grading_work or {}).get("detail_feedback_key") else []),
     }
 
 

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Query
 
 from app.api.deps import DB, CurrentUser
 from app.llm.openai_client import OpenAILLMClient
+from app.llm.usage import ai_context
 from app.schemas.vocabulary_coach import (
     VocabularyRecommendationRequest,
     VocabularyReviewAnswer,
@@ -22,7 +23,8 @@ def coach(db):
 async def recommendations(
     data: VocabularyRecommendationRequest, db: DB, user: CurrentUser, generate: bool = True
 ):
-    return await coach(db).recommend(data, user.id, generate)
+    with ai_context(attempt_id=data.source_attempt_id):
+        return await coach(db).recommend(data, user.id, generate)
 
 
 @router.post("/items", status_code=201)

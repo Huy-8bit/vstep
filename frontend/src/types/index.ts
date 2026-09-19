@@ -2,7 +2,7 @@ import type { LibraryMetadata } from "@/features/library/types";
 import type { WritingAssessmentMetadata } from "@/features/grading/writing-evidence";
 import type { TestProfile } from "@/lib/test-profile";
 export type Mode = "FULL_TEST" | "TASK1" | "TASK2";
-export type User = { id: string; email: string };
+export type User = { id: string; email: string; is_ai_admin?: boolean };
 export type Question = LibraryMetadata & {
   presentation?: {
     practice_asset_ids?: string[];
@@ -86,6 +86,7 @@ export type Attempt = {
   updated_at: string;
   question: Question;
   grading: Grading | null;
+  optional_feedback_ready?: string[];
   mode?: Mode;
 };
 export type Exam = LibraryMetadata & {

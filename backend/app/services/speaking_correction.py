@@ -24,6 +24,7 @@ class SpeakingCorrectionService:
         subscores = {field: aggregate(field) for field in AUDIO_SCORE_FIELDS}
         pronunciation, fluency = subscores["pronunciation_score"], subscores["fluency_score"]
         data = text_result.model_dump()
+        data.pop("confidence", None)
         data["scores"].update(pronunciation=pronunciation, fluency=fluency, overall=None)
         for key in ("pronunciation", "fluency"):
             data[f"{key}_confidence"] = min(

@@ -19,6 +19,7 @@ from app.core.security import (
 from app.db.base import utcnow
 from app.models import AuthSession, User
 from app.schemas.api import Credentials
+from app.services.ai_cost_service import is_cost_admin
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -56,7 +57,7 @@ async def start_session(response: Response, db, user: User):
     set_tokens(response, user, session)
     db.add(session)
     await db.commit()
-    return {"id": user.id, "email": user.email}
+    return {"id": user.id, "email": user.email, "is_ai_admin": is_cost_admin(user)}
 
 
 @router.post("/register", status_code=201)
@@ -104,7 +105,7 @@ async def refresh(request: Request, response: Response, db: DB):
     session.expires_at = utcnow() + timedelta(days=settings.jwt_refresh_expire_days)
     set_tokens(response, user, session)
     await db.commit()
-    return {"id": user.id, "email": user.email}
+    return {"id": user.id, "email": user.email, "is_ai_admin": is_cost_admin(user)}
 
 
 @router.post("/logout")
@@ -124,4 +125,4 @@ async def logout(request: Request, response: Response, db: DB):
 
 @router.get("/me")
 async def me(user: CurrentUser):
-    return {"id": user.id, "email": user.email}
+    return {"id": user.id, "email": user.email, "is_ai_admin": is_cost_admin(user)}

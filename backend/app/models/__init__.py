@@ -5,7 +5,9 @@ from sqlalchemy import (
     DateTime,
     Float,
     ForeignKey,
+    Index,
     Integer,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -158,13 +160,25 @@ class WritingError(IdentityMixin, Base):
 
 class AIUsageLog(IdentityMixin, Base):
     __tablename__ = "ai_usage_logs"
-    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
-    operation: Mapped[str] = mapped_column(String(30))
+    user_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True)
+    operation: Mapped[str] = mapped_column(String(60))
     model: Mapped[str] = mapped_column(String(100))
     input_tokens: Mapped[int] = mapped_column(Integer, default=0)
     output_tokens: Mapped[int] = mapped_column(Integer, default=0)
     latency_ms: Mapped[int] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String(30))
+    reasoning_effort: Mapped[str | None] = mapped_column(String(20))
+    cached_input_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    reasoning_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    estimated_cost_usd: Mapped[float | None] = mapped_column(Numeric(14, 8))
+    attempt_id: Mapped[str | None] = mapped_column(String(36))
+    category: Mapped[str] = mapped_column(String(30), default="legacy")
+    evaluation_id: Mapped[str | None] = mapped_column(String(36))
+    details: Mapped[dict] = mapped_column(JSONB, default=dict)
+    __table_args__ = (
+        Index("ix_ai_usage_time_category", "created_at", "category"),
+        Index("ix_ai_usage_user_attempt", "user_id", "attempt_id"),
+    )
 
 
 from app.models.assessment import (  # noqa: F401, E402
@@ -172,6 +186,7 @@ from app.models.assessment import (  # noqa: F401, E402
     WritingCalibrationSample,
     WritingGradingRevision,
 )
+from app.models.evaluation import GradingModelEvaluation  # noqa: E402,F401
 from app.models.learning import (  # noqa: E402,F401
     LearningAttempt,
     LearningExerciseAnswer,

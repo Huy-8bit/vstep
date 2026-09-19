@@ -1,0 +1,163 @@
+{
+  "model": "gpt-5.4-mini-2026-03-17",
+  "effort": "low",
+  "escalation_version": "1.2.0",
+  "cases": [
+    {
+      "id": "basic-errors",
+      "part": 1,
+      "question": "What do you usually do at weekends, and why?",
+      "transcript": "I usually go park with my friend. We plays football because it make me happy. Last Sunday I go there and meet many people. I like this activity because good for health.",
+      "reference": {
+        "grammar": 4.0,
+        "vocabulary": 4.5,
+        "structures": 5.0
+      }
+    },
+    {
+      "id": "connected-simple-answer",
+      "part": 1,
+      "question": "Do you prefer studying alone or with other people? Why?",
+      "transcript": "I prefer studying alone because I can choose my own time. When I study with friends, we sometimes talk about other things and forget our work. Last week I had an English exam, so I studied in my room every evening. This helped me finish all the exercises. However, I sometimes ask a friend for help when I do not understand a difficult question.",
+      "reference": {
+        "grammar": 6.5,
+        "vocabulary": 6.0,
+        "structures": 6.5
+      }
+    },
+    {
+      "id": "developed-comparison",
+      "part": 2,
+      "question": "Your class has a free afternoon. Choose a museum visit, a picnic, or a sports tournament. Explain your choice and why the other options are less suitable.",
+      "transcript": "I would choose the museum visit, mainly because it combines a shared experience with something useful to learn. Our class has recently studied local history, so seeing the objects in person would make those lessons more memorable. It would also suit students who do not enjoy competitive sports. A picnic would certainly be relaxing, but the weather has been unpredictable, and we might end up cancelling at the last minute. A sports tournament could bring people together, although differences in fitness might leave some students feeling excluded. The museum does charge an entrance fee; however, if we booked as a school group, we could probably get a discount. On balance, it seems the most inclusive and reliable option.",
+      "reference": {
+        "grammar": 8.0,
+        "vocabulary": 7.5,
+        "structures": 8.0
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "basic-errors",
+      "reference": {
+        "grammar": 4.0,
+        "vocabulary": 4.5,
+        "structures": 5.0
+      },
+      "source": "internal_reference",
+      "error": "ai_unavailable",
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "speaking_grade",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 3933,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "e3594b78-311a-41cd-85be-45b4544a2d44",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "id": "connected-simple-answer",
+      "reference": {
+        "grammar": 6.5,
+        "vocabulary": 6.0,
+        "structures": 6.5
+      },
+      "source": "internal_reference",
+      "error": "ai_unavailable",
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "speaking_grade",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 1086,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "58a11960-591e-4f0d-a4ec-b45a4b0e9a53",
+          "category": "evaluation"
+        }
+      ]
+    },
+    {
+      "id": "developed-comparison",
+      "reference": {
+        "grammar": 8.0,
+        "vocabulary": 7.5,
+        "structures": 8.0
+      },
+      "source": "internal_reference",
+      "error": "ai_unavailable",
+      "calls": [
+        {
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "cached_input_tokens": 0,
+          "reasoning_tokens": 0,
+          "estimated_cost_usd": null,
+          "details": {
+            "price_version": "openai-standard-2026-09-19",
+            "rates": {
+              "input": 0.75,
+              "cached": 0.075,
+              "output": 4.5
+            },
+            "usage_available": false,
+            "audio_input_tokens": 0,
+            "audio_output_tokens": 0,
+            "response_id": null
+          },
+          "user_id": null,
+          "operation": "speaking_grade",
+          "model": "gpt-5.4-mini-2026-03-17",
+          "reasoning_effort": "low",
+          "latency_ms": 997,
+          "status": "http_429",
+          "attempt_id": null,
+          "evaluation_id": "b814734a-180e-4bfe-a6b3-2e92d2e91eca",
+          "category": "evaluation"
+        }
+      ]
+    }
+  ],
+  "limitation": "Three internal references; no human ratings or audio. A routing/schema check, not full Speaking calibration."
+}

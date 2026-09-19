@@ -1,0 +1,41 @@
+{
+  "model": "gpt-5.6-luna",
+  "effort": "medium",
+  "escalation_model": "gpt-5.6-terra",
+  "escalation_effort": "none",
+  "escalation_version": "1.5.0",
+  "model_version": "2026-09-19-routing-v2",
+  "evidence": [
+    "backend/app/evals/runs/writing-routed-independent-a/gpt-5.6-luna-medium-routed-none.json",
+    "backend/app/evals/runs/writing-routed-independent-b/gpt-5.6-luna-medium-routed-none.json"
+  ],
+  "confirmation": "backend/app/evals/runs/writing-routed-independent-b/gpt-5.6-luna-medium-routed-none.json",
+  "quality_targets": {
+    "overall_mae_max": 0.5,
+    "criterion_mae_max": 0.75,
+    "within_half_min": 0.7,
+    "within_one_min": 0.9,
+    "serious_overscore_max": 0.02,
+    "structured_success_min": 0.99,
+    "min_samples": 12
+  },
+  "method": "Two complete independent primary draws on the same 13 internal references, each replayed in full with fresh policy-1.5 reviews. Not a new end-to-end run or an independent holdout.",
+  "deployment_status": "running locally; health and proxy verified",
+  "deployed_at": "2026-09-19T16:10:34.119102+00:00",
+  "url": "http://localhost:3000",
+  "checks": {
+    "backend_health": 200,
+    "frontend_home": 200,
+    "frontend_api_proxy": 200,
+    "cost_page": 200,
+    "unauthenticated_cost_api": 401,
+    "openapi_paths": 105,
+    "backend_frontend_build": "passed",
+    "backend_ruff": "passed",
+    "selected_route_walkthrough": "9 checks passed",
+    "live_model_routes": "matched selected models/efforts",
+    "shadow_enabled": false,
+    "generic_test_suites": "not run, per request",
+    "interactive_browser_microphone": "not verified"
+  }
+}

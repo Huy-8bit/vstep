@@ -1,36 +1,40 @@
-# Writing assessment 2.0.0
+# Writing assessment 4.1.0 — calibrated task routing
 
-Pipeline chấm điểm dùng bài **gốc**. `WritingAnalysisService` tạo structured evidence, `WritingScoreCalibrationService` hiệu chỉnh điểm, sau đó mới sinh hướng dẫn sửa bài. Không truyền target level, bản đã sửa hoặc bài cải thiện vào bước chấm.
+Giữ rubric và yêu cầu bằng chứng, gộp phân tích và chấm thành một Structured Output. Cấu hình được chọn là **Luna / medium**, chấm lại có điều kiện bằng **Terra / none**, chính sách 1.5. Hai lượt kiểm định trên 13 mẫu nội bộ đều vượt ngưỡng; đây chưa phải xác nhận chất lượng bởi giám khảo độc lập. Xem kết quả, chi phí và trạng thái triển khai tại [MODEL_EVALUATION.md](../MODEL_EVALUATION.md).
 
-1. Analysis nhận đề, requirements, bài gốc và sentence IDs. Model chỉ phân tích: độ phủ/phát triển ý, register, cohesion, positive/negative evidence, lỗi và loại cấu trúc. Backend kiểm tra trích dẫn nằm trong bài gốc/câu tương ứng và yêu cầu đủ IDs/requirements.
-2. Python gộp các lỗi trùng vùng trích dẫn, tính word/sentence count, lỗi major/minor, lỗi trên 100 từ, cấu trúc simple/compound/complex/compound-complex, relative/conditional/subordinate clauses. Phát hiện lỗi và cấu trúc là model-assisted, không phải parser ngữ pháp hoàn hảo. Metrics là bằng chứng, không phải công thức trừ điểm.
-3. Calibration chỉ nhận structured evidence/metrics, cùng sáu bài tham chiếu editorial từ yếu đến strong B2/C1. Có nguyên văn email Alex như một trường hợp hiệu chỉnh, không có so sánh chuỗi hay hardcode số điểm cho bài này. Mỗi tiêu chí có initial/final score, bằng chứng, justification và kiểm tra tính nhất quán; 7+ cần ít nhất hai trích dẫn tích cực khác nhau và giải thích đáng kể. Không được bỏ negative evidence từ bước phân tích. Điểm bốn tiêu chí là bội số 0.5; overall tính bằng Python, trung bình bằng nhau, không làm tròn dữ liệu gốc.
-4. Khi điểm cao mâu thuẫn với basic range, lỗi cơ bản, ý chưa phát triển hoặc cohesion đơn giản, checkpoint có `consistency_flags` và một lượt review riêng. Model phải giảm mức điểm hoặc giải thích bằng bằng chứng đủ mạnh. Backend không tự trừ số điểm cố định và không ép phân phối điểm.
-5. Sau khi điểm cố định, model mới sinh summary, ba ưu tiên, sửa từng câu, bản sửa tối thiểu và bài tham khảo B2. Schema feedback không chứa scores; feedback không thể thay đổi điểm.
+## Luồng chấm
 
-Các anchor là hướng dẫn nội bộ, **không** phải dữ liệu người chấm hay điểm VSTEP chính thức. Alex nhắm đến khoảng mid-5 đến low-6 tùy bằng chứng, không bắt buộc một con số. Chất lượng và độ lặp lại của điểm thực tế cần được đối chiếu với người chấm; triển khai không tự chứng minh độ chính xác.
+1. `WritingCoreService` nhận đề, requirements, bài **gốc** và sentence ID do backend tạo. Model phân tích độ phủ, phát triển ý, register, cohesion, range, lỗi, cấu trúc rồi cho bốn điểm theo bước 0.5. Không truyền bài đã sửa, target level hoặc nhãn tham chiếu benchmark vào request.
+2. Bằng chứng tham chiếu sentence ID; backend lấy nguyên văn câu gốc. Lỗi phải trích một đoạn liên tục trong đúng câu. ID không tồn tại, trích dẫn sai hoặc thiếu phân tích câu đều bị từ chối; tối đa một retry. Điểm 7+ vẫn cần hai trích dẫn tích cực khác nhau và giải thích có nội dung.
+3. Python loại lỗi trùng vùng trích dẫn và tính word count, mật độ lỗi, major/minor và thống kê cấu trúc. Phát hiện lỗi/cấu trúc vẫn dựa trên AI. Lỗi là các ví dụ tiêu biểu, không bảo đảm liệt kê mọi lỗi. Không trừ điểm cố định theo số lỗi.
+4. `GradingEscalationService` kiểm tra confidence, mâu thuẫn điểm với range/cohesion/control, lỗi dày đặc, điểm cao khi bằng chứng ngắn, task/language khác biệt rõ, ranh giới năng lực thiếu chắc chắn và output sai schema. Chỉ trường hợp bị đánh dấu mới gọi Terra. Lưu điểm gốc, lý do chuyển tiếp, model cuối và confidence. Không tự trừ điểm hay ép phân phối.
+5. Backend tính overall bằng trung bình bốn tiêu chí, lưu kết quả cùng evidence, metrics, summary ngắn và ba ưu tiên. Đồng bộ Personalized Learning từ kết quả đã lưu. Reading vẫn chấm bằng Python.
+6. Người học yêu cầu riêng **Chữa từng câu**, **Bài đã sửa**, **Bài tham khảo**, **Giải thích chi tiết**, **Vocabulary nâng cao**. Schema phản hồi bổ sung không chứa điểm. Mỗi phần lưu và tái sử dụng riêng; mở phần này không sinh các phần khác.
 
-## Lưu trữ và retry
+Rubric calibration được giữ trong prompt chung. Bài anchor đầy đủ được dùng làm dữ liệu đánh giá, không được đưa vào prompt core để model nhìn thấy đáp án tham chiếu. Chưa có dữ liệu giáo viên; toàn bộ 13 nhãn hiện tại là ước lượng editorial, không phải chuẩn VSTEP chính thức. Email Alex là một mẫu hồi quy, không được tìm theo câu chữ hoặc gán cứng điểm.
 
-`writing_attempts.grading_work` lưu từng checkpoint và cache key theo đề/bài/model/các prompt versions/nhiệt độ. UI gọi từng bước để không gom nhiều API model chậm vào một HTTP request. Retry tiếp tục phần đã lưu, giữ bài và điểm cũ nếu xử lý thất bại. PostgreSQL locks chặn chấm đồng thời cùng attempt. Cache kết quả đã hoàn tất chỉ dùng trong cùng user. Nếu mất kết nối ngay sau khi provider xử lý nhưng trước khi lưu DB, retry có thể phát sinh phí tiếp.
+## Cache, lịch sử và lỗi
 
-`writing_gradings` lưu `grader_version`, `ai_model`, analysis/calibration/feedback prompt versions, criterion evidence và analysis snapshot. Migration đánh dấu kết quả cũ `1.0.0`; bài chấm mới dùng `2.0.0`. Mở bài cũ không tự chấm lại. Khi bấm **Chấm lại với bộ chấm mới**, lưu toàn bộ snapshot cũ vào `writing_grading_revisions` trước khi thay kết quả trong cùng transaction. History/progress dùng kết quả hiện hành; lịch sử phiên bản vẫn xem được tại trang kết quả. Chấm lại phiên bản hiện hành là idempotent.
+`writing_attempts.grading_work` lưu checkpoint core, routing và artifact tùy chọn. Cache key chứa đề/ngữ cảnh/bài gốc, model/effort, MODEL_VERSION, grader/prompt version, temperature và cấu hình/phiên bản chuyển tiếp. Chỉ tái sử dụng trong cùng tài khoản. PostgreSQL advisory lock theo attempt và content ngăn gọi trùng đồng thời; phần phản hồi tùy chọn có content lock riêng.
+
+Mở bài chấm cũ không gọi lại AI. **Chấm lại với bộ chấm mới** lưu snapshot cũ vào `writing_grading_revisions`, giữ IDs và bài đã nộp. Gọi lại phiên bản hiện hành là idempotent. Mất kết nối sau khi provider xử lý nhưng trước khi lưu vẫn có thể phát sinh phí tiếp khi retry.
+
+Nếu model phản hồi không hợp lệ, không xuất bản điểm mới. Lỗi mạng/hạn mức không tự chuyển model để né lỗi tài khoản; bài đã nộp vẫn giữ nguyên. Hết credit có mã `ai_quota_exhausted`.
 
 ## API
 
-Dưới `/api/v1`, bắt buộc xác thực và ownership:
+Các endpoint dưới `/api/v1` yêu cầu xác thực và ownership:
 
 | Method | Route | Mục đích |
 | --- | --- | --- |
-| POST | `/attempts/{id}/analyze?upgrade=false` | Lưu evidence/metrics |
-| POST | `/attempts/{id}/calibrate?upgrade=false` | Chấm hoặc review; trả `reviewed` |
-| POST | `/attempts/{id}/grade` | Hoàn tất feedback; tự chạy các bước còn thiếu cho API clients |
-| POST | `/attempts/{id}/regrade` | Nâng bộ chấm và lưu kết quả cũ; không thay bài nộp |
-| GET | `/attempts/{id}/grading-history` | Kết quả hiện tại và snapshots cũ |
-| GET | `/internal/writing-calibration/{id}` | Bài gốc, scores, evidence, versions và checkpoints, chỉ admin allowlist |
+| POST | `/attempts/{id}/grade` | Một request chạy core/có thể review, rồi lưu điểm |
+| POST | `/attempts/{id}/analyze?upgrade=false` | Compatibility endpoint lưu core checkpoint |
+| POST | `/attempts/{id}/calibrate?upgrade=false` | Compatibility endpoint, tái sử dụng core |
+| POST | `/attempts/{id}/regrade` | Nâng grader version, lưu lịch sử |
+| POST | `/attempts/{id}/optional-feedback/{kind}` | `sentences`, `corrected`, `improved`, `detailed` |
+| POST | `/attempts/{id}/vocabulary` | Tạo Vocabulary Coach theo yêu cầu |
+| GET | `/attempts/{id}/grading-history` | Phiên bản hiện tại và snapshots |
+| GET | `/internal/writing-calibration/{id}` | Inspection theo admin allowlist |
+| POST | `/internal/ai-costs/human-references/{id}` | Admin lưu điểm người chấm riêng biệt |
 
-UI gọi analyze → calibrate → nếu chưa reviewed, calibrate thêm lần nữa → grade/regrade. Khi nâng phiên bản, hai bước đầu dùng `upgrade=true`.
-
-Admin allowlist cấu hình `WRITING_CALIBRATION_ADMIN_EMAILS=email1,email2`; mặc định trống, không mở inspection. Admin vẫn phải đăng nhập. `writing_calibration_samples` chuẩn bị question/answer, năm human score fields, reviewer_count, created_at; chưa giả lập hoặc tự điền dữ liệu giáo viên.
-
-`OPENAI_GRADING_TEMPERATURE` tùy chọn 0–0.3, chỉ đặt nếu model hỗ trợ temperature. Bỏ trống khi model không hỗ trợ tham số này. Backend dùng cùng model/config cho các giai đoạn, cache và version rõ ràng để hạn chế biến động; không hứa kết quả model luôn hoàn toàn xác định.
+`OPENAI_MODEL_WRITING_ANALYSIS` và `OPENAI_MODEL_WRITING_SCORING` giống model/effort thì dùng chung một call. Nếu quản trị viên cố ý đặt khác nhau, backend gọi calibration riêng và kiểm tra mâu thuẫn trước khi chuyển tiếp. Cấu hình tùy chỉnh này cần benchmark lại. Xem [operation inventory và cấu hình cost](ai-operations.md).

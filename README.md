@@ -31,7 +31,11 @@ Writing, Speaking và Reading dùng chung `test_profile=VSTEP_3_5`. Người h�
 | `DATABASE_URL` | URL SQLAlchemy `postgresql+asyncpg://...` cho chạy backend ngoài Docker |
 | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | Thông tin DB dùng trong Docker Compose |
 | `OPENAI_API_KEY` | Key chỉ đọc ở backend; để trống nếu chỉ dùng đề mẫu |
-| `OPENAI_MODEL` | Model hỗ trợ Responses API + Structured Outputs; ví dụ cấu hình `gpt-5.6` |
+| `OPENAI_MODEL_*` | Cấu hình theo tác vụ trong `.env.example`; `OPENAI_MODEL` cũ không còn ghi đè mọi tác vụ. Grading mới đang chờ đạt benchmark, xem `MODEL_EVALUATION.md` |
+| `OPENAI_REASONING_DEFAULT`, `OPENAI_REASONING_GRADING`, `OPENAI_REASONING_ESCALATION` | Mức reasoning riêng; JSON `OPENAI_REASONING_OVERRIDES` cho từng operation |
+| `MODEL_VERSION` | Phiên bản cấu hình model trong cache chấm |
+| `AI_COST_ADMIN_EMAILS` | Email admin đã đăng nhập được xem `/internal/ai-costs` |
+| `GRADING_SHADOW_ENABLED`, `GRADING_SHADOW_SAMPLE_RATE` | Shadow chỉ ở development, mặc định tắt; nếu bật lấy mẫu 5% |
 | `OPENAI_TRANSCRIBE_MODEL` | Audio Transcriptions, mặc định `gpt-4o-transcribe`; tùy quyền tài khoản |
 | `OPENAI_AUDIO_MODEL` | Mặc định `gpt-audio`; cần nhận WAV qua Chat Completions và hỗ trợ function calling |
 | `AUDIO_ANALYSIS_ENABLED`, `AUDIO_FEEDBACK_MIN_CONFIDENCE` | Bật phân tích audio và lọc nhận xét theo độ tin cậy; mặc định `true`, `0.70` |
@@ -48,7 +52,7 @@ Writing, Speaking và Reading dùng chung `test_profile=VSTEP_3_5`. Người h�
 
 Trong Compose, `DATABASE_URL` được tạo từ ba biến `POSTGRES_*` để trỏ đúng service `postgres`; URL `localhost` trong `.env` dành cho chạy backend trực tiếp. Nếu password chứa ký tự đặc biệt trong URL, cần URL-encode khi tự cấu hình.
 
-Đặt `OPENAI_API_KEY` và đổi `OPENAI_MODEL` nếu model mẫu không được cấp cho tài khoản của bạn. Sau khi sửa `.env`, chạy `docker compose up -d --force-recreate backend`. API key không có tiền tố `NEXT_PUBLIC_` và không được đưa vào frontend. Bài viết và audio/transcript đã nộp được gửi đến OpenAI để xử lý; Responses request dùng `store=False`. Xem [cấu hình và luồng Speaking](docs/speaking.md).
+Đặt `OPENAI_API_KEY` và model theo từng tác vụ nếu cần thay cấu hình, rồi chạy `docker compose up -d --build`. Mặc định Writing dùng Luna / medium, Speaking text dùng Mini / low, Terra / none chỉ chấm lại khi có dấu hiệu cần xem xét. API key không có tiền tố `NEXT_PUBLIC_` và không được đưa vào frontend. Bài viết và audio/transcript đã nộp được gửi đến OpenAI để xử lý; Responses request dùng `store=False`. Xem [vận hành AI](docs/ai-operations.md), [benchmark, chi phí và giới hạn đánh giá](MODEL_EVALUATION.md), [Speaking](docs/speaking.md).
 
 ## Chạy để phát triển
 
@@ -115,7 +119,7 @@ docs/              # Ghi chú thiết kế ngắn
 - Nộp full bằng một transaction cho cả hai Task. Sau nộp, result page yêu cầu chấm từng bài; có thể thử lại từ lịch sử khi dịch vụ AI gặp lỗi.
 - Bốn tiêu chí 0–10: Task Fulfillment, Organization, Vocabulary, Grammar. Điểm Task = trung bình bốn tiêu chí. Backend tự tính; Writing = `(Task1 + 2 × Task2) / 3`.
 - Cache theo nội dung đề, bài viết, model, prompt version; giới hạn trong tài khoản. PostgreSQL locks tránh trả phí lặp cho yêu cầu chấm đồng thời.
-- Phản hồi gồm 3 ưu tiên cải thiện, điểm mạnh, bố cục, đáp ứng yêu cầu, lỗi, từ vựng, từng câu, bản sửa tối thiểu và bản tham khảo B2.
+- Lượt chấm đầu trả điểm, bằng chứng bài gốc, lỗi, ba ưu tiên và tóm tắt ngắn. Chữa từng câu, bản sửa, bài tham khảo B2, giải thích chi tiết và Vocabulary nâng cao được tạo riêng khi người học yêu cầu, sau đó lưu cache.
 - Dashboard tách điểm Writing đủ hai Task và điểm luyện Task. Mức B1/B2/C1 hiển thị là tham khảo riêng kỹ năng viết, không chứng nhận bậc tổng thể.
 
 **Kết quả được AI ước tính nhằm phục vụ luyện tập và không phải điểm chính thức của kỳ thi VSTEP.**

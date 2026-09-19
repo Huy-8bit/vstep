@@ -37,6 +37,12 @@ class SpeechTranscriptionService:
         await self.db.refresh(answer)
 
     async def transcribe(self, answer: SpeakingAnswer, user_id: str):
+        from app.llm.usage import ai_context
+
+        with ai_context(attempt_id=answer.session_id):
+            return await self._transcribe(answer, user_id)
+
+    async def _transcribe(self, answer: SpeakingAnswer, user_id: str):
         await self._lock_recording(answer, user_id)
         if not answer.audio_path or not answer.audio_hash:
             raise AppError(409, "Câu trả lời chưa có bản ghi.", "audio_required")
@@ -93,6 +99,12 @@ class SpeechTranscriptionService:
         )
 
     async def analyze(self, answer: SpeakingAnswer, user_id: str, retry: bool = False):
+        from app.llm.usage import ai_context
+
+        with ai_context(attempt_id=answer.session_id):
+            return await self._analyze(answer, user_id, retry)
+
+    async def _analyze(self, answer: SpeakingAnswer, user_id: str, retry: bool = False):
         if answer.transcript is None:
             answer = await self.transcribe(answer, user_id)
         await self._lock_recording(answer, user_id)
