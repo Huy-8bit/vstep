@@ -1,7 +1,8 @@
 """Keep immutable revisions while a library exists; support existing account cascade cleanup."""
 
-from alembic import op
 import sqlalchemy as sa
+
+from alembic import op
 
 revision = "bcdf7614289e"
 down_revision = "ab812d97c641"

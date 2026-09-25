@@ -21,6 +21,7 @@ import type { Progress } from "@/types";
 
 export default function Home() {
   const { user } = useAuth();
+  const vipHours = user?.access?.vip_expires_at ? Math.max(0, Math.ceil((new Date(user.access.vip_expires_at).getTime() - Date.now()) / 3600000)) : null;
   const [progress, setProgress] = useState<Progress | null>(null);
   useEffect(() => {
     if (user)
@@ -85,6 +86,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {user && <section className="rounded-2xl border border-stone-200 bg-white p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4"><div><p className="eyebrow">Chào {user.name || user.email.split("@")[0]}</p><h2 className="mt-2 text-2xl font-bold">{user.access.tier === "VIP" ? `VIP · Còn khoảng ${Math.ceil((vipHours || 0) / 24)} ngày` : "Tài khoản FREE"}</h2><p className="mt-2 text-sm text-stone-600">{user.access.tier === "VIP" ? "Bạn có thể luyện đầy đủ Writing, Speaking và Reading." : `Trial còn lại: Writing Task 1 ${user.access.trial_remaining.WRITING_TASK1 ?? 0} lượt · Speaking Part 1 ${user.access.trial_remaining.SPEAKING_PART1 ?? 0} lượt.`}</p></div><Link href={user.access.tier === "VIP" ? "/account/subscription" : "/pricing"} className="rounded-xl bg-teal-800 px-5 py-3 text-sm font-semibold text-white">{user.access.tier === "VIP" ? "Xem gói VIP" : "Nâng cấp VIP"}</Link></div>
+        {vipHours !== null && vipHours <= 24 && <p className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">VIP của bạn sắp hết hạn. <Link className="font-semibold underline" href="/pricing">Gia hạn ngay</Link></p>}
+        {user.access.tier === "FREE" && <div className="mt-5 flex flex-wrap gap-4 text-sm"><Link className="font-semibold text-teal-800" href="/practice/task-1">{(user.access.trial_remaining.WRITING_TASK1 ?? 0) > 0 ? "Thử Writing Task 1 miễn phí →" : "Writing Task 1 · Hết trial"}</Link><Link className="font-semibold text-teal-800" href="/speaking?mode=PART1">{(user.access.trial_remaining.SPEAKING_PART1 ?? 0) > 0 ? "Thử Speaking Part 1 miễn phí →" : "Speaking Part 1 · Hết trial"}</Link><span className="text-stone-500">Task 2 · Part 2/3 · Reading 🔒 VIP</span></div>}
+      </section>}
       <section>
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>

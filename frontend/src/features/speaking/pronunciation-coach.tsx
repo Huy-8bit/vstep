@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Mic, Square, RotateCcw } from "lucide-react";
 import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
+import { Paywall } from "@/components/paywall";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice, Loading } from "@/components/feedback";
 import { api, post } from "@/services/api";
@@ -25,9 +26,14 @@ export function PronunciationCoach() {
   const params = useSearchParams();
   return (
     <RequireAuth>
-      <Coach key={params.toString()} />
+      <PronunciationGate key={params.toString()} />
     </RequireAuth>
   );
+}
+function PronunciationGate() {
+  const { user } = useAuth();
+  if (user?.role !== "ADMIN" && user?.access?.tier !== "VIP") return <Paywall title="Luyện phát âm dành cho VIP" />;
+  return <Coach />;
 }
 function Coach() {
   const params = useSearchParams();

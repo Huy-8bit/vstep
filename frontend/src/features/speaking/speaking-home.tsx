@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, AudioLines, Clock3, Mic, Sparkles } from "lucide-react";
-import { RequireAuth } from "@/features/auth/auth-provider";
+import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
+import { Paywall } from "@/components/paywall";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
 import { api, post } from "@/services/api";
@@ -16,6 +17,8 @@ import {
   type SpeakingQuestion,
   type SpeakingSession,
 } from "./types";
+
+const modeLocked = (mode: SpeakingMode) => mode !== "PART1" && mode !== "QUICK_PRACTICE";
 
 export function SpeakingHome({
   initialMode = "FULL_TEST",
@@ -30,7 +33,10 @@ export function SpeakingHome({
 }
 function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
   const router = useRouter();
-  const [mode, setMode] = useState<SpeakingMode>(initialMode);
+  const { user } = useAuth();
+  const free = user?.role !== "ADMIN" && user?.access?.tier !== "VIP";
+  const [mode, setMode] = useState<SpeakingMode>(free && initialMode === "FULL_TEST" ? "PART1" : initialMode);
+  const modeIsLocked = free && (modeLocked(mode) || (user?.access?.trial_remaining.SPEAKING_PART1 ?? 0) <= 0);
   const [source, setSource] = useState("BANK");
   const [topic, setTopic] = useState("random");
   const [busy, setBusy] = useState("");
@@ -72,7 +78,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
         test_profile: TEST_PROFILE,
         question_id: mode !== "FULL_TEST" ? preview?.id : undefined,
       });
-      router.push(`/speaking/exam/${session.id}`);
+      router.push(`/speaking/exam?id=${session.id}`);
     } catch (e) {
       setError((e as Error).message);
       setBusy("");
@@ -80,6 +86,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
   }
   return (
     <div className="space-y-8">
+      {modeIsLocked && <Paywall title={modeLocked(mode) ? "Phần luyện nói này dành cho VIP" : "Bạn đã dùng lượt Speaking Part 1 miễn phí"} />}
 <LearningEntry skill="Speaking" />
       <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">
         <div>
@@ -169,7 +176,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
                 }}
               >
                 <option value="BANK">Ngân hàng đề đã kiểm tra</option>
-                <option value="AI">Sinh đề với AI</option>
+                {!free && <option value="AI">Sinh đề với AI</option>}
               </select>
             </label>
             <label className="space-y-2 text-xs font-semibold">
@@ -193,8 +200,7 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
           </div>
           {source === "BANK" && (
             <p className="mt-3 text-xs leading-5 text-stone-500">
-              45 đề mẫu VSTEP.3–5. Chọn chủ đề ngẫu nhiên để dùng toàn bộ ngân
-              hàng đề.
+              {free ? "Lượt miễn phí chọn từ pool đề Part 1 đã duyệt." : "Chọn chủ đề ngẫu nhiên để dùng toàn bộ ngân hàng đề."}
             </p>
           )}
           {configured === false && (
@@ -205,12 +211,12 @@ function SpeakingSetup({ initialMode }: { initialMode: SpeakingMode }) {
           )}
           {error && <ErrorNotice message={error} />}
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button disabled={!!busy} onClick={start}>
+            <Button disabled={!!busy || modeIsLocked} onClick={start}>
               {busy === "start" ? "Đang chuẩn bị đề..." : "Bắt đầu luyện nói"}
               <ArrowRight />
             </Button>
             {mode !== "FULL_TEST" && (
-              <Button variant="outline" disabled={!!busy} onClick={generate}>
+              <Button variant="outline" disabled={!!busy || modeIsLocked} onClick={generate}>
                 {busy === "preview"
                   ? "Đang chuẩn bị..."
                   : preview

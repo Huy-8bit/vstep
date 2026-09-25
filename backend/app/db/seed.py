@@ -186,9 +186,13 @@ async def seed():
                     .values(**values)
                     .on_conflict_do_nothing(index_elements=["fingerprint"])
                 )
+        trial_task1_added = 0
         for question in seed_questions():
             WritingQuestionValidator().validate(question)
             values = question.model_dump(exclude={"task"})
+            trial = question.task == 1 and trial_task1_added < 4
+            if trial:
+                trial_task1_added += 1
             await db.execute(
                 insert(WritingQuestion)
                 .values(
@@ -198,6 +202,8 @@ async def seed():
                     fingerprint=question_fingerprint(question.instruction + " " + question.stimulus),
                     prompt_version="3.0.0",
                     generation_diagnostics=seed_diagnostics(question.task),
+                    access_tier="FREE_TRIAL" if trial else "VIP",
+                    available_for_free_trial=trial,
                 )
                 .on_conflict_do_nothing(index_elements=["fingerprint"])
             )

@@ -1,6 +1,7 @@
 """Focused integration checks on PostgreSQL; fixtures only remove their disposable accounts."""
 
 import io
+from datetime import timedelta
 from uuid import uuid4
 
 import httpx
@@ -10,9 +11,11 @@ from PIL import Image
 from sqlalchemy import delete
 
 from app.core.config import settings
+from app.db.base import utcnow
 from app.db.session import SessionLocal
 from app.main import app, hits
 from app.models import User
+from app.models.commerce import UserEntitlement
 from app.schemas.library import LibraryDocument, ParsedImport
 from app.services.question_import_service import guard_extracted_keys, inspect_file
 
@@ -21,7 +24,9 @@ from app.services.question_import_service import guard_extracted_keys, inspect_f
 async def clients(tmp_path):
     accounts = []
     previous = settings.question_import_storage_dir
+    previous_custom = settings.user_custom_questions_enabled
     settings.question_import_storage_dir = str(tmp_path)
+    settings.user_custom_questions_enabled = True
     async with (
         httpx.AsyncClient(
             transport=httpx.ASGITransport(app=app),
@@ -42,8 +47,12 @@ async def clients(tmp_path):
             )
             assert result.status_code == 201, result.text
             accounts.append(result.json()["id"])
+        async with SessionLocal() as db:
+            db.add_all(UserEntitlement(user_id=uid, source="ADMIN_GRANT", entitlement_type="VIP", starts_at=utcnow(), expires_at=utcnow() + timedelta(days=30), status="ACTIVE", details={"reason": "legacy integration fixture"}) for uid in accounts)
+            await db.commit()
         yield first, second
     settings.question_import_storage_dir = previous
+    settings.user_custom_questions_enabled = previous_custom
     async with SessionLocal() as db:
         await db.execute(delete(User).where(User.id.in_(accounts)))
         await db.commit()
@@ -206,7 +215,7 @@ async def test_writing_exact_prompt_private_duplicate_and_snapshot(clients):
     response = await client.post("/api/v1/my-questions", json={"document": same})
     assert response.status_code == 409 and response.json()["duplicate"]["id"] == row["id"]
     started = await start(client, row)
-    assert started["url"].startswith("/exam/")
+    assert started["url"].startswith("/exam?id=")
     exam = (await client.get(f"/api/v1/exams/{started['id']}")).json()
     question = exam["attempts"][0]["question"]
     assert question["stimulus"] == doc["content"]["writing"][0]["stimulus_text"]

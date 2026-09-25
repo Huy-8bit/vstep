@@ -25,7 +25,18 @@ async def current_user(request: Request, db: DB) -> User:
     user = await db.get(User, payload["sub"])
     if not user:
         raise AppError(401, "Tài khoản không tồn tại.", "unauthorized")
+    if user.status != "ACTIVE":
+        raise AppError(403, "Tài khoản đã bị vô hiệu hóa.", "ACCOUNT_DISABLED")
     return user
 
 
 CurrentUser = Annotated[User, Depends(current_user)]
+
+
+async def current_admin(user: CurrentUser) -> User:
+    if user.role != "ADMIN":
+        raise AppError(403, "Chỉ quản trị viên được truy cập.", "ADMIN_REQUIRED")
+    return user
+
+
+CurrentAdmin = Annotated[User, Depends(current_admin)]

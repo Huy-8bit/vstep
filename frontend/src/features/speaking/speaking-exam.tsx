@@ -43,7 +43,7 @@ function Exam({ id }: { id: string }) {
       setError("");
       const data = await api<SpeakingSession>(`/speaking/sessions/${id}`);
       if (data.status !== "IN_PROGRESS") {
-        router.replace(`/speaking/result/${id}`);
+        router.replace(`/speaking/result?id=${id}`);
         return;
       }
       setSession(data);
@@ -61,7 +61,7 @@ function Exam({ id }: { id: string }) {
   async function complete() {
     try {
       await post(`/speaking/sessions/${id}/complete`);
-      router.replace(`/speaking/result/${id}`);
+      router.replace(`/speaking/result?id=${id}`);
     } catch (e) {
       setError((e as Error).message);
     }

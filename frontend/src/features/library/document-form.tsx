@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { post } from "@/services/api";
+import { post, apiUrl } from "@/services/api";
 import { Field, SelectField } from "./form-fields";
 import { WritingForm } from "./writing-form";
 import { SpeakingForm } from "./speaking-form";
@@ -63,7 +63,7 @@ export function DocumentForm({
               />
               Hiển thị tệp nguồn {i + 1}{" "}
               <a
-                href={`/api/v1/my-questions/assets/${id}`}
+                href={apiUrl(`/my-questions/assets/${id}`)}
                 target="_blank"
                 rel="noreferrer"
                 className="text-teal-800 underline"

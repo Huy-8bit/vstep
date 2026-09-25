@@ -10,6 +10,12 @@ export class ApiError extends Error {
 }
 let refreshPromise: Promise<boolean> | null = null;
 
+export function apiUrl(path: string): string {
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (!base) throw new Error("NEXT_PUBLIC_API_BASE_URL chưa được cấu hình.");
+  return `${base.replace(/\/+$/, "")}/api/v1${path}`;
+}
+
 export async function api<T>(
   path: string,
   options: RequestInit = {},
@@ -17,8 +23,9 @@ export async function api<T>(
   binary = false,
 ): Promise<T> {
   let response: Response;
+  const url = apiUrl(path);
   try {
-    response = await fetch(`/api/v1${path}`, {
+    response = await fetch(url, {
       ...options,
       credentials: "include",
       cache: "no-store",
@@ -49,12 +56,12 @@ export async function api<T>(
     if (!refreshPromise) {
       // Serialize refresh across tabs too; refresh tokens rotate on every use.
       const refresh = async () => {
-        const check = await fetch("/api/v1/auth/me", {
+        const check = await fetch(apiUrl("/auth/me"), {
           credentials: "include",
         });
         if (check.ok) return true;
         return (
-          await fetch("/api/v1/auth/refresh", {
+          await fetch(apiUrl("/auth/refresh"), {
             method: "POST",
             credentials: "include",
           })

@@ -5,6 +5,7 @@ from sqlalchemy import select
 from app.common.errors import AppError
 from app.db.base import utcnow
 from app.learning.signals import sync_learning
+from app.models.commerce import ProductEvent
 from app.models.reading import ReadingAnswer, ReadingExamSession, ReadingPassage
 from app.services.reading_blueprint import READING_BLUEPRINT
 from app.services.reading_question_generator import ReadingQuestionGeneratorService
@@ -28,7 +29,7 @@ class ReadingExamService:
     def __init__(self, db, llm=None):
         self.db, self.llm = db, llm
 
-    async def create(self, data, user_id, *, selection=None, library=None):
+    async def create(self, data, user_id, *, selection=None, library=None, access_source="VIP"):
         selected = selection if selection is not None else await ReadingQuestionGeneratorService(self.db, self.llm).select(data, user_id)
         if any(p.owner_id not in (None, user_id) for p, _ in selected):
             raise AppError(404, "Không tìm thấy bài đọc.")
@@ -45,6 +46,7 @@ class ReadingExamService:
             **(library or {}),
             user_id=user_id,
             mode=data.mode,
+            access_source=access_source,
             test_profile=data.test_profile,
             blueprint_version=READING_BLUEPRINT.version if data.mode == "FULL_TEST" and not library else None,
             blueprint_diagnostics=READING_BLUEPRINT.diagnostics(list({p.id: p for p, _ in selected}.values()))
@@ -129,6 +131,7 @@ class ReadingExamService:
             return session
         self.apply(session, changes)
         ReadingScoringService().finalize(session)
+        self.db.add(ProductEvent(user_id=user_id, name="PRACTICE_COMPLETED", details={"skill": "READING", "session_id": session.id, "access_source": session.access_source}))
         await self.db.commit()
         await sync_learning(user_id, "READING", session_id)
         return session

@@ -9,7 +9,8 @@ import {
   RefreshCw,
   Sparkles,
 } from "lucide-react";
-import { RequireAuth } from "@/features/auth/auth-provider";
+import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
+import { Paywall } from "@/components/paywall";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
 import { PracticeAssets } from "@/features/library/practice-assets";
@@ -82,6 +83,8 @@ export function QuestionCard({ question }: { question: Question }) {
 
 function Setup({ task }: { task: 1 | 2 }) {
   const router = useRouter();
+  const { user } = useAuth();
+  const free = user?.role !== "ADMIN" && user?.access?.tier !== "VIP";
   const [questionType, setQuestionType] = useState("random");
   const [topic, setTopic] = useState("random");
   const [source, setSource] = useState<"BANK" | "AI">("BANK");
@@ -114,7 +117,7 @@ function Setup({ task }: { task: 1 | 2 }) {
           question_ids: [q.id],
           timed,
         });
-        router.push(`/exam/${exam.id}`);
+        router.push(`/exam?id=${exam.id}`);
       }
     } catch (e) {
       setError((e as Error).message);
@@ -124,6 +127,7 @@ function Setup({ task }: { task: 1 | 2 }) {
   }
   return (
     <>
+      {free && (task === 2 || (user?.access?.trial_remaining.WRITING_TASK1 ?? 0) <= 0) ? <Paywall title={task === 2 ? "Writing Task 2 dành cho VIP" : "Bạn đã dùng lượt Writing Task 1 miễn phí"} /> : null}
       <p className="eyebrow">Luyện tập có chủ đích</p>
 <LearningEntry skill="Writing" />
       <h1 className="mb-3 mt-3 text-3xl font-bold">
@@ -156,7 +160,7 @@ function Setup({ task }: { task: 1 | 2 }) {
                 }}
               >
                 <option value="BANK">Ngân hàng đề đã kiểm tra</option>
-                <option value="AI">Sinh đề mới bằng AI</option>
+                {!free && <option value="AI">Sinh đề mới bằng AI</option>}
               </select>
             </div>
             <div>
@@ -229,7 +233,7 @@ function Setup({ task }: { task: 1 | 2 }) {
           </div>
           <Button
             className="mt-6 w-full"
-            disabled={!!busy}
+            disabled={!!busy || (free && (task === 2 || (user?.access?.trial_remaining.WRITING_TASK1 ?? 0) <= 0))}
             onClick={() => act(true)}
           >
             {busy === "start" ? (
@@ -246,7 +250,7 @@ function Setup({ task }: { task: 1 | 2 }) {
             <Button
               variant="outline"
               size="sm"
-              disabled={!!busy}
+              disabled={!!busy || (free && (task === 2 || (user?.access?.trial_remaining.WRITING_TASK1 ?? 0) <= 0))}
               onClick={() => act(false)}
             >
               {busy === "generate" ? (
@@ -288,6 +292,8 @@ export function PracticeSetup({ task }: { task: 1 | 2 }) {
 }
 export function FullTestStart() {
   const router = useRouter();
+  const { user } = useAuth();
+  const free = user?.role !== "ADMIN" && user?.access?.tier !== "VIP";
   const [source, setSource] = useState("BANK");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -309,7 +315,7 @@ export function FullTestStart() {
         timed: true,
         question_ids: ids,
       });
-      router.push(`/exam/${exam.id}`);
+      router.push(`/exam?id=${exam.id}`);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -318,6 +324,7 @@ export function FullTestStart() {
   }
   return (
     <section id="full-test" className="panel mt-8 scroll-mt-32 p-6 sm:p-8">
+      {free && <div className="mb-5"><Paywall title="Thi thử Writing đầy đủ dành cho VIP" compact /></div>}
       <div className="flex flex-wrap items-center justify-between gap-6">
         <div>
           <p className="eyebrow mb-3">Sẵn sàng thử sức?</p>
@@ -342,9 +349,9 @@ export function FullTestStart() {
             disabled={busy}
           >
             <option value="BANK">Ngân hàng đề đã kiểm tra</option>
-            <option value="AI">Sinh cả hai đề bằng AI</option>
+            {!free && <option value="AI">Sinh cả hai đề bằng AI</option>}
           </select>
-          <Button disabled={busy} onClick={start}>
+          <Button disabled={busy || free} onClick={start}>
             {busy ? <LoaderCircle className="animate-spin" /> : <Clock3 />}
             {busy ? "Đang chuẩn bị đề..." : "Bắt đầu thi thử"}
           </Button>

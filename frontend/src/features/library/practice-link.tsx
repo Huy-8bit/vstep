@@ -1,4 +1,5 @@
 "use client";
+import { staticPageUrl } from "@/lib/static-page-url";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -33,7 +34,7 @@ export function LibraryPracticeButton({
               `/my-questions/${id}/practice`,
               { revision: revision || null, timed },
             );
-            router.push(result.url);
+            router.push(staticPageUrl(result.url));
           } catch (e) {
             setError((e as Error).message);
             setBusy(false);
@@ -61,7 +62,7 @@ export function LibraryOrigin({
   return (
     <div className="my-3 flex flex-wrap items-center gap-3">
       <Link
-        href={`/my-questions/${value.library_question_id}`}
+        href={`/my-questions/detail?id=${value.library_question_id}`}
         className="rounded-lg bg-teal-50 px-3 py-1.5 text-sm text-teal-900"
       >
         Đề của tôi · {value.library_title || "Đề đã nhập"} · v

@@ -1,4 +1,5 @@
 "use client";
+import { staticPageUrl } from "@/lib/static-page-url";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -30,7 +31,7 @@ function ExerciseView({ id }: { id: string }) {
         description="Luyện từng câu, đọc phản hồi rồi áp dụng trong một tình huống mới."
       />
       <Link
-        href={`/learning/weaknesses/${data.weakness_id}`}
+        href={`/learning/weaknesses?id=${data.weakness_id}`}
         className="text-sm text-teal-800 underline"
       >
         ← Quay lại bài học và bằng chứng
@@ -92,7 +93,7 @@ function ExerciseView({ id }: { id: string }) {
             bước tiến; việc thành thạo cần được chứng minh qua nhiều ngữ cảnh.
           </p>
           <Button asChild className="mt-4">
-            <Link href={`/learning/weaknesses/${data.weakness_id}`}>
+            <Link href={`/learning/weaknesses?id=${data.weakness_id}`}>
               Xem tiến bộ và luyện tiếp
             </Link>
           </Button>
@@ -163,7 +164,7 @@ function ExerciseItem({
           item_index: index,
         },
       );
-      router.push(result.url);
+      router.push(staticPageUrl(result.url));
     } catch (e) {
       setError((e as Error).message);
     } finally {

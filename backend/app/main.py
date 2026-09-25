@@ -10,8 +10,10 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
 from app.api.routes import (
+    admin,
     ai_costs,
     auth,
+    commerce,
     learning,
     library,
     progress,
@@ -24,12 +26,14 @@ from app.api.routes import (
 from app.common.errors import AppError
 from app.core.config import settings
 from app.db.session import SessionLocal, engine
+from app.services.initial_admin import InitialAdminBootstrapService
 
 logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app):
+    await InitialAdminBootstrapService(settings).run()
     yield
     await engine.dispose()
 
@@ -37,7 +41,7 @@ async def lifespan(app):
 app = FastAPI(title="VSTEP Practice Platform", version="1.0.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_url],
+    allow_origins=[settings.frontend_url.rstrip("/")],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type"],
@@ -55,7 +59,7 @@ async def request_guards(request: Request, call_next):
                 {"detail": "Nguồn yêu cầu không được phép.", "code": "invalid_origin"},
                 status_code=403,
             )
-        if request.headers.get("sec-fetch-site") == "cross-site":
+        if request.headers.get("sec-fetch-site") == "cross-site" and origin != settings.frontend_url.rstrip("/"):
             return JSONResponse({"detail": "Yêu cầu không hợp lệ."}, status_code=403)
         audio_upload = request.url.path.startswith(
             ("/api/v1/speaking/answers/", "/api/v1/speaking/pronunciation/practices/")
@@ -176,8 +180,10 @@ async def health():
 
 
 for router in (
+    admin.router,
     ai_costs.router,
     auth.router,
+    commerce.router,
     writing.router,
     progress.router,
     speaking.router,

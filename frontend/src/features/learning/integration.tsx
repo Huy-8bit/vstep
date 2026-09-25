@@ -63,7 +63,7 @@ export function AttemptLearningSignals({
             i.weakness_id ? (
               <Link
                 key={i.concept_key}
-                href={`/learning/weaknesses/${i.weakness_id}`}
+                href={`/learning/weaknesses?id=${i.weakness_id}`}
                 className="rounded-lg bg-teal-50 px-3 py-2 text-sm text-teal-900"
               >
                 {i.label} · {i.count} lần ↗

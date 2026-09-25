@@ -77,6 +77,7 @@ class ReadingExamSession(LibrarySessionMixin, IdentityMixin, Base):
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     status: Mapped[str] = mapped_column(String(20), default="IN_PROGRESS", index=True)
+    access_source: Mapped[str] = mapped_column(String(12), default="LEGACY", server_default="LEGACY")
     question_count: Mapped[int] = mapped_column(Integer)
     passage_ids: Mapped[list] = mapped_column(JSONB)
     question_ids: Mapped[list] = mapped_column(JSONB)

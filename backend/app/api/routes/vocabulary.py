@@ -10,6 +10,7 @@ from app.schemas.vocabulary_coach import (
     VocabularySave,
     VocabularySourceSkill,
 )
+from app.services.entitlements import EntitlementService
 from app.services.vocabulary_coach_service import VocabularyCoachService, item_view, review_view
 
 router = APIRouter(prefix="/vocabulary", tags=["Vocabulary Coach"])
@@ -23,12 +24,14 @@ def coach(db):
 async def recommendations(
     data: VocabularyRecommendationRequest, db: DB, user: CurrentUser, generate: bool = True
 ):
+    await EntitlementService(db).require(user, "VOCABULARY")
     with ai_context(attempt_id=data.source_attempt_id):
         return await coach(db).recommend(data, user.id, generate)
 
 
 @router.post("/items", status_code=201)
 async def save(data: VocabularySave, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "VOCABULARY")
     return await coach(db).save(data, user.id)
 
 
@@ -65,11 +68,13 @@ async def progress(db: DB, user: CurrentUser):
 
 @router.post("/reuse")
 async def reuse(data: VocabularyRecommendationRequest, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "VOCABULARY")
     return await coach(db).reuse(data, user.id)
 
 
 @router.post("/items/{item_id}/reviews", status_code=201)
 async def create_review(item_id: str, data: VocabularyReviewCreate, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "VOCABULARY")
     return await coach(db).create_review(item_id, data, user.id)
 
 
@@ -80,4 +85,5 @@ async def get_review(review_id: str, db: DB, user: CurrentUser):
 
 @router.post("/reviews/{review_id}/answer")
 async def answer_review(review_id: str, data: VocabularyReviewAnswer, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "VOCABULARY")
     return await coach(db).answer_review(review_id, data, user.id)

@@ -4,18 +4,12 @@ from zoneinfo import ZoneInfo
 from sqlalchemy import func, select
 
 from app.common.errors import AppError
-from app.core.config import settings
 from app.llm.routing import ROUTES, route_for
 from app.models import AIUsageLog
 
 
 def is_cost_admin(user):
-    allowed = {
-        x.strip().lower()
-        for x in (settings.ai_cost_admin_emails + "," + settings.writing_calibration_admin_emails).split(",")
-        if x.strip()
-    }
-    return user.email.lower() in allowed
+    return user.role == "ADMIN"
 
 
 def require_cost_admin(user):

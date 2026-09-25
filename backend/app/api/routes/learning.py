@@ -1,7 +1,7 @@
 from datetime import timedelta
 from typing import Literal
 
-from fastapi import APIRouter, BackgroundTasks, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, Query
 from sqlalchemy import select
 
 from app.api.deps import DB, CurrentUser
@@ -21,7 +21,13 @@ from app.schemas.learning import (
     PracticeCreate,
     TargetPracticeCreate,
 )
+from app.services.entitlements import EntitlementService
 from app.services.speech_transcription_service import speech_lock
+
+
+async def require_learning(user: CurrentUser, db: DB):
+    await EntitlementService(db).require(user, "LEARNING")
+
 
 router = APIRouter(prefix="/learning", tags=["Personalized Learning"])
 
@@ -39,17 +45,19 @@ async def schedule_backfill(db, user_id, tasks, force=False):
 
 @router.get("/overview")
 async def overview(db: DB, user: CurrentUser, tasks: BackgroundTasks):
+    if not (await EntitlementService(db).decision(user, "LEARNING")).allowed:
+        return {"tier": "FREE", "message_vi": "Bạn cần thêm bài luyện để hệ thống phân tích điểm yếu. Nâng cấp VIP để xem bài học và kế hoạch chi tiết."}
     await schedule_backfill(db, user.id, tasks)
     return await PersonalizedLearningAnalysisService(db).overview(user.id)
 
 
-@router.post("/recalculate", status_code=202)
+@router.post("/recalculate", status_code=202, dependencies=[Depends(require_learning)])
 async def recalculate(db: DB, user: CurrentUser, tasks: BackgroundTasks):
     profile = await schedule_backfill(db, user.id, tasks, force=True)
     return {"status": profile.backfill_status, "processed": profile.backfill_processed}
 
 
-@router.get("/weaknesses")
+@router.get("/weaknesses", dependencies=[Depends(require_learning)])
 async def weaknesses(
     db: DB,
     user: CurrentUser,
@@ -64,27 +72,27 @@ async def weaknesses(
     )
 
 
-@router.get("/weaknesses/{identifier}")
+@router.get("/weaknesses/{identifier}", dependencies=[Depends(require_learning)])
 async def detail(identifier: str, db: DB, user: CurrentUser):
     return await PersonalizedLearningAnalysisService(db).detail(identifier, user.id)
 
 
-@router.post("/weaknesses/{identifier}/lesson")
+@router.post("/weaknesses/{identifier}/lesson", dependencies=[Depends(require_learning)])
 async def lesson(identifier: str, db: DB, user: CurrentUser):
     return await PersonalizedCoachService(db, OpenAILLMClient()).lesson(identifier, user.id)
 
 
-@router.post("/weaknesses/{identifier}/practice", status_code=201)
+@router.post("/weaknesses/{identifier}/practice", status_code=201, dependencies=[Depends(require_learning)])
 async def practice(identifier: str, data: PracticeCreate, db: DB, user: CurrentUser):
     return await PersonalizedCoachService(db, OpenAILLMClient()).practice(identifier, user.id, data)
 
 
-@router.post("/weaknesses/{identifier}/targeted-practice", status_code=201)
+@router.post("/weaknesses/{identifier}/targeted-practice", status_code=201, dependencies=[Depends(require_learning)])
 async def targeted(identifier: str, data: TargetPracticeCreate, db: DB, user: CurrentUser):
     return await TargetedPracticeService(db, OpenAILLMClient()).start(identifier, user.id, data)
 
 
-@router.get("/exercises")
+@router.get("/exercises", dependencies=[Depends(require_learning)])
 async def exercises(db: DB, user: CurrentUser):
     rows = await db.scalars(
         select(PersonalizedExercise)
@@ -98,7 +106,7 @@ async def exercises(db: DB, user: CurrentUser):
                 "id": r.id,
                 "title": r.content.get("title", "Luyện tập"),
                 "weakness_id": r.weakness_id,
-                "url": r.content.get("url") or f"/learning/practice/{r.id}",
+                "url": r.content.get("url") or f"/learning/practice?id={r.id}",
                 "completed_at": r.completed_at,
                 "created_at": r.created_at,
             }
@@ -108,87 +116,87 @@ async def exercises(db: DB, user: CurrentUser):
     }
 
 
-@router.get("/exercises/{identifier}")
+@router.get("/exercises/{identifier}", dependencies=[Depends(require_learning)])
 async def exercise(identifier: str, db: DB, user: CurrentUser):
     coach = PersonalizedCoachService(db, OpenAILLMClient())
     return await coach.exercise_view(await coach.owned_exercise(identifier, user.id), user.id)
 
 
-@router.post("/exercises/{identifier}/answer")
+@router.post("/exercises/{identifier}/answer", dependencies=[Depends(require_learning)])
 async def answer(identifier: str, data: ExerciseSubmit, db: DB, user: CurrentUser):
     return await PersonalizedCoachService(db, OpenAILLMClient()).answer(identifier, user.id, data)
 
 
-@router.get("/strengths")
+@router.get("/strengths", dependencies=[Depends(require_learning)])
 async def strengths(db: DB, user: CurrentUser):
     return {"items": await PersonalizedLearningAnalysisService(db).strengths(user.id)}
 
 
-@router.get("/attempts/{skill}/{attempt_id}")
+@router.get("/attempts/{skill}/{attempt_id}", dependencies=[Depends(require_learning)])
 async def attempt(
     skill: Literal["WRITING", "SPEAKING", "READING"], attempt_id: str, db: DB, user: CurrentUser
 ):
     return await PersonalizedLearningAnalysisService(db).attempt(user.id, skill, attempt_id)
 
 
-@router.get("/today")
+@router.get("/today", dependencies=[Depends(require_learning)])
 async def today(db: DB, user: CurrentUser):
     return await StudyPlanService(db).today(user.id)
 
 
-@router.post("/study-plan", status_code=201)
+@router.post("/study-plan", status_code=201, dependencies=[Depends(require_learning)])
 async def create_plan(data: PlanCreate, db: DB, user: CurrentUser):
     return await StudyPlanService(db).create(user.id, data)
 
 
-@router.get("/study-plan/current")
+@router.get("/study-plan/current", dependencies=[Depends(require_learning)])
 async def current_plan(db: DB, user: CurrentUser):
     return await StudyPlanService(db).current(user.id)
 
 
-@router.patch("/study-plan/items/{identifier}")
+@router.patch("/study-plan/items/{identifier}", dependencies=[Depends(require_learning)])
 async def update_plan_item(identifier: str, data: PlanItemUpdate, db: DB, user: CurrentUser):
     return await StudyPlanService(db).update_item(identifier, user.id, data)
 
 
-@router.get("/writing")
+@router.get("/writing", dependencies=[Depends(require_learning)])
 async def writing(db: DB, user: CurrentUser):
     return await PersonalizedLearningAnalysisService(db).skill(user.id, "WRITING")
 
 
-@router.get("/speaking")
+@router.get("/speaking", dependencies=[Depends(require_learning)])
 async def speaking(db: DB, user: CurrentUser):
     return await PersonalizedLearningAnalysisService(db).skill(user.id, "SPEAKING")
 
 
-@router.get("/reading")
+@router.get("/reading", dependencies=[Depends(require_learning)])
 async def reading(db: DB, user: CurrentUser):
     return await PersonalizedLearningAnalysisService(db).skill(user.id, "READING")
 
 
-@router.get("/grammar")
+@router.get("/grammar", dependencies=[Depends(require_learning)])
 async def grammar(db: DB, user: CurrentUser):
     return await PersonalizedLearningAnalysisService(db).weaknesses(user.id, category="GRAMMAR")
 
 
-@router.get("/vocabulary")
+@router.get("/vocabulary", dependencies=[Depends(require_learning)])
 async def vocabulary(db: DB, user: CurrentUser):
     return await PersonalizedLearningAnalysisService(db).vocabulary(user.id)
 
 
-@router.get("/weekly")
+@router.get("/weekly", dependencies=[Depends(require_learning)])
 async def weekly(db: DB, user: CurrentUser):
     return await PersonalizedLearningAnalysisService(db).weekly(user.id)
 
 
-@router.post("/weekly/summary")
+@router.post("/weekly/summary", dependencies=[Depends(require_learning)])
 async def weekly_summary(db: DB, user: CurrentUser):
     from app.learning.weekly import generate_summary
 
     return await generate_summary(db, OpenAILLMClient(), user.id)
 
 
-@router.post("/vocabulary/reuses/{identifier}/answer")
+@router.post("/vocabulary/reuses/{identifier}/answer", dependencies=[Depends(require_learning)])
 async def verify_vocabulary_reuse(identifier: str, db: DB, user: CurrentUser):
     from app.learning.vocabulary import verify_reuse
 

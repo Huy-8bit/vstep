@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice, Loading } from "@/components/feedback";
-import { RequireAuth } from "@/features/auth/auth-provider";
+import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
+import { Paywall } from "@/components/paywall";
 import { api, post } from "@/services/api";
 import { topicLabels as topics } from "./types";
 import { LearningContent } from "./learning-card";
@@ -38,6 +39,8 @@ export function VocabularyPage() {
 }
 function Library() {
   const router = useRouter();
+  const { user } = useAuth();
+  const free = user?.role !== "ADMIN" && user?.access?.tier !== "VIP";
   const [section, setSection] = useState("DUE");
   const [skill, setSkill] = useState("");
   const [topic, setTopic] = useState("");
@@ -118,7 +121,7 @@ function Library() {
         kind,
         client_request_id: crypto.randomUUID(),
       });
-      router.push(`/vocabulary/review/${r.id}`);
+      router.push(`/vocabulary/review?id=${r.id}`);
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);
@@ -127,6 +130,7 @@ function Library() {
   const total = data?.total ?? history?.total ?? 0;
   return (
     <div className="space-y-7">
+      {free && <Paywall title="Mở Vocabulary Coach và ôn tập cá nhân" compact />}
       <div>
         <p className="eyebrow">Vocabulary Coach</p>
         <h1 className="mt-3 text-3xl font-bold">Từ đã gặp. Cụm từ sẽ dùng.</h1>
@@ -251,7 +255,7 @@ function Library() {
               history.items.map((r) => (
                 <Link
                   key={r.id}
-                  href={`/vocabulary/review/${r.id}`}
+                  href={`/vocabulary/review?id=${r.id}`}
                   className="flex flex-wrap items-center justify-between gap-3 p-5 hover:bg-stone-50"
                 >
                   <div>
@@ -319,7 +323,7 @@ function Library() {
                       size="sm"
                       variant="outline"
                       disabled={
-                        busy ||
+                        busy || free ||
                         (kind === "CORRECT" &&
                           (!item.user_original_text || !item.improved_text))
                       }

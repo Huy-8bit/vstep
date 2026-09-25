@@ -19,6 +19,7 @@ from app.schemas.speaking import (
     SpeakingSessionCreate,
 )
 from app.services.audio_storage_service import LocalAudioStorageService
+from app.services.entitlements import EntitlementService, speaking_feature
 from app.services.speaking_exam_service import (
     SpeakingExamService,
     owned_speaking_answer,
@@ -47,11 +48,12 @@ def grader(db):
 
 
 @router.get("/config")
-async def config(user: CurrentUser):
+async def config(user: CurrentUser, db: DB):
+    speaking_access = await EntitlementService(db).decision(user, "SPEAKING_FULL")
     return {
         "ai_configured": bool(settings.openai_api_key),
         "audio_analysis_configured": bool(settings.openai_speaking_audio_model),
-        "tts_configured": bool(settings.openai_api_key and settings.openai_tts_model),
+        "tts_configured": bool(settings.openai_api_key and settings.openai_tts_model and speaking_access.allowed),
         "max_audio_mb": settings.max_speaking_audio_mb,
         "max_audio_seconds": settings.max_speaking_audio_seconds,
     }
@@ -59,14 +61,28 @@ async def config(user: CurrentUser):
 
 @router.post("/questions/generate")
 async def generate(data: SpeakingQuestionRequest, db: DB, user: CurrentUser):
+    access = EntitlementService(db)
+    decision = await access.require(user, speaking_feature(f"PART{data.part}"))
+    if data.source == "AI":
+        await access.require(user, "AI_GENERATION", consume=True)
     return speaking_question_view(
-        await SpeakingQuestionGeneratorService(db, OpenAILLMClient()).generate(data, user.id)
+        await SpeakingQuestionGeneratorService(db, OpenAILLMClient()).generate(data, user.id, trial_only=decision.reason == "TRIAL_AVAILABLE", publish_global=user.role == "ADMIN")
     )
 
 
 @router.post("/sessions", status_code=201)
 async def create(data: SpeakingSessionCreate, db: DB, user: CurrentUser):
-    return speaking_session_view(await exam_service(db).create(data, user.id))
+    access = EntitlementService(db)
+    decision = await access.require(user, speaking_feature(data.mode), consume=True)
+    if data.source == "AI":
+        await access.require(user, "AI_GENERATION", consume=True)
+    return speaking_session_view(await exam_service(db).create(data, user.id, trial_only=decision.reason == "TRIAL_AVAILABLE", access_source="ADMIN" if user.role == "ADMIN" else "TRIAL" if decision.reason == "TRIAL_AVAILABLE" else "VIP"))
+
+
+async def require_speaking_session(db, user, session_id):
+    session = await owned_speaking_session(db, session_id, user.id)
+    await EntitlementService(db).require_existing(user, speaking_feature(session.mode), session.access_source)
+    return session
 
 
 @router.get("/sessions/{session_id}")
@@ -76,6 +92,7 @@ async def get_session(session_id: str, db: DB, user: CurrentUser):
 
 @router.post("/sessions/{session_id}/answers", status_code=201)
 async def start_answer(session_id: str, data: SpeakingAnswerCreate, db: DB, user: CurrentUser):
+    await require_speaking_session(db, user, session_id)
     answer = await exam_service(db).start_answer(session_id, user.id, data.sequence_number)
     session = await owned_speaking_session(db, session_id, user.id)
     return speaking_answer_view(answer, session.mode != "FULL_TEST")
@@ -83,6 +100,8 @@ async def start_answer(session_id: str, data: SpeakingAnswerCreate, db: DB, user
 
 @router.post("/answers/{answer_id}/audio")
 async def upload(answer_id: str, file: UploadFile, db: DB, user: CurrentUser):
+    answer = await owned_speaking_answer(db, answer_id, user.id)
+    await require_speaking_session(db, user, answer.session_id)
     answer = await exam_service(db).upload(answer_id, user.id, file)
     session = await owned_speaking_session(db, answer.session_id, user.id)
     return speaking_answer_view(answer, session.mode != "FULL_TEST")
@@ -104,6 +123,7 @@ async def audio(answer_id: str, db: DB, user: CurrentUser):
 @router.post("/answers/{answer_id}/transcribe")
 async def transcribe(answer_id: str, db: DB, user: CurrentUser):
     answer = await owned_speaking_answer(db, answer_id, user.id)
+    await require_speaking_session(db, user, answer.session_id)
     await exam_service(db).can_review(answer, user.id)
     return speaking_answer_view(await processor(db).transcribe(answer, user.id), True)
 
@@ -111,6 +131,9 @@ async def transcribe(answer_id: str, db: DB, user: CurrentUser):
 @router.post("/answers/{answer_id}/analyze")
 async def analyze(answer_id: str, db: DB, user: CurrentUser, retry: bool = False):
     answer = await owned_speaking_answer(db, answer_id, user.id)
+    if retry:
+        await EntitlementService(db).require(user, "SPEAKING_FULL")
+    await require_speaking_session(db, user, answer.session_id)
     await exam_service(db).can_review(answer, user.id)
     return speaking_answer_view(await processor(db).analyze(answer, user.id, retry), True)
 
@@ -118,11 +141,13 @@ async def analyze(answer_id: str, db: DB, user: CurrentUser, retry: bool = False
 @router.post("/answers/{answer_id}/grade")
 async def grade_answer(answer_id: str, db: DB, user: CurrentUser):
     answer = await owned_speaking_answer(db, answer_id, user.id)
+    await require_speaking_session(db, user, answer.session_id)
     return speaking_grading_view(await grader(db).grade(answer.session_id, user.id, answer_id))
 
 
 @router.post("/sessions/{session_id}/next")
 async def next_question(session_id: str, data: SpeakingAdvance, db: DB, user: CurrentUser):
+    await require_speaking_session(db, user, session_id)
     return speaking_session_view(
         await exam_service(db).advance(session_id, user.id, data.sequence_number, data.skip)
     )
@@ -130,11 +155,13 @@ async def next_question(session_id: str, data: SpeakingAdvance, db: DB, user: Cu
 
 @router.post("/sessions/{session_id}/complete")
 async def complete(session_id: str, db: DB, user: CurrentUser):
+    await require_speaking_session(db, user, session_id)
     return speaking_session_view(await exam_service(db).complete(session_id, user.id))
 
 
 @router.post("/sessions/{session_id}/grade")
 async def grade_session(session_id: str, db: DB, user: CurrentUser):
+    await require_speaking_session(db, user, session_id)
     return speaking_grading_view(await grader(db).grade(session_id, user.id))
 
 
@@ -145,6 +172,7 @@ async def result(session_id: str, db: DB, user: CurrentUser):
 
 @router.post("/sessions/{session_id}/tts")
 async def tts(session_id: str, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "SPEAKING_FULL")
     session = await owned_speaking_session(db, session_id, user.id)
     if session.current_sequence >= len(session.question_set):
         raise AppError(409, "Phiên đã hết câu hỏi.")

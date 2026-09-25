@@ -1,8 +1,10 @@
 "use client";
+import { staticPageUrl } from "@/lib/static-page-url";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Clock3, RefreshCw } from "lucide-react";
-import { RequireAuth } from "@/features/auth/auth-provider";
+import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
+import { Paywall } from "@/components/paywall";
 import { Button } from "@/components/ui/button";
 import { Loading, ErrorNotice } from "@/components/feedback";
 import { post } from "@/services/api";
@@ -21,9 +23,14 @@ import {
 export function LearningDashboard() {
   return (
     <RequireAuth>
-      <Dashboard />
+      <LearningGate />
     </RequireAuth>
   );
+}
+function LearningGate() {
+  const { user } = useAuth();
+  if (user?.role !== "ADMIN" && user?.access?.tier !== "VIP") return <div className="space-y-6"><div><p className="eyebrow">Phân tích học tập</p><h1 className="mt-2 text-3xl font-bold">Theo dõi hành trình của bạn</h1><p className="mt-2 text-sm text-stone-600">Bạn vẫn xem được lịch sử và kết quả các lượt đã hoàn thành. Phân tích điểm yếu và kế hoạch cá nhân được mở cùng VIP.</p></div><div className="panel p-5 text-sm">Trial: Writing Task 1 còn {user?.access?.trial_remaining.WRITING_TASK1 ?? 0} lượt · Speaking Part 1 còn {user?.access?.trial_remaining.SPEAKING_PART1 ?? 0} lượt.</div><Paywall title="Mở phân tích học tập cá nhân" /><Link href="/history" className="text-sm font-semibold text-teal-800">Xem lịch sử luyện tập →</Link></div>;
+  return <Dashboard />;
 }
 function Dashboard() {
   const { data, error, reload } = useLearning<Overview>("/overview");
@@ -142,7 +149,7 @@ function Dashboard() {
                 ).map((item, i) => (
                   <Link
                     key={i}
-                    href={item.url}
+                    href={staticPageUrl(item.url)}
                     className="flex items-center justify-between gap-3 rounded-xl border border-stone-200 p-4 hover:border-teal-600"
                   >
                     <div>
@@ -303,7 +310,7 @@ function WeeklyCoach({
               className="rounded-xl bg-teal-50 p-4 text-sm"
             >
               <Link
-                href={r.url}
+                href={staticPageUrl(r.url)}
                 className="font-semibold text-teal-900 underline"
               >
                 {r.label_vi}
@@ -344,7 +351,7 @@ function RecentExercises() {
         {data.items.slice(0, 6).map((i) => (
           <Link
             className="panel flex items-center justify-between gap-4 p-4 text-sm hover:border-teal-600"
-            href={i.url}
+            href={staticPageUrl(i.url)}
             key={i.id}
           >
             {i.title}

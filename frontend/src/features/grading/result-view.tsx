@@ -21,6 +21,7 @@ import { VocabularyRecommendations } from "@/features/vocabulary/recommendations
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { QuestionCard } from "@/features/writing/practice-setup";
+import { Paywall } from "@/components/paywall";
 import { LibraryOrigin } from "@/features/library/practice-link";
 import { api, post } from "@/services/api";
 import { categories, criteria, topics } from "@/lib/constants";
@@ -509,7 +510,7 @@ function Result({ id }: { id: string }) {
         description="Hoàn thành và nộp bài để nhận phản hồi. Bài viết của bạn đã được lưu."
       >
         <Button asChild>
-          <Link href={`/exam/${data.exam_session_id}`}>
+          <Link href={`/exam?id=${data.exam_session_id}`}>
             Tiếp tục viết
             <ArrowRight />
           </Link>
@@ -583,7 +584,7 @@ function Result({ id }: { id: string }) {
                 size="sm"
                 variant={a.id === id ? "secondary" : "outline"}
               >
-                <Link href={`/result/${a.id}`}>
+                <Link href={`/result?id=${a.id}`}>
                   Task {a.task_type} · {score(a.grading?.scores.overall)}
                 </Link>
               </Button>
@@ -732,6 +733,7 @@ function Result({ id }: { id: string }) {
       <p className="rounded-xl bg-stone-100 p-4 text-xs leading-6 text-stone-500">
         {DISCLAIMER}
       </p>
+      {g && <Paywall title="Tiếp tục với Writing Task 2 và thi thử đầy đủ" compact />}
     </div>
   );
 }

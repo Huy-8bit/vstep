@@ -61,7 +61,7 @@ function Workspace({ initial }: { initial: Exam }) {
       const answers = await draft.prepareSubmit();
       const exam = await post<Exam>(`/exams/${initial.id}/submit`, { answers });
       draft.complete(exam);
-      router.replace(`/result/${exam.attempts[0].id}`);
+      router.replace(`/result?id=${exam.attempts[0].id}`);
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);
@@ -375,7 +375,7 @@ function LoadExam({ id }: { id: string }) {
       .then((e) => {
         setError("");
         if (e.status !== "IN_PROGRESS")
-          router.replace(`/result/${e.attempts[0].id}`);
+          router.replace(`/result?id=${e.attempts[0].id}`);
         else setExam(e);
       })
       .catch((e) => setError(e.message));

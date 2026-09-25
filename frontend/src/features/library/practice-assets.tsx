@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { api } from "@/services/api";
+import { api, apiUrl } from "@/services/api";
 function PracticeAsset({ id }: { id: string }) {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
@@ -36,7 +36,7 @@ function PracticeAsset({ id }: { id: string }) {
         />
       )}
       <a
-        href={`/api/v1/my-questions/assets/${id}`}
+        href={apiUrl(`/my-questions/assets/${id}`)}
         target="_blank"
         rel="noreferrer"
         className="text-xs text-teal-800 underline"

@@ -13,3 +13,12 @@ __pycache__/
 coverage/
 test-results/
 data/audio/
+
+# Static export and Terraform local state/secrets
+frontend/out/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!terraform.tfvars.example
+crash.log

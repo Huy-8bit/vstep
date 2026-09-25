@@ -1,3 +1,4 @@
+import { apiUrl } from "@/services/api";
 import {
   partLabels,
   skillLabels,
@@ -145,7 +146,7 @@ export function DocumentPreview({ value }: { value: LibraryDocument }) {
           {value.asset_ids.map((id, i) => (
             <a
               className="block text-sm text-teal-800 underline"
-              href={`/api/v1/my-questions/assets/${id}`}
+              href={apiUrl(`/my-questions/assets/${id}`)}
               key={id}
               target="_blank"
               rel="noreferrer"

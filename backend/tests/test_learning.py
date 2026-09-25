@@ -18,6 +18,7 @@ from app.learning.taxonomy import normalize
 from app.llm.openai_client import OpenAILLMClient
 from app.main import app, hits
 from app.models import User, WritingAttempt, WritingError, WritingGrading
+from app.models.commerce import UserEntitlement
 from app.models.learning import LearningSignal, UserLearningEvent
 from app.schemas.learning import PersonalizedExercisesOutput, PersonalizedLessonOutput
 
@@ -193,6 +194,9 @@ async def accounts():
             )
             assert r.status_code == 201, r.text
             ids.append(r.json()["id"])
+        async with SessionLocal() as db:
+            db.add_all(UserEntitlement(user_id=uid, source="ADMIN_GRANT", entitlement_type="VIP", starts_at=utcnow(), expires_at=utcnow() + timedelta(days=30), status="ACTIVE", details={"reason": "legacy integration fixture"}) for uid in ids)
+            await db.commit()
         yield first, other, ids
     async with SessionLocal() as db:
         await db.execute(delete(User).where(User.id.in_(ids)))

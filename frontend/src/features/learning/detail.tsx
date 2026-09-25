@@ -1,4 +1,5 @@
 "use client";
+import { staticPageUrl } from "@/lib/static-page-url";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -70,7 +71,7 @@ function DetailView({ id }: { id: string }) {
         },
       );
       requestId.current = null;
-      router.push(`/learning/practice/${exercise.id}`);
+      router.push(`/learning/practice?id=${exercise.id}`);
     } catch (e) {
       setActionError((e as Error).message);
     } finally {
@@ -96,7 +97,7 @@ function DetailView({ id }: { id: string }) {
           source,
         },
       );
-      router.push(result.url);
+      router.push(staticPageUrl(result.url));
     } catch (e) {
       setActionError((e as Error).message);
     } finally {
@@ -160,7 +161,7 @@ function DetailView({ id }: { id: string }) {
                     {new Date(e.created_at).toLocaleDateString("vi-VN")}
                   </span>
                   <Link
-                    href={e.details.source_url}
+                    href={staticPageUrl(e.details.source_url)}
                     className="text-teal-800 underline"
                   >
                     Bài gốc ↗
@@ -433,10 +434,7 @@ function LessonContent({ lesson }: { lesson: Lesson }) {
                 {c.sources.find((s) => s.signal_id === e.signal_id)
                   ?.source_url && (
                   <Link
-                    href={
-                      c.sources.find((s) => s.signal_id === e.signal_id)!
-                        .source_url
-                    }
+                    href={staticPageUrl(c.sources.find((s) => s.signal_id === e.signal_id)!.source_url)}
                     className="mt-2 inline-block text-xs text-teal-800 underline"
                   >
                     Xem bài gốc

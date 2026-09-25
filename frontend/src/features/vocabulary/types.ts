@@ -118,5 +118,5 @@ export type Review = {
 };
 export const sourceLink = (item: VocabularyItem) =>
   item.source_skill === "WRITING"
-    ? `/result/${item.source_attempt_id}`
-    : `/${item.source_skill.toLowerCase()}/result/${item.source_attempt_id}`;
+    ? `/result?id=${item.source_attempt_id}`
+    : `/${item.source_skill.toLowerCase()}/result?id=${item.source_attempt_id}`;

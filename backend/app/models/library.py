@@ -18,6 +18,10 @@ class LibrarySessionMixin:
 class PrivateQuestionMixin(LibrarySessionMixin):
     owner_id: Mapped[str | None] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     presentation: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
+    access_tier: Mapped[str] = mapped_column(String(12), default="VIP", server_default="VIP")
+    is_published: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    available_for_free_trial: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    is_featured: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
 
 
 class QuestionCollection(IdentityMixin, Base):

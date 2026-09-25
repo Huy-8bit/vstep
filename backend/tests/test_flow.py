@@ -16,6 +16,7 @@ from app.db.session import SessionLocal
 from app.llm import openai_client
 from app.main import app, hits
 from app.models import AIUsageLog, ExamSession, User, WritingQuestion
+from app.models.commerce import UserEntitlement
 
 
 @pytest_asyncio.fixture
@@ -31,6 +32,9 @@ async def client():
         assert response.status_code == 201, response.text
         c.test_user_id = response.json()["id"]
         c.test_credentials = credentials
+        async with SessionLocal() as db:
+            db.add(UserEntitlement(user_id=c.test_user_id, source="ADMIN_GRANT", entitlement_type="VIP", starts_at=utcnow(), expires_at=utcnow() + timedelta(days=30), status="ACTIVE", details={"reason": "legacy integration fixture"}))
+            await db.commit()
         yield c
     async with SessionLocal() as db:
         await db.execute(delete(User).where(User.id == c.test_user_id))

@@ -156,7 +156,7 @@ function History() {
                     </td>
                     <td className="px-5 py-5">
                       <Link
-                        href={`/speaking/${item.status === "IN_PROGRESS" ? "exam" : "result"}/${item.id}`}
+                        href={`/speaking/${item.status === "IN_PROGRESS" ? "exam" : "result"}?id=${item.id}`}
                         className="whitespace-nowrap font-semibold text-teal-800"
                       >
                         {item.status === "IN_PROGRESS"

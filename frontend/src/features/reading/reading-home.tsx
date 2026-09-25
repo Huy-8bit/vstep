@@ -10,7 +10,8 @@ import {
   Clock3,
   Sparkles,
 } from "lucide-react";
-import { RequireAuth } from "@/features/auth/auth-provider";
+import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
+import { Paywall } from "@/components/paywall";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
 import { api, post } from "@/services/api";
@@ -34,9 +35,14 @@ export function ReadingHome({
 }) {
   return (
     <RequireAuth>
-      <Setup initialMode={initialMode} initialType={initialType} />
+      <ReadingGate initialMode={initialMode} initialType={initialType} />
     </RequireAuth>
   );
+}
+function ReadingGate({ initialMode, initialType }: { initialMode: ReadingMode; initialType: string }) {
+  const { user } = useAuth();
+  if (user?.role !== "ADMIN" && user?.access?.tier !== "VIP" && !user?.access?.free_reading_enabled) return <div className="space-y-6"><div><p className="eyebrow">Reading</p><h1 className="mt-2 text-3xl font-bold">Luyện đọc hiểu VSTEP</h1></div><Paywall title="Reading dành cho VIP" /><Link href="/reading/history" className="text-sm font-semibold text-teal-800">Xem lịch sử Reading →</Link></div>;
+  return <Setup initialMode={user?.access?.tier === "FREE" ? "QUICK_PRACTICE" : initialMode} initialType={initialType} />;
 }
 function Setup({
   initialMode,
@@ -139,7 +145,7 @@ function Setup({
         target_question_type: mode === "QUESTION_TYPE_PRACTICE" ? target : null,
         passage_id: mode === "FULL_TEST" ? null : selected || null,
       });
-      router.push(`/reading/exam/${s.id}`);
+      router.push(`/reading/exam?id=${s.id}`);
     } catch (e) {
       setError((e as Error).message);
       setBusy("");

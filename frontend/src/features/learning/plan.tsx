@@ -1,4 +1,5 @@
 "use client";
+import { staticPageUrl } from "@/lib/static-page-url";
 import { useState } from "react";
 import Link from "next/link";
 import { CalendarDays, Check, LoaderCircle } from "lucide-react";
@@ -175,7 +176,7 @@ function PlanView() {
                         </div>
                         <div className="flex gap-2">
                           <Button asChild variant="outline" size="sm">
-                            <Link href={item.url}>Mở hoạt động</Link>
+                            <Link href={staticPageUrl(item.url)}>Mở hoạt động</Link>
                           </Button>
                           <Button
                             size="sm"

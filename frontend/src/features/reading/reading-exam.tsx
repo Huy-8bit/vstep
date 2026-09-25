@@ -31,7 +31,7 @@ function LoadExam({ id }: { id: string }) {
     setError("");
     try {
       const s = await api<ReadingSession>(`/reading/sessions/${id}`);
-      if (s.status !== "IN_PROGRESS") router.replace(`/reading/result/${id}`);
+      if (s.status !== "IN_PROGRESS") router.replace(`/reading/result?id=${id}`);
       else setData(s);
     } catch (e) {
       setError((e as Error).message);
@@ -71,7 +71,7 @@ function Workspace({ session }: { session: ReadingSession }) {
   const expiredRetry = useRef(0);
   const questionsRoot = useRef<HTMLDivElement>(null);
   const closed = useCallback(
-    () => router.replace(`/reading/result/${session.id}`),
+    () => router.replace(`/reading/result?id=${session.id}`),
     [router, session.id],
   );
   const save = useReadingAutosave(session, user!.id, closed);

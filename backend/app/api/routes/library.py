@@ -1,11 +1,12 @@
 from typing import Literal
 
-from fastapi import APIRouter, Query, UploadFile
+from fastapi import APIRouter, Depends, Query, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy import exists, func, or_, select
 
 from app.api.deps import DB, CurrentUser
 from app.common.errors import AppError
+from app.core.config import settings
 from app.db.base import utcnow
 from app.llm.openai_client import OpenAILLMClient
 from app.models import ExamSession
@@ -22,11 +23,21 @@ from app.schemas.library import (
     ParseRequest,
     Skill,
 )
+from app.services.entitlements import EntitlementService, speaking_feature, writing_feature
 from app.services.library_practice_service import LibraryPracticeService
 from app.services.library_service import library_view, practice_stats
 from app.services.question_import_service import QuestionImportService
 
-router = APIRouter(prefix="/my-questions", tags=["My Question Library"])
+
+async def require_private_library(user: CurrentUser, db: DB):
+    if user.role == "ADMIN":
+        return
+    if not settings.user_custom_questions_enabled:
+        raise AppError(403, "Thư viện đề riêng hiện chưa mở cho người học.", "FEATURE_DISABLED")
+    await EntitlementService(db).require(user, "WRITING_FULL")
+
+
+router = APIRouter(prefix="/my-questions", tags=["My Question Library"], dependencies=[Depends(require_private_library)])
 
 
 @router.get("")
@@ -207,4 +218,8 @@ async def delete_question(question_id: str, db: DB, user: CurrentUser):
 
 @router.post("/{question_id}/practice", status_code=201)
 async def practice(question_id: str, data: LibraryPractice, db: DB, user: CurrentUser):
+    draft = await QuestionRepository(db, user.id).get(question_id, include_deleted=data.revision is not None)
+    doc = await QuestionRepository(db, user.id).revision(draft, data.revision or draft.revision)
+    feature = (writing_feature("FULL_TEST" if doc.part == "full" else f"TASK{doc.part[-1]}") if doc.skill == "writing" else speaking_feature("FULL_TEST" if doc.part == "full" else f"PART{doc.part[-1]}") if doc.skill == "speaking" else "READING")
+    await EntitlementService(db).require(user, feature, consume=True)
     return await LibraryPracticeService(db, OpenAILLMClient()).start(question_id, data, user.id)

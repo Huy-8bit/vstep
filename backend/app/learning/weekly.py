@@ -93,7 +93,7 @@ async def generate_summary(db, llm, user_id):
             {
                 **r.model_dump(),
                 "label_vi": allowed[r.weakness_id]["display_name_vi"],
-                "url": f"/learning/weaknesses/{r.weakness_id}",
+                "url": f"/learning/weaknesses?id={r.weakness_id}",
             }
             for r in output.recommendations
         ],

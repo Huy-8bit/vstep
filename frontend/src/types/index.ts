@@ -2,7 +2,15 @@ import type { LibraryMetadata } from "@/features/library/types";
 import type { WritingAssessmentMetadata } from "@/features/grading/writing-evidence";
 import type { TestProfile } from "@/lib/test-profile";
 export type Mode = "FULL_TEST" | "TASK1" | "TASK2";
-export type User = { id: string; email: string; is_ai_admin?: boolean };
+export type User = {
+  id: string;
+  email: string;
+  name?: string | null;
+  role: "USER" | "ADMIN";
+  status: "ACTIVE" | "DISABLED";
+  is_ai_admin?: boolean;
+  access: { tier: "FREE" | "VIP"; vip_expires_at: string | null; trial_remaining: Record<string, number>; free_reading_enabled?: boolean };
+};
 export type Question = LibraryMetadata & {
   presentation?: {
     practice_asset_ids?: string[];

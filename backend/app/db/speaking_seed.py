@@ -528,6 +528,7 @@ def speaking_seed_data():
 
 async def seed():
     async with SessionLocal() as db:
+        trial_part1_added = 0
         for question in speaking_seed_data():
             SpeakingQuestionValidator().validate(question)
             diagnostics = {
@@ -541,6 +542,9 @@ async def seed():
                 "validation_notes": ["Original conversational prompts with editorial structure."],
             }
             data = question.model_dump(exclude={"allow_own_idea"})
+            trial = question.part == 1 and trial_part1_added < 4
+            if trial:
+                trial_part1_added += 1
             await db.execute(
                 insert(SpeakingQuestion)
                 .values(
@@ -548,6 +552,8 @@ async def seed():
                     source="SEED",
                     fingerprint=speaking_fingerprint(data),
                     generation_diagnostics=diagnostics,
+                    access_tier="FREE_TRIAL" if trial else "VIP",
+                    available_for_free_trial=trial,
                 )
                 .on_conflict_do_update(
                     index_elements=["fingerprint"], set_={"generation_diagnostics": diagnostics}

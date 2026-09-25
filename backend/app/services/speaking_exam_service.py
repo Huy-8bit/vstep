@@ -4,6 +4,7 @@ from sqlalchemy import select
 
 from app.common.errors import AppError
 from app.db.base import utcnow
+from app.models.commerce import ProductEvent
 from app.models.speaking import SpeakingAnswer, SpeakingExamSession, SpeakingQuestion
 from app.schemas.speaking import SpeakingQuestionRequest, SpeakingSessionCreate
 from app.services.speaking_question_generator import SpeakingQuestionGeneratorService
@@ -77,7 +78,7 @@ class SpeakingExamService:
     def __init__(self, db, llm, storage):
         self.db, self.llm, self.storage = db, llm, storage
 
-    async def create(self, data: SpeakingSessionCreate, user_id: str, *, resolved_questions=None, library=None):
+    async def create(self, data: SpeakingSessionCreate, user_id: str, *, resolved_questions=None, library=None, trial_only=False, access_source="VIP"):
         parts = (
             [1, 2, 3]
             if data.mode == "FULL_TEST"
@@ -93,14 +94,14 @@ class SpeakingExamService:
                     raise AppError(422, "Thiếu phần Speaking trong đề riêng.")
             elif data.question_id:
                 q = await self.db.get(SpeakingQuestion, data.question_id)
-                if not q or q.part != part or q.owner_id not in (None, user_id) or (q.owner_id is None and not q.generation_diagnostics.get("quality_valid")):
+                if not q or q.part != part or q.owner_id not in (None, user_id) or (q.owner_id is None and (not q.generation_diagnostics.get("quality_valid") or not q.is_published or q.access_tier == "INTERNAL")) or (trial_only and (q.owner_id is not None or not q.available_for_free_trial or q.access_tier != "FREE_TRIAL")):
                     raise AppError(422, "Đề không khớp phần Speaking đã chọn.")
             else:
                 q = await SpeakingQuestionGeneratorService(self.db, self.llm).generate(
                     SpeakingQuestionRequest(
                         part=part, topic=data.topic, source=data.source, test_profile=data.test_profile
                     ),
-                    user_id,
+                    user_id, trial_only=trial_only,
                 )
             steps.extend(question_steps(q))
         if data.mode == "QUICK_PRACTICE":
@@ -113,6 +114,7 @@ class SpeakingExamService:
             **(library or {}),
             user_id=user_id,
             mode=data.mode,
+            access_source=access_source,
             test_profile=data.test_profile,
             current_part=steps[0]["part"],
             current_sequence=0,
@@ -237,6 +239,7 @@ class SpeakingExamService:
                 409, "Hãy hoàn thành các câu hỏi và follow-up trước khi nộp bài.", "speaking_incomplete"
             )
         session.status, session.completed_at = "COMPLETED", utcnow()
+        self.db.add(ProductEvent(user_id=user_id, name="PRACTICE_COMPLETED", details={"skill": "SPEAKING", "session_id": session.id, "access_source": session.access_source}))
         await self.db.commit()
         return session
 

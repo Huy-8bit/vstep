@@ -1,13 +1,12 @@
 import hashlib
 import random
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.exc import IntegrityError
 
 from app.common.errors import AppError
 from app.common.test_profiles import ITEM_DIFFICULTY_BANDS, VSTEP_3_5
 from app.common.words import count_words
-from app.core.config import settings
 from app.models.reading import ReadingExamSession, ReadingPassage, ReadingQuestion
 from app.prompts.reading_question_generator import READING_GENERATOR_PROMPT_VERSION
 from app.schemas.reading import READING_TOPICS, ReadingGenerateRequest
@@ -52,17 +51,20 @@ class ReadingQuestionGeneratorService:
     def __init__(self, db, llm):
         self.db, self.llm = db, llm
 
-    async def bank(self, topic="random"):
-        query = select(ReadingPassage).where(ReadingPassage.owner_id.is_(None)).where(
+    async def bank(self, topic="random", user_id=None):
+        visible = ReadingPassage.owner_id.is_(None) if user_id is None else or_(ReadingPassage.owner_id.is_(None), ReadingPassage.owner_id == user_id)
+        query = select(ReadingPassage).where(visible).where(
             ReadingPassage.test_profile == VSTEP_3_5,
             ReadingPassage.generation_diagnostics["quality_valid"].as_boolean().is_(True),
+            ReadingPassage.access_tier.in_(["FREE_TRIAL", "VIP"]),
+            or_(ReadingPassage.owner_id == user_id, ReadingPassage.is_published.is_(True)) if user_id else ReadingPassage.is_published.is_(True),
         )
         if topic != "random":
             query = query.where(ReadingPassage.topic == topic)
         return list(await self.db.scalars(query))
 
     async def ordered_bank(self, topic, user_id):
-        bank = await self.bank(topic)
+        bank = await self.bank(topic, user_id)
         seen_groups = await self.db.scalars(
             select(ReadingExamSession.passage_ids).where(ReadingExamSession.user_id == user_id)
         )
@@ -71,7 +73,7 @@ class ReadingQuestionGeneratorService:
         bank.sort(key=lambda p: p.id in seen)
         return bank
 
-    async def generate(self, request: ReadingGenerateRequest, user_id, *, slot=None, plan=None, learning_focus=None):
+    async def generate(self, request: ReadingGenerateRequest, user_id, *, slot=None, plan=None, learning_focus=None, publish_global=False):
         if learning_focus and request.mode == "FULL_TEST":
             raise AppError(422, "Luyện điểm yếu chỉ áp dụng trong chế độ học.")
         # Only this service chooses internal item targets. Public requests never carry proficiency levels.
@@ -122,6 +124,9 @@ class ReadingQuestionGeneratorService:
         )
         passage = passage_from_generated(generated)
         passage.generation_diagnostics = diagnostics
+        passage.owner_id = user_id if learning_focus or not publish_global else None
+        passage.is_published = False
+        passage.access_tier = "VIP"
         if learning_focus:
             passage.owner_id = user_id
             passage.generation_diagnostics = {**diagnostics, "learning_focus": learning_focus}
@@ -163,24 +168,13 @@ class ReadingQuestionGeneratorService:
         bank = await self.ordered_bank("random" if data.mode == "FULL_TEST" else data.topic, user_id)
         if data.mode == "FULL_TEST":
             plan = READING_BLUEPRINT.select(bank)
-            missing = [
-                (slot, i) for i, (slot, p) in enumerate(zip(READING_BLUEPRINT.slots, plan)) if p is None
-            ]
-            if missing and not settings.openai_api_key:
+            missing = [p for p in plan if p is None]
+            if missing:
                 raise AppError(
                     409,
                     f"Bộ lọc còn thiếu {len(missing)} bài đọc để ghép đề VSTEP.3–5 có đủ độ phân hóa và dạng câu. Chọn chủ đề ngẫu nhiên hoặc bổ sung đề bằng AI.",
                     "reading_bank_insufficient",
                 )
-            for slot, i in missing:
-                plan[i] = await self.generate(
-                    ReadingGenerateRequest(mode="FULL_TEST", test_profile=data.test_profile, topic="random"),
-                    user_id,
-                    slot=slot,
-                    plan=plan,
-                )
-                if not READING_BLUEPRINT.accepts(plan[i], slot):
-                    raise AppError(502, "Đề AI chưa đáp ứng cấu trúc bài thi Reading. Hãy tạo lại.")
             if not READING_BLUEPRINT.complete(plan):
                 raise AppError(
                     409,
@@ -198,29 +192,11 @@ class ReadingQuestionGeneratorService:
             ][:5]
             if selected:
                 return selected
-            count, targets = 5, [data.target_question_type]
         else:
             count = 5 if data.mode == "QUICK_PRACTICE" else 10
-            targets = []
             eligible = [p for p in bank if len(p.questions) >= count]
             if eligible:
                 return [(eligible[0], q) for q in eligible[0].questions[:count]]
         if data.passage_id:
             raise AppError(422, "Bài đã chọn chưa có đủ câu hỏi phù hợp với chế độ luyện này.")
-        if not settings.openai_api_key:
-            raise AppError(
-                409,
-                "Bộ lọc chưa có đủ câu phù hợp. Chọn chủ đề ngẫu nhiên hoặc bổ sung đề bằng AI.",
-                "reading_bank_empty",
-            )
-        passage = await self.generate(
-            ReadingGenerateRequest(
-                mode=data.mode,
-                test_profile=data.test_profile,
-                topic=data.topic,
-                question_count=count,
-                target_question_types=targets,
-            ),
-            user_id,
-        )
-        return [(passage, q) for q in passage.questions]
+        raise AppError(409, "Bộ lọc chưa có đủ câu phù hợp. Chọn chủ đề ngẫu nhiên hoặc bổ sung đề bằng AI.", "reading_bank_empty")

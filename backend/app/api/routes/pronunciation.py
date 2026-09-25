@@ -5,6 +5,7 @@ from app.api.deps import DB, CurrentUser
 from app.common.errors import AppError
 from app.schemas.audio_assessment import PronunciationCreate
 from app.services.audio_storage_service import LocalAudioStorageService
+from app.services.entitlements import EntitlementService
 from app.services.pronunciation_practice_service import PronunciationPracticeService, practice_view
 from app.services.text_to_speech_service import TextToSpeechService
 from app.speech.openai_audio_analysis import OpenAIAudioAnalysisProvider
@@ -19,6 +20,7 @@ def service(db):
 
 @router.post("/practices", status_code=201)
 async def create(data: PronunciationCreate, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "PRONUNCIATION")
     return practice_view(await service(db).create(data, user.id))
 
 
@@ -29,6 +31,7 @@ async def get_practice(identifier: str, db: DB, user: CurrentUser):
 
 @router.post("/practices/{identifier}/audio")
 async def upload(identifier: str, file: UploadFile, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "PRONUNCIATION")
     return practice_view(await service(db).upload(identifier, user.id, file))
 
 
@@ -46,11 +49,13 @@ async def audio(identifier: str, db: DB, user: CurrentUser):
 
 @router.post("/practices/{identifier}/analyze")
 async def analyze(identifier: str, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "PRONUNCIATION")
     return practice_view(await service(db).analyze(identifier, user.id))
 
 
 @router.post("/practices/{identifier}/tts")
 async def tts(identifier: str, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "PRONUNCIATION")
     item = await service(db).owned(identifier, user.id)
     path = await TextToSpeechService(OpenAISpeechClient(), db).speak_question(item.reference_text, user.id)
     return FileResponse(path, media_type="audio/mpeg", headers={"Cache-Control": "private, no-store"})

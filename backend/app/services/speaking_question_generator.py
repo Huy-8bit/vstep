@@ -49,7 +49,9 @@ class SpeakingQuestionGeneratorService:
     def __init__(self, db, llm: LLMClient):
         self.db, self.llm = db, llm
 
-    async def generate(self, request: SpeakingQuestionRequest, user_id: str, *, learning_focus=None) -> SpeakingQuestion:
+    async def generate(self, request: SpeakingQuestionRequest, user_id: str, *, learning_focus=None, trial_only=False, publish_global=False) -> SpeakingQuestion:
+        if trial_only and (request.part != 1 or request.source == "AI"):
+            raise AppError(403, "Lượt miễn phí dùng đề Speaking Part 1 có sẵn.", "VIP_REQUIRED")
         recent_sets = list(
             await self.db.scalars(
                 select(SpeakingExamSession.question_set)
@@ -65,8 +67,12 @@ class SpeakingQuestionGeneratorService:
                 recent_ids.add(step["question_id"])
                 recent_topics.add(step["topic_code"])
         query = select(SpeakingQuestion).where(SpeakingQuestion.owner_id.is_(None)).where(
-            SpeakingQuestion.part == request.part, SpeakingQuestion.test_profile == request.test_profile
+            SpeakingQuestion.part == request.part, SpeakingQuestion.test_profile == request.test_profile,
+            SpeakingQuestion.is_published.is_(True),
+            SpeakingQuestion.access_tier.in_(["FREE_TRIAL"] if trial_only else ["FREE_TRIAL", "VIP"]),
         )
+        if trial_only:
+            query = query.where(SpeakingQuestion.available_for_free_trial.is_(True))
         if request.source != "AI":
             query = query.where(
                 SpeakingQuestion.generation_diagnostics["quality_valid"].as_boolean().is_(True)
@@ -123,10 +129,12 @@ class SpeakingQuestionGeneratorService:
         diagnostics["source_blueprint"] = SPEAKING_BLUEPRINTS[request.part]["id"]
         data = generated.model_dump(exclude={"allow_own_idea"})
         question = SpeakingQuestion(
-            owner_id=user_id if learning_focus else None,
+            owner_id=user_id if learning_focus or not publish_global else None,
             **data,
             source="AI",
             generation_diagnostics=diagnostics,
+            is_published=False,
+            access_tier="VIP",
             fingerprint=speaking_fingerprint(data),
             prompt_version=SPEAKING_VERSIONS[request.part],
         )

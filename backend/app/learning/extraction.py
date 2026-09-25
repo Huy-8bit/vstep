@@ -219,7 +219,7 @@ def writing_data(attempt):
         "grader_version": grading.grader_version,
         "model": grading.ai_model,
         "occurred_at": attempt.submitted_at or grading.created_at,
-        "source_url": f"/result/{attempt.id}",
+        "source_url": f"/result?id={attempt.id}",
     }
 
 
@@ -358,7 +358,7 @@ def speaking_data(session):
         grader_version=grades[0].prompt_version,
         model=grades[0].ai_model,
         occurred_at=session.completed_at or max(g.created_at for g in grades),
-        source_url=f"/speaking/result/{session.id}",
+        source_url=f"/speaking/result?id={session.id}",
     )
 
 
@@ -409,5 +409,5 @@ def reading_data(session):
         grader_version="reading-1",
         model=None,
         occurred_at=session.submitted_at or session.created_at,
-        source_url=f"/reading/result/{session.id}",
+        source_url=f"/reading/result?id={session.id}",
     )

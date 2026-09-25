@@ -88,7 +88,7 @@ export function WeaknessCard({ item: w }: { item: Weakness }) {
         Mức bằng chứng: {w.stats.confidence_label}
       </p>
       <Button asChild className="mt-5 w-full" variant="outline">
-        <Link href={`/learning/weaknesses/${w.id}`}>
+        <Link href={`/learning/weaknesses?id=${w.id}`}>
           Học và luyện điểm này
           <ArrowUpRight size={16} />
         </Link>

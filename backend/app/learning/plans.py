@@ -120,7 +120,7 @@ class StudyPlanService:
                         estimated_minutes=minutes,
                         details={
                             "title": w["display_name_vi"],
-                            "url": f"/learning/weaknesses/{w['id']}",
+                            "url": f"/learning/weaknesses?id={w['id']}",
                             "reason_vi": f"Ưu tiên từ {w['affected_attempt_count']} bài có bằng chứng; {'ôn cách dùng trong ngữ cảnh mới' if review else 'học quy tắc và luyện có phản hồi'}.",
                             "exercise_count": 5
                             if data.daily_minutes == 15
@@ -162,7 +162,7 @@ class StudyPlanService:
                 "title": w["display_name_vi"],
                 "skill": w["skill"],
                 "estimated_minutes": 15 if n == 0 else 10,
-                "url": f"/learning/weaknesses/{w['id']}",
+                "url": f"/learning/weaknesses?id={w['id']}",
                 "reason_vi": "Ôn lại sau khi lỗi xuất hiện trở lại."
                 if w["status"] == "REGRESSED"
                 else "Học quy tắc ngắn, luyện và áp dụng vào một ngữ cảnh mới.",

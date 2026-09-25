@@ -14,6 +14,7 @@ from app.schemas.reading import (
     ReadingSessionCreate,
     VocabularyRequest,
 )
+from app.services.entitlements import EntitlementService
 from app.services.reading_blueprint import READING_BLUEPRINT
 from app.services.reading_exam_service import ReadingExamService
 from app.services.reading_progress_service import ReadingProgressService
@@ -25,7 +26,8 @@ router = APIRouter(prefix="/reading", tags=["Reading"])
 
 @router.get("/bank")
 async def bank(db: DB, user: CurrentUser, topic: str = "random"):
-    rows = await ReadingQuestionGeneratorService(db, OpenAILLMClient()).bank(topic)
+    await EntitlementService(db).require(user, "READING_QUICK" if settings.free_reading_enabled else "READING")
+    rows = await ReadingQuestionGeneratorService(db, OpenAILLMClient()).bank(topic, user.id)
     return {
         "ai_configured": bool(settings.openai_api_key),
         "test_profile": "VSTEP_3_5",
@@ -48,23 +50,27 @@ async def bank(db: DB, user: CurrentUser, topic: str = "random"):
 
 @router.post("/questions/generate")
 async def generate(data: ReadingGenerateRequest, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "READING")
+    await EntitlementService(db).require(user, "AI_GENERATION", consume=True)
     return reading_passage_view(
-        await ReadingQuestionGeneratorService(db, OpenAILLMClient()).generate(data, user.id)
+        await ReadingQuestionGeneratorService(db, OpenAILLMClient()).generate(data, user.id, publish_global=user.role == "ADMIN")
     )
 
 
 @router.get("/passages/{passage_id}")
 async def passage(passage_id: str, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "READING")
     row = await db.get(ReadingPassage, passage_id)
-    if not row or row.owner_id not in (None, user.id):
+    if not row or row.owner_id not in (None, user.id) or (row.owner_id is None and (not row.is_published or row.access_tier == "INTERNAL")):
         raise AppError(404, "Không tìm thấy bài đọc.")
     return reading_passage_view(row)
 
 
 @router.post("/sessions", status_code=201)
 async def create(data: ReadingSessionCreate, db: DB, user: CurrentUser):
+    decision = await EntitlementService(db).require(user, "READING_QUICK" if data.mode == "QUICK_PRACTICE" and settings.free_reading_enabled else "READING", consume=True)
     service = ReadingExamService(db, OpenAILLMClient())
-    session = await service.create(data, user.id)
+    session = await service.create(data, user.id, access_source="ADMIN" if user.role == "ADMIN" else "FREE" if not decision.vip_expires_at else "VIP")
     return reading_session_view(session, await service.passages(session))
 
 
@@ -123,4 +129,5 @@ async def progress(db: DB, user: CurrentUser, mode: ReadingMode | None = None):
 
 @router.post("/vocabulary/explain")
 async def vocabulary(data: VocabularyRequest, db: DB, user: CurrentUser):
+    await EntitlementService(db).require(user, "VOCABULARY")
     return await VocabularyService(db, OpenAILLMClient()).explain(data, user.id)

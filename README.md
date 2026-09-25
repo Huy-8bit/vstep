@@ -2,11 +2,34 @@
 
 Ứng dụng luyện VSTEP Writing, Speaking và Reading dành cho người Việt. Reading có thi thử 4 bài đọc/40 câu/60 phút, luyện passage/dạng câu/chủ đề, chấm điểm ngay, giải thích từng phương án và bằng chứng trong bài. Speaking gồm thi thử ba phần, luyện từng Part, ghi âm, nhận dạng giọng nói, chữa từng câu và theo dõi tiến độ. Writing gồm: thi thử hai Task, luyện riêng thư/email hoặc bài luận, lưu nháp, chấm và chữa bài bằng AI, lịch sử và biểu đồ tiến độ. Toàn bộ giao diện và giải thích bằng tiếng Việt; đề và bài viết bằng tiếng Anh.
 
+## Quyền truy cập SaaS
+
+- Người mới đăng ký có một lượt **Writing Task 1** và một lượt **Speaking Part 1** miễn phí, mỗi lượt gồm đề trong pool đã duyệt, nộp bài và chấm AI nếu máy chủ đã cấu hình OpenAI. Xem lại bài cũ và lịch sử vẫn được sau khi hết trial hoặc VIP. Reading và các phần luyện còn lại dành cho VIP theo mặc định.
+- Trang `/pricing` đọc ba gói từ database: **3 ngày / 50.000đ**, **7 ngày / 100.000đ**, **30 ngày / 150.000đ**. Chọn gói tạo giao dịch `PENDING`; quyền VIP chỉ có sau khi admin đối soát và xác nhận trong `/admin/payments`. Chưa tích hợp cổng thanh toán hay webhook thật; người học cần liên hệ hỗ trợ để nhận hướng dẫn chuyển khoản. `/account/subscription` hiển thị thời hạn và lịch sử.
+- `/admin` là giao diện riêng theo vai trò `ADMIN`: dashboard, người dùng, cấp/gia hạn/thu hồi VIP, thanh toán, ngân hàng đề, bộ đề, chi phí AI, báo cáo và cấu hình. Admin tạo đề qua editor/import hiện có `/my-questions`, đưa bản soạn vào ngân hàng dưới dạng **nháp**, rồi kiểm tra và xuất bản. Đề AI mới của admin cũng là nháp. Normal user không thể quản lý ngân hàng chung; thư viện riêng `/my-questions` mặc định tắt cho họ.
+- Lượt trial gắn với tài khoản. VIP tính theo `starts_at <= now < expires_at`, gia hạn nối tiếp thời hạn còn lại. Giới hạn dùng hợp lý theo ngày được kiểm tra ở backend; các con số cấu hình nằm trong `.env.example`.
+
+Sau khi migrate, tạo admin đầu tiên bằng tài khoản hiện có:
+
+```sh
+docker compose exec backend python -m app.cli.create_admin admin@example.com
+```
+
+Hoặc tạo tài khoản admin mới và nhập mật khẩu tại terminal:
+
+```sh
+docker compose exec backend python -m app.cli.create_admin admin@example.com --new-account
+```
+
+Lệnh khởi tạo thu hồi các phiên đăng nhập cũ khi nâng quyền tài khoản hiện có; đăng nhập lại để mở `/admin`. Cần sao lưu database trước migration production; các migration mới chỉ thêm bảng/cột và đánh dấu pool đề seed đã kiểm tra.
+
 ## Học thủ công khi API hết quota
 
 [VSTEP Manual AI Prompt Kit](docs/prompts/README.md) có các prompt hoàn chỉnh để sao chép vào ChatGPT, Claude, Gemini hoặc chatbot có khả năng phù hợp. Bắt đầu với [Writing Task 1](docs/prompts/quick/quick-grade-writing-task1.md), [Writing Task 2](docs/prompts/quick/quick-grade-writing-task2.md), [Speaking từ transcript](docs/prompts/quick/quick-grade-speaking.md), [giải thích Reading](docs/prompts/quick/quick-explain-reading.md), [Vocabulary Coach](docs/prompts/quick/quick-vocabulary-coach.md) hoặc [phân tích học tập](docs/prompts/quick/quick-learning-analysis.md). Thay các ô `{{...}}` bằng đề, bài gốc và dữ liệu thật; không cần API key để dùng tài liệu.
 
 Bộ prompt có bản đọc dễ hiểu, JSON, all-in-one, sinh/nhập đề, bài học và bài tập; mỗi bản ghi nguồn code, phiên bản và khác biệt với ứng dụng. Phát âm cần audio thực sự nghe được; Reading thiếu key nguồn không có tổng điểm; một task Writing chưa đủ quy đổi bậc. Kết quả từ chatbot cần lưu riêng, chưa có chức năng nhập JSON chấm thủ công để ghi đè điểm trong app. Xem [quy trình sử dụng](docs/prompts/reference/manual-workflows.md) và [bản đồ phiên bản](docs/prompts/reference/prompt-version-map.md).
+
+Triển khai frontend tĩnh bằng AWS CloudFront/S3 và backend đặt ngoài AWS được hướng dẫn trong [devops/README.md](devops/README.md). Khởi tạo Admin an toàn bằng env được mô tả trong [docs/deployment.md](docs/deployment.md).
 
 ## Chạy bằng Docker
 
@@ -23,7 +46,7 @@ docker compose up --build
 
 Backend tự chạy Alembic và nạp **10 đề Task 1 + 10 đề Task 2 + 45 đề Speaking (15 mỗi Part) + 8 bài Reading (80 câu)** khi khởi động. Seed có thể chạy lại an toàn. PostgreSQL lưu dữ liệu trong volume `postgres_data`; audio Speaking nằm trong volume `speaking_audio`. `docker compose down` giữ dữ liệu; không dùng `down -v` nếu cần giữ bài viết.
 
-Không cần OpenAI key để đăng ký, lấy đề mẫu, làm và lưu/nộp bài, ghi âm và nghe lại trong Practice. Chấm AI và sinh đề AI yêu cầu key thật; khi thiếu key, ứng dụng báo **“Chưa cấu hình OpenAI API.”** và giữ bài đã nộp. Reading chấm đúng/sai bằng Python từ đáp án có sẵn và không cần gọi AI khi nộp. Không có điểm giả lập trong ứng dụng.
+Không cần OpenAI key để đăng ký, xem bảng giá, làm và lưu/nộp bài trong phạm vi quyền tài khoản. Chấm AI và sinh đề AI yêu cầu key thật; khi thiếu key, ứng dụng báo **“Chưa cấu hình OpenAI API.”** và giữ bài đã nộp. Reading chấm đúng/sai bằng Python từ đáp án có sẵn và không cần gọi AI khi nộp. Không có điểm giả lập trong ứng dụng.
 
 ## Một bài thi đa bậc
 
@@ -40,7 +63,10 @@ Writing, Speaking và Reading dùng chung `test_profile=VSTEP_3_5`. Người h�
 | `OPENAI_MODEL_*` | Cấu hình theo tác vụ trong `.env.example`; `OPENAI_MODEL` cũ không còn ghi đè mọi tác vụ. Cấu hình đã chọn và kết quả benchmark nội bộ nằm trong `MODEL_EVALUATION.md` |
 | `OPENAI_REASONING_DEFAULT`, `OPENAI_REASONING_GRADING`, `OPENAI_REASONING_ESCALATION` | Mức reasoning riêng; JSON `OPENAI_REASONING_OVERRIDES` cho từng operation |
 | `MODEL_VERSION` | Phiên bản cấu hình model trong cache chấm |
-| `AI_COST_ADMIN_EMAILS` | Email admin đã đăng nhập được xem `/internal/ai-costs` |
+| `INITIAL_ADMIN_ENABLED`, `INITIAL_ADMIN_EMAIL`, `INITIAL_ADMIN_PASSWORD`, `INITIAL_ADMIN_NAME` | Bootstrap admin phía backend khi bật; mật khẩu chỉ dùng lúc tạo mới, không ghi đè tài khoản hiện có |
+| `USER_CUSTOM_QUESTIONS_ENABLED` | Mặc định `false`; chỉ admin dùng trình nhập/quản lý đề |
+| `FREE_TRIAL_*`, `FREE_READING_ENABLED` | Hai lượt trial mặc định 1 mỗi kỹ năng; Reading free mặc định tắt |
+| `VIP_*_DAILY_LIMIT`, `VIP_FAIR_USE_ENABLED` | Hạn mức hợp lý cho Writing, Speaking, Reading và sinh đề AI |
 | `GRADING_SHADOW_ENABLED`, `GRADING_SHADOW_SAMPLE_RATE` | Shadow chỉ ở development, mặc định tắt; nếu bật lấy mẫu 5% |
 | `OPENAI_TRANSCRIBE_MODEL` | Audio Transcriptions, mặc định `gpt-4o-transcribe`; tùy quyền tài khoản |
 | `OPENAI_AUDIO_MODEL` | Mặc định `gpt-audio`; cần nhận WAV qua Chat Completions và hỗ trợ function calling |
@@ -54,7 +80,8 @@ Writing, Speaking và Reading dùng chung `test_profile=VSTEP_3_5`. Người h�
 | `JWT_ACCESS_EXPIRE_MINUTES` | Mặc định 15 phút |
 | `JWT_REFRESH_EXPIRE_DAYS` | Mặc định 7 ngày |
 | `FRONTEND_URL` | Origin frontend, mặc định `http://localhost:3000` |
-| `BACKEND_INTERNAL_URL` | URL nội bộ cho Next.js proxy; Docker đặt thành `http://backend:8000` |
+| `COOKIE_SAMESITE` | `lax` mặc định; đặt `none` khi frontend CDN và API khác site, yêu cầu HTTPS/Secure cookie |
+| `NEXT_PUBLIC_API_BASE_URL` | Public origin của FastAPI, cấu hình lúc build frontend; chỉ biến này được nhúng vào browser |
 
 Trong Compose, `DATABASE_URL` được tạo từ ba biến `POSTGRES_*` để trỏ đúng service `postgres`; URL `localhost` trong `.env` dành cho chạy backend trực tiếp. Nếu password chứa ký tự đặc biệt trong URL, cần URL-encode khi tự cấu hình.
 
@@ -85,11 +112,11 @@ npm ci
 npm run dev
 ```
 
-Backend đọc `.env` ở thư mục gốc hoặc backend. Next.js có mặc định proxy tới `localhost:8000`; nếu thay đổi, export `BACKEND_INTERNAL_URL` vào shell hoặc tạo `frontend/.env.local`. Không sao chép OpenAI key sang `.env.local` của frontend.
+Backend đọc `.env` ở thư mục gốc hoặc backend. Tạo `frontend/.env.local` từ `frontend/.env.example` và đặt `NEXT_PUBLIC_API_BASE_URL=http://localhost:8000` khi phát triển cục bộ. Frontend gọi FastAPI trực tiếp; không có Next.js API proxy. Không sao chép OpenAI key hoặc mật khẩu admin sang frontend.
 
 ## Kiến trúc & cấu trúc
 
-Modular monolith: **Next.js / TypeScript / Tailwind / shadcn/ui / Recharts → FastAPI / Pydantic v2 → SQLAlchemy 2 / Alembic / PostgreSQL**. Application service gọi abstraction `LLMClient`; adapter `OpenAILLMClient` dùng OpenAI Python SDK và Responses Structured Outputs. Không queue/Redis/microservices trong MVP.
+Modular monolith: **Next.js static export / TypeScript / Tailwind / Recharts → FastAPI / Pydantic v2 → SQLAlchemy 2 / Alembic / PostgreSQL**. Application service gọi abstraction `LLMClient`; adapter `OpenAILLMClient` dùng OpenAI Python SDK và Responses Structured Outputs. Không queue/Redis/microservices trong MVP.
 
 ```text
 backend/
@@ -107,7 +134,7 @@ backend/
   alembic/         # Migration schema PostgreSQL
   tests/           # 5 kiểm tra tích hợp trọng tâm
 frontend/src/
-  app/             # Các trang và proxy API cùng origin
+  app/             # Các trang xuất tĩnh, runtime ID qua query URL
   components/      # Layout + shadcn/ui primitives
   features/        # Auth, exam, writing, speaking, reading, grading, history, progress
   hooks/           # Autosave, phục hồi nháp, giải quyết xung đột
@@ -206,4 +233,4 @@ Xem [generation](docs/vstep-generation.md) và [Vocabulary Coach](docs/vocabular
 
 ### Đề của tôi / My Question Library
 
-Mở `/my-questions` để lưu đề riêng từ văn bản, ảnh/PDF hoặc biểu mẫu thủ công. Hỗ trợ Writing, Speaking, Reading và đề đầy đủ; dùng chung engine luyện, chấm, Vocabulary Coach, lịch sử và tiến độ. Reading thiếu đáp án vẫn luyện được và được ghi rõ chưa thể tính điểm chính xác. Xem [hướng dẫn, API và JSON schemas](docs/my-question-library.md).
+Admin mở `/my-questions` để soạn/nhập đề từ văn bản, ảnh/PDF hoặc biểu mẫu thủ công, rồi đưa vào ngân hàng và duyệt ở `/admin/questions`. Hỗ trợ Writing, Speaking, Reading và đề đầy đủ. Thư viện riêng của người học được giữ trong code nhưng mặc định tắt bằng `USER_CUSTOM_QUESTIONS_ENABLED=false`. Xem [hướng dẫn, API và JSON schemas](docs/my-question-library.md); quyền truy cập SaaS ở đầu README là nguồn hiện hành.

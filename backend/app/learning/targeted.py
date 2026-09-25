@@ -146,7 +146,7 @@ class TargetedPracticeService:
                 ExamCreate(mode=f"TASK{part}", question_ids=[q.id], timed=False), user_id
             )
             result = {
-                "url": f"/exam/{session.id}",
+                "url": f"/exam?id={session.id}",
                 "attempt_id": session.attempts[0].id,
                 "skill": "WRITING",
                 "target_skill": data.skill,
@@ -175,7 +175,7 @@ class TargetedPracticeService:
                     ]
                 await self.db.commit()
             result = {
-                "url": f"/speaking/exam/{session.id}",
+                "url": f"/speaking/exam?id={session.id}",
                 "attempt_id": session.id,
                 "skill": "SPEAKING",
                 "target_skill": data.skill,
@@ -213,7 +213,7 @@ class TargetedPracticeService:
                     selection=selected[:10],
                 )
                 return {
-                    "url": f"/reading/exam/{session.id}",
+                    "url": f"/reading/exam?id={session.id}",
                     "attempt_id": session.id,
                     "skill": "READING",
                     "target_skill": "READING",
@@ -242,7 +242,7 @@ class TargetedPracticeService:
                 selection=[(passage, q) for passage in passages for q in passage.questions],
             )
             result = {
-                "url": f"/reading/exam/{session.id}",
+                "url": f"/reading/exam?id={session.id}",
                 "attempt_id": session.id,
                 "skill": "READING",
                 "target_skill": data.skill,

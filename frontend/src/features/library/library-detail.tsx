@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { RequireAuth } from "@/features/auth/auth-provider";
+import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice, Loading } from "@/components/feedback";
 import { api, ApiError, post } from "@/services/api";
@@ -20,6 +20,8 @@ export function LibraryDetail({ id }: { id: string }) {
 }
 function Detail({ id }: { id: string }) {
   const router = useRouter();
+  const { user } = useAuth();
+  const isAdmin = user?.role === "ADMIN";
   const [row, setRow] = useState<LibraryRow | null>(null);
   const [document, setDocument] = useState<LibraryDocument | null>(null);
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -92,8 +94,11 @@ function Detail({ id }: { id: string }) {
     );
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <Link href="/my-questions" className="text-sm text-teal-800">
-        ← Đề của tôi
+      <Link
+        href={isAdmin ? "/admin/questions" : "/my-questions"}
+        className="text-sm text-teal-800"
+      >
+        ← {isAdmin ? "Ngân hàng đề" : "Đề của tôi"}
       </Link>
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
@@ -106,6 +111,31 @@ function Detail({ id }: { id: string }) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {isAdmin && !editing && (
+            <Button
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                setError("");
+                try {
+                  const result = await post<{
+                    items: { id: string; skill: string }[];
+                  }>(`/admin/question-drafts/${id}/to-bank`);
+                  if (result.items.length === 1)
+                    router.push(
+                      `/admin/question?skill=${result.items[0].skill}&id=${result.items[0].id}`,
+                    );
+                  else router.push("/admin/questions");
+                } catch (failure) {
+                  setError((failure as Error).message);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              Đưa vào ngân hàng
+            </Button>
+          )}
           <Button
             variant="outline"
             disabled={busy}
@@ -127,7 +157,7 @@ function Detail({ id }: { id: string }) {
                 const copy = await post<LibraryRow>(
                   `/my-questions/${id}/duplicate`,
                 );
-                router.push(`/my-questions/${copy.id}`);
+                router.push(`/my-questions/detail?id=${copy.id}`);
               } catch (e) {
                 setError((e as Error).message);
               } finally {
@@ -162,7 +192,7 @@ function Detail({ id }: { id: string }) {
           {duplicate && (
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
-                href={`/my-questions/${duplicate.id}`}
+                href={`/my-questions/detail?id=${duplicate.id}`}
                 target="_blank"
                 className="text-sm text-teal-800 underline"
               >

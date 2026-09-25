@@ -171,8 +171,8 @@ function History() {
                         <Link
                           href={
                             a.status === "DRAFT"
-                              ? `/exam/${a.exam_session_id}`
-                              : `/result/${a.id}`
+                              ? `/exam?id=${a.exam_session_id}`
+                              : `/result?id=${a.id}`
                           }
                         >
                           {a.status === "DRAFT" ? "Viết tiếp" : "Xem bài"}

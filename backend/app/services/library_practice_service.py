@@ -76,7 +76,7 @@ class LibraryPracticeService:
                 user_id,
                 library=meta,
             )
-            url = f"/exam/{session.id}"
+            url = f"/exam?id={session.id}"
         elif doc.skill == "speaking":
             session = await SpeakingExamService(self.db, self.llm, None).create(
                 SpeakingSessionCreate(mode="FULL_TEST" if doc.part == "full" else f"PART{doc.part[-1]}"),
@@ -84,7 +84,7 @@ class LibraryPracticeService:
                 resolved_questions=questions,
                 library=meta,
             )
-            url = f"/speaking/exam/{session.id}"
+            url = f"/speaking/exam?id={session.id}"
         else:
             questions.sort(key=lambda p: p.presentation["passage_index"])
             session = await ReadingExamService(self.db, self.llm).create(
@@ -95,7 +95,7 @@ class LibraryPracticeService:
                 selection=[(p, q) for p in questions for q in p.questions],
                 library=meta,
             )
-            url = f"/reading/exam/{session.id}"
+            url = f"/reading/exam?id={session.id}"
         return {"id": session.id, "skill": doc.skill, "url": url, **meta}
 
     @staticmethod

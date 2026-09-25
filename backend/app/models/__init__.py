@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     DateTime,
     Float,
@@ -30,6 +31,12 @@ class User(IdentityMixin, UpdatedMixin, Base):
     __tablename__ = "users"
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column(String(255))
+    name: Mapped[str | None] = mapped_column(String(160))
+    role: Mapped[str] = mapped_column(String(12), default="USER", server_default="USER")
+    status: Mapped[str] = mapped_column(String(12), default="ACTIVE", server_default="ACTIVE")
+    is_test_account: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    learning_goal: Mapped[str | None] = mapped_column(String(240))
+    last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class AuthSession(IdentityMixin, Base):
@@ -77,6 +84,7 @@ class ExamSession(LibrarySessionMixin, IdentityMixin, Base):
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     status: Mapped[str] = mapped_column(String(20), default="IN_PROGRESS")
+    access_source: Mapped[str] = mapped_column(String(12), default="LEGACY", server_default="LEGACY")
     attempts: Mapped[list["WritingAttempt"]] = relationship(
         back_populates="exam", lazy="selectin", order_by="WritingAttempt.task_type"
     )
@@ -185,6 +193,15 @@ from app.models.assessment import (  # noqa: F401, E402
     PronunciationPractice,
     WritingCalibrationSample,
     WritingGradingRevision,
+)
+from app.models.commerce import (  # noqa: F401, E402
+    AdminAuditLog,
+    Payment,
+    ProductEvent,
+    SubscriptionPlan,
+    TrialUsage,
+    UserEntitlement,
+    VipDailyUsage,
 )
 from app.models.evaluation import GradingModelEvaluation  # noqa: E402,F401
 from app.models.learning import (  # noqa: E402,F401

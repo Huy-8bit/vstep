@@ -7,6 +7,7 @@ import { useAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
 import { cn } from "@/lib/utils";
+import { AdminFrame } from "@/features/admin/admin-frame";
 
 export function Brand() {
   return (
@@ -30,10 +31,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [error, setError] = useState("");
+  if (pathname.startsWith("/my-questions") && user?.role === "ADMIN")
+    return <AdminFrame>{children}</AdminFrame>;
   if (
-    pathname.startsWith("/exam/") ||
-    pathname.startsWith("/speaking/exam/") ||
-    pathname.startsWith("/reading/exam/")
+    pathname.startsWith("/admin") ||
+    pathname === "/exam" ||
+    pathname === "/speaking/exam" ||
+    pathname === "/reading/exam"
   )
     return <>{children}</>;
   return (
@@ -50,15 +54,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
               ["/practice", "Writing"],
               ["/speaking", "Speaking"],
               ["/reading", "Reading"],
-              ["/my-questions", "Đề của tôi"],
               ["/learning", "Phân tích học tập"],
               ["/vocabulary", "Từ vựng"],
               ["/history", "Lịch sử"],
               ["/progress", "Tiến độ"],
-              ["/settings", "Cài đặt"],
-              ...(user?.is_ai_admin
-                ? [["/internal/ai-costs", "Chi phí AI"]]
-                : []),
+              ["/pricing", "Bảng giá"],
+              ["/account", "Tài khoản"],
             ].map(([href, label]) => (
               <Link
                 key={href}
@@ -77,6 +78,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2">
             {user ? (
               <>
+                <Link href="/account/subscription" className="rounded-full bg-teal-50 px-3 py-1.5 text-xs font-semibold text-teal-800">
+                  {user.access?.tier === "VIP" ? "VIP" : "FREE"}
+                </Link>
+                {user.role === "ADMIN" && <Link href="/admin" className="text-xs font-semibold text-teal-800">Quản trị</Link>}
                 <span
                   title={user.email}
                   className="hidden max-w-24 truncate text-xs text-stone-500 lg:block"

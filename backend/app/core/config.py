@@ -39,6 +39,23 @@ class Settings(BaseSettings):
     grading_shadow_enabled: bool = False
     grading_shadow_sample_rate: float = Field(default=0.05, ge=0, le=1)
     ai_cost_admin_emails: str = ""
+    initial_admin_email: str = ""
+    initial_admin_password: str = ""
+    initial_admin_name: str = "Admin"
+    initial_admin_enabled: bool = False
+    cookie_samesite: str = Field(default="lax", pattern=r"^(lax|strict|none)$")
+    user_custom_questions_enabled: bool = False
+    vip_ai_question_generation_enabled: bool = True
+    free_ai_question_generation_enabled: bool = False
+    free_reading_enabled: bool = False
+    free_reading_daily_limit: int = Field(default=1, ge=1, le=10)
+    free_trial_writing_task1_attempts: int = Field(default=1, ge=0, le=10)
+    free_trial_speaking_part1_attempts: int = Field(default=1, ge=0, le=10)
+    vip_fair_use_enabled: bool = True
+    vip_writing_daily_limit: int = Field(default=30, ge=1)
+    vip_speaking_daily_limit: int = Field(default=50, ge=1)
+    vip_reading_daily_limit: int = Field(default=100, ge=1)
+    vip_ai_generation_daily_limit: int = Field(default=20, ge=1)
     eval_overall_mae_max: float = Field(default=0.5, ge=0, le=10)
     eval_criterion_mae_max: float = Field(default=0.75, ge=0, le=10)
     eval_within_half_min: float = Field(default=0.70, ge=0, le=1)

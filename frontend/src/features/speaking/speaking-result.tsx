@@ -15,6 +15,7 @@ import { VocabularyRecommendations } from "@/features/vocabulary/recommendations
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { LibraryOrigin } from "@/features/library/practice-link";
+import { Paywall } from "@/components/paywall";
 import { api, post } from "@/services/api";
 import { AudioAssessmentPanel } from "./audio-assessment-panel";
 import { coachLink } from "./pronunciation-types";
@@ -134,7 +135,7 @@ function Result({ id }: { id: string }) {
         description="Tiếp tục các câu hỏi còn lại để mở kết quả và phản hồi."
       >
         <Button asChild>
-          <Link href={`/speaking/exam/${id}`}>Tiếp tục bài nói</Link>
+          <Link href={`/speaking/exam?id=${id}`}>Tiếp tục bài nói</Link>
         </Button>
       </EmptyState>
     );
@@ -660,6 +661,7 @@ function Result({ id }: { id: string }) {
       <p className="border-t border-stone-200 pt-5 text-xs leading-6 text-stone-500">
         {disclaimer}
       </p>
+      {g && <Paywall title="Tiếp tục với Speaking Part 2, 3 và thi thử đầy đủ" compact />}
     </div>
   );
 }

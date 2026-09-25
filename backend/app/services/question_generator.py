@@ -23,7 +23,9 @@ class QuestionGeneratorService:
     def __init__(self, db, llm: LLMClient):
         self.db, self.llm = db, llm
 
-    async def generate(self, request: QuestionRequest, user_id: str, *, learning_focus=None) -> WritingQuestion:
+    async def generate(self, request: QuestionRequest, user_id: str, *, learning_focus=None, trial_only=False, publish_global=False) -> WritingQuestion:
+        if trial_only and (request.task != 1 or request.source == "AI"):
+            raise AppError(403, "Lượt miễn phí dùng đề Task 1 có sẵn.", "VIP_REQUIRED")
         recent = list(
             await self.db.scalars(
                 select(WritingQuestion).where(WritingQuestion.owner_id.is_(None))
@@ -40,7 +42,11 @@ class QuestionGeneratorService:
                 WritingQuestion.task_type == request.task,
                 WritingQuestion.test_profile == request.test_profile,
                 WritingQuestion.generation_diagnostics["quality_valid"].as_boolean().is_(True),
+                WritingQuestion.is_published.is_(True),
+                WritingQuestion.access_tier.in_(["FREE_TRIAL"] if trial_only else ["FREE_TRIAL", "VIP"]),
             )
+            if trial_only:
+                query = query.where(WritingQuestion.available_for_free_trial.is_(True))
             if request.source == "SEED":
                 query = query.where(WritingQuestion.source == "SEED")
             if request.question_type != "random":
@@ -89,13 +95,15 @@ class QuestionGeneratorService:
         diagnostics = await validate_quality(self.llm, "WRITING", result.model_dump(), user_id)
         diagnostics["source_blueprint"] = WRITING_BLUEPRINTS[request.task]["id"]
         question = WritingQuestion(
-            owner_id=user_id if learning_focus else None,
+            owner_id=user_id if learning_focus or not publish_global else None,
             task_type=result.task,
             **result.model_dump(exclude={"task"}),
             source="AI",
             fingerprint=question_fingerprint(result.instruction + " " + result.stimulus),
             prompt_version=QUESTION_GENERATOR_PROMPT_VERSION,
             generation_diagnostics=diagnostics,
+            is_published=False,
+            access_tier="VIP",
         )
         if learning_focus:
             question.generation_diagnostics = {**diagnostics, "learning_focus": learning_focus}

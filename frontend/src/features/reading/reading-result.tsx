@@ -139,7 +139,7 @@ function ResultView({ id }: { id: string }) {
         <div className="flex gap-3">
           <Button onClick={load}>Thử lại</Button>
           <Button asChild variant="outline">
-            <Link href={`/reading/exam/${id}`}>Quay lại phiên</Link>
+            <Link href={`/reading/exam?id=${id}`}>Quay lại phiên</Link>
           </Button>
         </div>
       </>

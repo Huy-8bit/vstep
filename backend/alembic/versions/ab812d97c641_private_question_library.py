@@ -4,9 +4,10 @@ Revision ID: ab812d97c641
 Revises: f729a310c058
 """
 
-from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import JSONB
+
+from alembic import op
 
 revision = "ab812d97c641"
 down_revision = "f729a310c058"

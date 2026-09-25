@@ -38,6 +38,7 @@ class SpeakingExamSession(LibrarySessionMixin, IdentityMixin, Base):
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     status: Mapped[str] = mapped_column(String(20), default="IN_PROGRESS")
+    access_source: Mapped[str] = mapped_column(String(12), default="LEGACY", server_default="LEGACY")
     current_part: Mapped[int] = mapped_column(Integer, default=1)
     current_sequence: Mapped[int] = mapped_column(Integer, default=0)
     question_set: Mapped[list] = mapped_column(JSONB)

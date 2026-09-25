@@ -273,7 +273,7 @@ function LibraryList() {
                 </div>
                 <Link
                   className="text-lg font-semibold hover:text-teal-800"
-                  href={`/my-questions/${row.id}`}
+                  href={`/my-questions/detail?id=${row.id}`}
                 >
                   {row.document.title}
                 </Link>
@@ -346,7 +346,7 @@ function LibraryList() {
                     asChild
                     aria-label="Mở và sửa đề"
                   >
-                    <Link href={`/my-questions/${row.id}`}>
+                    <Link href={`/my-questions/detail?id=${row.id}`}>
                       <Pencil size={16} />
                     </Link>
                   </Button>

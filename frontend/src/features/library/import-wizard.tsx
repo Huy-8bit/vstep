@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/features/auth/auth-provider";
 import { FileText, ImagePlus, PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api, ApiError, post } from "@/services/api";
@@ -31,6 +32,8 @@ export function normalizedDocument(doc: LibraryDocument) {
 }
 export function ImportWizard() {
   const router = useRouter();
+  const { user } = useAuth();
+  const isAdmin = user?.role === "ADMIN";
   const [method, setMethod] = useState<"manual" | "paste" | "file">("paste");
   const [raw, setRaw] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -128,7 +131,7 @@ export function ImportWizard() {
       if (updated.filter((d) => d.selected).every((d) => d.savedId))
         router.push(
           updated.filter((d) => d.selected).length === 1
-            ? `/my-questions/${lastId || updated.find((d) => d.selected)?.savedId}`
+            ? `/my-questions/detail?id=${lastId || updated.find((d) => d.selected)?.savedId}`
             : "/my-questions",
         );
     } catch (e) {
@@ -197,15 +200,49 @@ export function ImportWizard() {
   return (
     <div className="space-y-6">
       <header>
-        <Link href="/my-questions" className="text-sm text-teal-800">
-          ← Đề của tôi
+        <Link
+          href={isAdmin ? "/admin/questions" : "/my-questions"}
+          className="text-sm text-teal-800"
+        >
+          ← {isAdmin ? "Ngân hàng đề" : "Đề của tôi"}
         </Link>
-        <h1 className="mt-3 text-3xl font-semibold">Thêm đề vào thư viện</h1>
+        <h1 className="mt-3 text-3xl font-semibold">
+          {isAdmin ? "Nhập và soạn đề" : "Thêm đề vào thư viện"}
+        </h1>
         <p className="mt-2 text-stone-500">
-          Nhập đề bạn tìm được, kiểm tra nội dung rồi luyện bằng các công cụ
-          quen thuộc.
+          {isAdmin
+            ? "Chọn nguồn, phân tích bằng AI nếu cần, rà soát nội dung rồi lưu bản soạn. Sau khi lưu, đưa đề vào ngân hàng từ trang chi tiết."
+            : "Nhập đề bạn tìm được, kiểm tra nội dung rồi luyện bằng các công cụ quen thuộc."}
         </p>
       </header>
+      {isAdmin && (
+        <ol aria-label="Các bước nhập đề" className="grid gap-2 sm:grid-cols-4">
+          {[
+            ["1", "Nguồn nhập"],
+            ["2", "AI phân tích"],
+            ["3", "Rà soát"],
+            ["4", "Lưu bản soạn"],
+          ].map(([number, label], index) => {
+            const current = !drafts.length ? (busy ? 1 : 0) : 2;
+            return (
+              <li
+                key={number}
+                aria-current={current === index ? "step" : undefined}
+                className={
+                  "rounded-lg border px-3 py-2.5 text-sm " +
+                  (index === current
+                    ? "border-teal-500 bg-teal-50 font-semibold text-teal-900"
+                    : index < current
+                      ? "border-teal-200 bg-white text-teal-800"
+                      : "border-slate-200 bg-white text-slate-500")
+                }
+              >
+                {number}. {label}
+              </li>
+            );
+          })}
+        </ol>
+      )}
       {!drafts.length && (
         <>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -444,7 +481,7 @@ export function ImportWizard() {
       {duplicate && (
         <div className="flex flex-wrap items-center gap-4 rounded-lg border border-amber-300 p-4">
           <Link
-            href={`/my-questions/${duplicate.id}`}
+            href={`/my-questions/detail?id=${duplicate.id}`}
             target="_blank"
             className="text-sm text-teal-800 underline"
           >
@@ -467,15 +504,16 @@ export function ImportWizard() {
       {!!drafts.length && (
         <div className="sticky bottom-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-stone-200 bg-white p-4 shadow-lg">
           <p className="text-sm text-stone-500">
-            Đề chỉ được lưu khi bạn bấm nút. Hãy kiểm tra nội dung và đáp án
-            trước khi lưu.
+            {isAdmin
+              ? "Kiểm tra nội dung và đáp án trước khi lưu. Bản soạn chưa xuất bản vào ngân hàng."
+              : "Đề chỉ được lưu khi bạn bấm nút. Hãy kiểm tra nội dung và đáp án trước khi lưu."}
           </p>
           <Button
             disabled={!!busy || !drafts.some((d) => d.selected && !d.savedId)}
             onClick={() => save()}
           >
-            Lưu {drafts.filter((d) => d.selected && !d.savedId).length} đề đã
-            chọn
+            {isAdmin ? "Lưu bản soạn" : "Lưu"}{" "}
+            {drafts.filter((d) => d.selected && !d.savedId).length} đề đã chọn
           </Button>
         </div>
       )}

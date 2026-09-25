@@ -134,7 +134,7 @@ function ReuseChallenge({ source }: { source: Source }) {
         kind: "USE",
         client_request_id: crypto.randomUUID(),
       });
-      router.push(`/vocabulary/review/${review.id}`);
+      router.push(`/vocabulary/review?id=${review.id}`);
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);

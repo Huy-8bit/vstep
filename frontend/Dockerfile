@@ -1,22 +1,14 @@
-FROM node:22-alpine AS dependencies
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-
 FROM node:22-alpine AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
-ARG BACKEND_INTERNAL_URL=http://backend:8000
-ENV BACKEND_INTERNAL_URL=$BACKEND_INTERNAL_URL
-COPY --from=dependencies /app/node_modules ./node_modules
+ARG NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+COPY package*.json ./
+RUN npm ci
 COPY . .
-RUN npm run build
+RUN test -n "$NEXT_PUBLIC_API_BASE_URL" && npm run build
 
-FROM node:22-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 HOSTNAME=0.0.0.0 PORT=3000
-COPY --from=build --chown=node:node /app/.next/standalone ./
-COPY --from=build --chown=node:node /app/.next/static ./.next/static
-USER node
+FROM nginx:1.27-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/out /usr/share/nginx/html
 EXPOSE 3000
-CMD ["node", "server.js"]
