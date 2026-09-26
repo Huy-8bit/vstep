@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ErrorNotice, Loading } from "@/components/feedback";
+import { AiProgressOverlay } from "@/components/ui/ai-progress";
 import { RequireAuth, useAuth } from "@/features/auth/auth-provider";
 import { QuestionCard } from "@/features/writing/practice-setup";
 import { useAutosave } from "@/hooks/use-autosave";
@@ -362,6 +363,15 @@ function Workspace({ initial }: { initial: Exam }) {
           </div>
         </DialogContent>
       </Dialog>
+      {busy && (
+        <AiProgressOverlay
+          title={
+            initial.mode === "FULL_TEST"
+              ? "AI đang chấm cả hai bài Writing"
+              : "AI đang chấm bài viết của bạn"
+          }
+        />
+      )}
     </div>
   );
 }

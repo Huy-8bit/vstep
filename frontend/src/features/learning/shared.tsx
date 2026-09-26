@@ -5,6 +5,7 @@ import { ArrowUpRight, BookOpen, Target, TrendingUp } from "lucide-react";
 import { api } from "@/services/api";
 import { Button } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/feedback";
+import { Caption, PageTitle, Body } from "@/components/ui/typography";
 import { statusLabels, trends, type Weakness } from "./types";
 
 export function useLearning<T>(path: string) {
@@ -40,11 +41,9 @@ export function LearningHeader({
   return (
     <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
       <div>
-        <p className="eyebrow mb-2">HỌC TỪ BÀI LÀM CỦA BẠN</p>
-        <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-stone-500">
-          {description}
-        </p>
+        <Caption>Học từ bài làm của bạn</Caption>
+        <PageTitle className="mt-2">{title}</PageTitle>
+        <Body className="mt-3 max-w-2xl leading-7">{description}</Body>
       </div>
       <div className="flex gap-2">
         <Button asChild variant="outline">
@@ -65,7 +64,7 @@ export function LearningHeader({
 }
 export function WeaknessCard({ item: w }: { item: Weakness }) {
   return (
-    <article className="panel flex flex-col p-5">
+    <article className="panel panel-interactive flex flex-col p-5">
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <span className="rounded-md bg-teal-50 px-2 py-1 text-xs font-medium text-teal-900">
           {w.stats.skills.join(" + ")}

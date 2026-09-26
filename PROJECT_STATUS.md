@@ -1,5 +1,13 @@
 # VSTEP Practice Platform — implementation status
 
+## Admin login recovery — 2026-09-25
+
+**Root cause reproduced on the running local stack:** the ignored `.env` still contained example Admin email/password and `INITIAL_ADMIN_ENABLED=false`. PostgreSQL already had one `ADMIN`/`ACTIVE` account with a valid hash from the restored database; its password did not match the example bootstrap password. Login with that configured password returned `401`. The bootstrap correctly preserved the existing password, so changing `INITIAL_ADMIN_PASSWORD` alone could never log in to the existing account. The frontend also sent successful Admin logins to `/practice` by default and could let an in-flight `/auth/me` response overwrite the newly logged-in user state.
+
+The current local Admin password was explicitly reset with the new `reset_admin_password` CLI; prior sessions were revoked. A unique recovery secret is held in a local owner-only file outside the repository for the operator to retrieve, then delete. The ignored local `.env` now points at the existing Admin email, has no initial password, and keeps bootstrap disabled. No password, hash or token was committed or logged.
+
+Changes: shared email normalization across auth/bootstrap/CLIs; safe bootstrap and auth event logs; read-only `check_admin` CLI; explicit hidden-prompt/password-file reset CLI; Admin default `/admin` redirect and stale auth-request protection. See [Admin auth troubleshooting](docs/admin-auth-troubleshooting.md) for recovery commands and deployment checks. Five focused tests passed for wrong/old password denial, explicit reset, session revocation/refresh, Admin dashboard `200`, USER dashboard `403`, bootstrap idempotence and email normalization. On the rebuilt local Docker stack, Admin login, `/auth/me`, `/admin/dashboard`, refresh and direct HTML routes returned `200`; wrong password returned `401` and CORS preflight accepted only the configured origin. The in-app browser was unavailable, so interactive hydration/redirect could not be observed directly. Production-like cookie behavior still requires checking the actual deployment origin and HTTPS configuration.
+
 ## Initial Admin bootstrap + static AWS frontend preparation — 2026-09-25
 
 **Implemented locally; AWS has not been deployed.** FastAPI now supports environment-controlled, idempotent initial Admin creation with strong Argon2-hashed initial password. Existing accounts are promoted without password reset; missing/placeholder credentials cannot silently create a new Admin. The existing CLI accepts `--email` and `--name`. Integration tests cover creation, repeat startup, password preservation, promotion of an existing user, normal Admin login and cross-origin Origin checks.

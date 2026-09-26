@@ -26,7 +26,8 @@ export function AuthForm({ register = false }: { register?: boolean }) {
       );
       setUser(user);
       const next =
-        new URLSearchParams(window.location.search).get("next") || "/practice";
+        new URLSearchParams(window.location.search).get("next") ||
+        (user.role === "ADMIN" ? "/admin" : "/practice");
       router.replace(
         next.startsWith("/") && !next.startsWith("//") && !next.includes("\\")
           ? next

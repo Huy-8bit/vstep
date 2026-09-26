@@ -217,6 +217,12 @@ class OpenAILLMClient(LLMClient):
                         provider_error_code,
                         retry_after_seconds,
                     )
+                    if exc.status_code == 401:
+                        raise AppError(
+                            503,
+                            "Khóa truy cập dịch vụ AI không hợp lệ hoặc đã bị vô hiệu hóa. Bài làm đã được lưu; vui lòng liên hệ quản trị viên để cập nhật khóa.",
+                            "ai_credentials_invalid",
+                        ) from None
                     if provider_error_code in {
                         "credit_balance_exhausted",
                         "insufficient_quota",

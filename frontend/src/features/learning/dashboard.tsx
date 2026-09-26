@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Loading, ErrorNotice } from "@/components/feedback";
 import { post } from "@/services/api";
 import { LearningHeader, LoadError, useLearning, WeaknessGrid } from "./shared";
+import { FadeIn, StaggerContainer, StaggerItem, AnimatedNumber } from "@/components/ui/motion";
 import {
   criteria,
   trends,
@@ -88,23 +89,27 @@ function Dashboard() {
           </button>
         </div>
       )}
-      <section className="rounded-2xl bg-teal-950 p-6 text-white sm:p-8">
-        <p className="text-xs tracking-widest text-teal-200">30 NGÀY GẦN ĐÂY</p>
-        <div className="mt-5 grid grid-cols-2 gap-6 md:grid-cols-5">
-          {[
-            [data.recent.writing_attempts, "bài Writing"],
-            [data.recent.speaking_attempts, "bài Speaking"],
-            [data.recent.reading_questions, "câu Reading có đáp án"],
-            [data.improving_skills, "kỹ năng cải thiện"],
-            [data.mastered_count, "nội dung thành thạo"],
-          ].map(([n, label]) => (
-            <div key={label}>
-              <p className="text-3xl font-semibold">{n}</p>
-              <p className="mt-2 text-xs text-teal-100/80">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FadeIn>
+        <section className="rounded-2xl bg-gradient-to-br from-teal-900 to-teal-950 p-6 text-white sm:p-8">
+          <p className="text-xs font-bold tracking-widest text-teal-200">30 NGÀY GẦN ĐÂY</p>
+          <StaggerContainer className="mt-5 grid grid-cols-2 gap-6 md:grid-cols-5">
+            {[
+              [data.recent.writing_attempts, "bài Writing"],
+              [data.recent.speaking_attempts, "bài Speaking"],
+              [data.recent.reading_questions, "câu Reading có đáp án"],
+              [data.improving_skills, "kỹ năng cải thiện"],
+              [data.mastered_count, "nội dung thành thạo"],
+            ].map(([n, label]) => (
+              <StaggerItem key={label}>
+                <p className="text-3xl font-bold tabular-nums">
+                  <AnimatedNumber value={n as number} decimals={0} />
+                </p>
+                <p className="mt-2 text-xs text-teal-100/80">{label}</p>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </section>
+      </FadeIn>
       <section>
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>

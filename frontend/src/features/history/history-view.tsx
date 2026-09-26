@@ -5,6 +5,9 @@ import Link from "next/link";
 import { ArrowRight, FileClock, Plus } from "lucide-react";
 import { RequireAuth } from "@/features/auth/auth-provider";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Caption, PageTitle, Body } from "@/components/ui/typography";
+import { StaggerContainer, StaggerItem } from "@/components/ui/motion";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
 import { LibraryOrigin } from "@/features/library/practice-link";
 import { api } from "@/services/api";
@@ -45,13 +48,11 @@ function History() {
   return (
     <>
       <LearningEntry />
-<div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="eyebrow">Mỗi bài viết đều được ghi lại</p>
-          <h1 className="mb-3 mt-3 text-3xl font-bold">Lịch sử luyện tập</h1>
-          <p className="text-sm text-stone-500">
-            Tiếp tục bài đang viết hoặc xem lại phản hồi để ôn tập.
-          </p>
+          <Caption>Mỗi bài viết đều được ghi lại</Caption>
+          <PageTitle className="mb-3 mt-2">Lịch sử luyện tập</PageTitle>
+          <Body>Tiếp tục bài đang viết hoặc xem lại phản hồi để ôn tập.</Body>
         </div>
         <Button asChild>
           <Link href="/practice">
@@ -110,81 +111,53 @@ function History() {
         <Loading />
       ) : data?.items.length ? (
         <>
-          <div className="panel overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-stone-200 bg-stone-50 text-xs text-stone-500">
-                <tr>
-                  {[
-                    "Ngày luyện",
-                    "Bài viết",
-                    "Chủ đề",
-                    "Số từ",
-                    "Điểm AI ước tính",
-                    "",
-                  ].map((title, i) => (
-                    <th
-                      key={i}
-                      className="whitespace-nowrap px-5 py-4 font-medium"
-                    >
-                      {title}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.items.map((a) => (
-                  <tr
-                    key={a.id}
-                    className="border-b border-stone-100 last:border-0 hover:bg-stone-50/50"
-                  >
-                    <td className="whitespace-nowrap px-5 py-5 text-xs text-stone-500">
-                      {formatDate(a.created_at)}
-                    </td>
-                    <td className="whitespace-nowrap px-5 py-5">
-                      <p className="font-semibold">Task {a.task_type}</p>
-                      <p className="mt-1 text-xs text-stone-400">
-                        {modes[a.mode as Mode]}
+          <StaggerContainer className="space-y-3">
+            {data.items.map((a) => (
+              <StaggerItem key={a.id}>
+                <Card interactive className="flex flex-wrap items-center gap-4 p-5">
+                  <div className="flex min-w-40 flex-1 items-center gap-4">
+                    {a.grading ? (
+                      <span className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-teal-50 text-sm font-bold text-teal-800">
+                        {score(a.grading.scores.overall)}
+                        <span className="text-[9px] font-medium text-teal-500">/ 10</span>
+                      </span>
+                    ) : (
+                      <span className="flex h-12 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-stone-100 px-3 text-xs font-medium text-stone-500">
+                        {a.status === "DRAFT" ? "Đang viết" : "Chưa chấm"}
+                      </span>
+                    )}
+                    <div className="min-w-0">
+                      <p className="font-semibold">
+                        {a.mode === "FULL_TEST"
+                          ? `Task ${a.task_type} · ${modes[a.mode as Mode]}`
+                          : modes[a.mode as Mode]}
                       </p>
-                    </td>
-                    <td className="px-5 py-5 text-stone-500">
-                      {topics[a.question.topic] || a.question.topic}
-                      <LibraryOrigin value={a.question} />
-                    </td>
-                    <td className="px-5 py-5 text-stone-500">{a.word_count}</td>
-                    <td className="px-5 py-5">
-                      {a.grading ? (
-                        <span className="rounded-lg bg-teal-50 px-3 py-1.5 font-bold text-teal-800">
-                          {score(a.grading.scores.overall)}
-                          <span className="text-xs font-normal text-teal-600">
-                            {" "}
-                            / 10
-                          </span>
-                        </span>
-                      ) : (
-                        <span className="text-xs text-stone-400">
-                          {a.status === "DRAFT" ? "Đang viết" : "Chưa chấm"}
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-5 py-5">
-                      <Button asChild size="sm" variant="ghost">
-                        <Link
-                          href={
-                            a.status === "DRAFT"
-                              ? `/exam?id=${a.exam_session_id}`
-                              : `/result?id=${a.id}`
-                          }
-                        >
-                          {a.status === "DRAFT" ? "Viết tiếp" : "Xem bài"}
-                          <ArrowRight />
-                        </Link>
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      <p className="mt-1 truncate text-xs text-stone-500">
+                        {topics[a.question.topic] || a.question.topic}
+                        <LibraryOrigin value={a.question} />
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-5 text-xs text-stone-400">
+                    <span>{a.word_count} từ</span>
+                    <span className="hidden sm:inline">{formatDate(a.created_at)}</span>
+                  </div>
+                  <Button asChild size="sm" variant="ghost">
+                    <Link
+                      href={
+                        a.status === "DRAFT"
+                          ? `/exam?id=${a.exam_session_id}`
+                          : `/result?id=${a.id}`
+                      }
+                    >
+                      {a.status === "DRAFT" ? "Viết tiếp" : "Xem bài"}
+                      <ArrowRight />
+                    </Link>
+                  </Button>
+                </Card>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
           <div className="mt-5 flex items-center justify-between text-xs text-stone-500">
             <span>
               Trang {page + 1} / {Math.ceil(data.total / 15)}

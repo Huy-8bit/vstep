@@ -9,7 +9,7 @@ export function TabsList({
   return (
     <TabsPrimitive.List
       className={cn(
-        "flex gap-1 overflow-x-auto border-b border-stone-200 pb-1",
+        "flex gap-1 overflow-x-auto border-b border-stone-200",
         className,
       )}
       {...props}
@@ -23,7 +23,10 @@ export function TabsTrigger({
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        "shrink-0 rounded-lg px-4 py-3 text-sm font-medium text-stone-500 outline-none focus-visible:ring-2 focus-visible:ring-teal-600 data-[state=active]:bg-teal-50 data-[state=active]:text-teal-900",
+        "relative shrink-0 whitespace-nowrap px-4 py-3 text-sm font-medium text-stone-500 outline-none transition-colors",
+        "hover:text-stone-800 focus-visible:ring-2 focus-visible:ring-teal-600",
+        "data-[state=active]:text-teal-900",
+        "after:absolute after:inset-x-3 after:-bottom-px after:h-0.5 after:rounded-full after:bg-teal-700 after:opacity-0 after:transition-opacity after:duration-200 data-[state=active]:after:opacity-100",
         className,
       )}
       {...props}
@@ -36,7 +39,7 @@ export function TabsContent({
 }: React.ComponentProps<typeof TabsPrimitive.Content>) {
   return (
     <TabsPrimitive.Content
-      className={cn("mt-6 outline-none", className)}
+      className={cn("animate-fade-in mt-6 outline-none", className)}
       {...props}
     />
   );

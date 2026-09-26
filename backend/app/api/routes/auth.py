@@ -1,14 +1,16 @@
+import logging
 from datetime import timedelta
 from uuid import uuid4
 
 from fastapi import APIRouter, Request, Response
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from starlette.concurrency import run_in_threadpool
 
 from app.api.deps import DB, CurrentUser
 from app.common.errors import AppError
 from app.core.config import settings
+from app.core.identity import normalize_email
 from app.core.security import (
     DUMMY_HASH,
     decode_token,
@@ -23,6 +25,7 @@ from app.services.ai_cost_service import is_cost_admin
 from app.services.entitlements import EntitlementService
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+logger = logging.getLogger(__name__)
 
 
 def set_tokens(response: Response, user: User, session: AuthSession) -> None:
@@ -78,8 +81,12 @@ async def user_view(db, user: User):
 
 @router.post("/register", status_code=201)
 async def register(data: Credentials, response: Response, db: DB):
+    email = normalize_email(str(data.email))
+    existing = await db.scalar(select(User.id).where(func.lower(func.trim(User.email)) == email))
+    if existing:
+        raise AppError(409, "Email này đã được đăng ký.")
     user = User(
-        email=str(data.email).strip().lower(),
+        email=email,
         password_hash=await run_in_threadpool(password_hasher.hash, data.password),
     )
     db.add(user)
@@ -96,17 +103,23 @@ async def register(data: Credentials, response: Response, db: DB):
 
 @router.post("/login")
 async def login(data: Credentials, response: Response, db: DB):
-    user = await db.scalar(select(User).where(User.email == str(data.email).strip().lower()))
+    user = await db.scalar(
+        select(User).where(func.lower(func.trim(User.email)) == normalize_email(str(data.email)))
+    )
     valid = await run_in_threadpool(
         password_hasher.verify,
         data.password,
         user.password_hash if user else DUMMY_HASH,
     )
     if not valid or not user:
+        logger.info("auth_login_failed reason=INVALID_CREDENTIALS")
         raise AppError(401, "Email hoặc mật khẩu không đúng.")
     if user.status != "ACTIVE":
+        logger.info("auth_login_failed reason=ACCOUNT_DISABLED user_id=%s", user.id)
         raise AppError(403, "Tài khoản đã bị vô hiệu hóa.", "ACCOUNT_DISABLED")
-    return await start_session(response, db, user)
+    result = await start_session(response, db, user)
+    logger.info("auth_login_succeeded user_id=%s role=%s", user.id, user.role)
+    return result
 
 
 @router.post("/refresh")
@@ -141,8 +154,18 @@ async def logout(request: Request, response: Response, db: DB):
             await db.commit()
     except AppError:
         pass
-    response.delete_cookie("vstep_access", path="/api", samesite=settings.cookie_samesite, secure=settings.app_env == "production" or settings.cookie_samesite == "none")
-    response.delete_cookie("vstep_refresh", path="/api", samesite=settings.cookie_samesite, secure=settings.app_env == "production" or settings.cookie_samesite == "none")
+    response.delete_cookie(
+        "vstep_access",
+        path="/api",
+        samesite=settings.cookie_samesite,
+        secure=settings.app_env == "production" or settings.cookie_samesite == "none",
+    )
+    response.delete_cookie(
+        "vstep_refresh",
+        path="/api",
+        samesite=settings.cookie_samesite,
+        secure=settings.app_env == "production" or settings.cookie_samesite == "none",
+    )
     return {"message": "Đã đăng xuất."}
 
 

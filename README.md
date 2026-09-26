@@ -29,7 +29,7 @@ Lệnh khởi tạo thu hồi các phiên đăng nhập cũ khi nâng quyền t�
 
 Bộ prompt có bản đọc dễ hiểu, JSON, all-in-one, sinh/nhập đề, bài học và bài tập; mỗi bản ghi nguồn code, phiên bản và khác biệt với ứng dụng. Phát âm cần audio thực sự nghe được; Reading thiếu key nguồn không có tổng điểm; một task Writing chưa đủ quy đổi bậc. Kết quả từ chatbot cần lưu riêng, chưa có chức năng nhập JSON chấm thủ công để ghi đè điểm trong app. Xem [quy trình sử dụng](docs/prompts/reference/manual-workflows.md) và [bản đồ phiên bản](docs/prompts/reference/prompt-version-map.md).
 
-Triển khai frontend tĩnh bằng AWS CloudFront/S3 và backend đặt ngoài AWS được hướng dẫn trong [devops/README.md](devops/README.md). Khởi tạo Admin an toàn bằng env được mô tả trong [docs/deployment.md](docs/deployment.md).
+Triển khai frontend tĩnh bằng AWS CloudFront/S3 và backend đặt ngoài AWS được hướng dẫn trong [devops/README.md](devops/README.md). Khởi tạo Admin an toàn bằng env được mô tả trong [docs/deployment.md](docs/deployment.md). Nếu Admin hiện có không đăng nhập được, xem [chẩn đoán và đặt lại mật khẩu](docs/admin-auth-troubleshooting.md); bootstrap không tự đổi mật khẩu cũ.
 
 ## Chạy bằng Docker
 

@@ -33,7 +33,11 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app):
-    await InitialAdminBootstrapService(settings).run()
+    try:
+        await InitialAdminBootstrapService(settings).run()
+    except Exception as exc:
+        logger.error("initial_admin_bootstrap_failed error_type=%s", type(exc).__name__)
+        raise
     yield
     await engine.dispose()
 
@@ -44,7 +48,8 @@ app.add_middleware(
     allow_origins=[settings.frontend_url.rstrip("/")],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Content-Type"],
+    # Browsers may add cache headers for fetch(..., {cache: "no-store"}).
+    allow_headers=["Content-Type", "Cache-Control", "Pragma"],
 )
 hits: dict[str, deque] = defaultdict(deque)
 
@@ -59,7 +64,9 @@ async def request_guards(request: Request, call_next):
                 {"detail": "Nguồn yêu cầu không được phép.", "code": "invalid_origin"},
                 status_code=403,
             )
-        if request.headers.get("sec-fetch-site") == "cross-site" and origin != settings.frontend_url.rstrip("/"):
+        if request.headers.get("sec-fetch-site") == "cross-site" and origin != settings.frontend_url.rstrip(
+            "/"
+        ):
             return JSONResponse({"detail": "Yêu cầu không hợp lệ."}, status_code=403)
         audio_upload = request.url.path.startswith(
             ("/api/v1/speaking/answers/", "/api/v1/speaking/pronunciation/practices/")

@@ -20,6 +20,9 @@ import { Button } from "@/components/ui/button";
 import { VocabularyRecommendations } from "@/features/vocabulary/recommendations";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyState, ErrorNotice, Loading } from "@/components/feedback";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Metric, Caption } from "@/components/ui/typography";
+import { FadeIn, AnimatedNumber } from "@/components/ui/motion";
 import { QuestionCard } from "@/features/writing/practice-setup";
 import { Paywall } from "@/components/paywall";
 import { LibraryOrigin } from "@/features/library/practice-link";
@@ -391,6 +394,31 @@ function Feedback({
   );
 }
 
+function CriteriaBar({ label, value }: { label: string; value: number }) {
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setWidth(value * 10));
+    return () => cancelAnimationFrame(frame);
+  }, [value]);
+  return (
+    <div>
+      <div className="mb-2 flex justify-between text-sm">
+        <span className="text-stone-500">{label}</span>
+        <strong className="tabular-nums">
+          {score(value)}
+          <span className="font-normal text-stone-300"> / 10</span>
+        </strong>
+      </div>
+      <div className="h-1.5 overflow-hidden rounded-full bg-stone-100">
+        <div
+          className="h-full rounded-full bg-teal-600 transition-[width] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          style={{ width: `${width}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
 function LocalRecovery({ attempt }: { attempt: AttemptDetail }) {
   const { user } = useAuth();
   const [local] = useState<string>(() => {
@@ -593,21 +621,31 @@ function Result({ id }: { id: string }) {
         </div>
       )}
       {grading && (
-        <div
-          role="status"
-          className="flex items-center gap-4 rounded-xl border border-teal-100 bg-teal-50 p-5 text-teal-900"
-        >
-          <LoaderCircle className="size-6 shrink-0 animate-spin" />
-          <div>
-            <p className="font-semibold">
-              Task {gradingTask} · {stage}...
-            </p>
-            <p className="mt-1 text-xs leading-6 text-teal-700">
-              Quá trình có thể mất vài phút. Bài đã được lưu; bạn có thể quay
-              lại kết quả từ lịch sử.
-            </p>
+        <FadeIn>
+          <div className="flex items-center gap-4 rounded-2xl border border-teal-100 bg-teal-50/70 p-5 sm:p-6">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-teal-700 shadow-sm">
+              <Sparkles size={20} className="animate-soft-pulse" />
+            </span>
+            <div>
+              <p className="font-semibold text-teal-900">
+                Task {gradingTask} · {stage}...
+              </p>
+              <p className="mt-1 text-xs leading-6 text-teal-700">
+                Thường mất khoảng 15–30 giây. Bài đã được lưu; bạn có thể quay
+                lại kết quả từ lịch sử bất cứ lúc nào.
+              </p>
+            </div>
           </div>
-        </div>
+          <div className="mt-6 grid gap-6 lg:grid-cols-[280px_1fr]">
+            <Skeleton className="h-48" />
+            <div className="panel space-y-4 p-6 sm:p-7">
+              <Skeleton className="h-5 w-1/3" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-4/5" />
+            </div>
+          </div>
+        </FadeIn>
       )}
       {error && (
         <div>
@@ -624,16 +662,16 @@ function Result({ id }: { id: string }) {
       )}
       {g ? (
         <>
-          <section className="grid gap-6 lg:grid-cols-[280px_1fr]">
-            <div className="rounded-2xl bg-teal-800 p-7 text-white">
-              <p className="text-sm text-teal-100">
+          <FadeIn className="grid gap-6 lg:grid-cols-[280px_1fr]">
+            <div className="rounded-2xl bg-gradient-to-br from-teal-800 to-teal-950 p-7 text-white">
+              <Caption className="text-teal-200">
                 Điểm AI ước tính · Task {data.task_type}
-              </p>
-              <p className="my-5 text-6xl font-bold tracking-tight">
-                {score(g.scores.overall)}
-                <span className="ml-2 text-lg font-normal text-teal-200">
-                  / 10
-                </span>
+              </Caption>
+              <p className="my-5 flex items-baseline gap-2">
+                <Metric size="xl" className="text-white">
+                  <AnimatedNumber value={g.scores.overall} decimals={1} />
+                </Metric>
+                <span className="text-lg font-normal text-teal-200">/ 10</span>
               </p>
               <p className="mt-4 text-xs leading-6 text-teal-100">
                 Đây là điểm luyện tập cho nhiệm vụ này, không phải kết quả xác
@@ -643,35 +681,19 @@ function Result({ id }: { id: string }) {
             <div className="panel p-6 sm:p-7">
               <h2 className="mb-5 font-bold">Bốn tiêu chí chấm bài</h2>
               <div className="grid gap-x-7 gap-y-5 sm:grid-cols-2">
-                {Object.entries(criteria).map(([key, label]) => {
-                  const value = g.scores[key as keyof typeof g.scores];
-                  return (
-                    <div key={key}>
-                      <div className="mb-2 flex justify-between text-sm">
-                        <span className="text-stone-500">{label}</span>
-                        <strong>
-                          {score(value)}
-                          <span className="font-normal text-stone-300">
-                            {" "}
-                            / 10
-                          </span>
-                        </strong>
-                      </div>
-                      <div className="h-1.5 overflow-hidden rounded-full bg-stone-100">
-                        <div
-                          className="h-full rounded-full bg-teal-600"
-                          style={{ width: `${value * 10}%` }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+                {Object.entries(criteria).map(([key, label]) => (
+                  <CriteriaBar
+                    key={key}
+                    label={label}
+                    value={g.scores[key as keyof typeof g.scores]}
+                  />
+                ))}
               </div>
               <p className="mt-6 border-t border-stone-100 pt-5 text-sm leading-7 text-stone-600">
                 {g.summary_vi}
               </p>
             </div>
-          </section>
+          </FadeIn>
           <div className="panel flex flex-wrap items-center justify-between gap-4 p-5">
             <div>
               <p className="text-sm font-semibold">

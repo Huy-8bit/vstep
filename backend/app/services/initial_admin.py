@@ -4,11 +4,12 @@ import logging
 import re
 
 from pydantic import EmailStr, TypeAdapter
-from sqlalchemy import select, update
+from sqlalchemy import func, select, update
 from sqlalchemy.exc import IntegrityError
 from starlette.concurrency import run_in_threadpool
 
 from app.core.config import Settings
+from app.core.identity import normalize_email
 from app.core.security import password_hasher
 from app.db.base import utcnow
 from app.db.session import SessionLocal
@@ -40,6 +41,11 @@ class InitialAdminBootstrapService:
         self.config = config
 
     async def run(self) -> None:
+        logger.warning(
+            "initial_admin_bootstrap enabled=%s email_configured=%s",
+            self.config.initial_admin_enabled,
+            bool(self.config.initial_admin_email.strip()),
+        )
         if not self.config.initial_admin_enabled:
             return
         if not self.config.initial_admin_email.strip():
@@ -47,12 +53,16 @@ class InitialAdminBootstrapService:
                 "Initial admin bootstrap enabled but INITIAL_ADMIN_EMAIL is missing; no account created."
             )
             return
-        email = str(TypeAdapter(EmailStr).validate_python(self.config.initial_admin_email.strip())).lower()
+        email = normalize_email(
+            str(TypeAdapter(EmailStr).validate_python(self.config.initial_admin_email.strip()))
+        )
         password = self.config.initial_admin_password
         if password:
             validate_initial_password(password, email)
         async with SessionLocal() as db:
-            user = await db.scalar(select(User).where(User.email == email).with_for_update())
+            user = await db.scalar(
+                select(User).where(func.lower(func.trim(User.email)) == email).with_for_update()
+            )
             if user is None:
                 if not password:
                     logger.error(
@@ -72,7 +82,9 @@ class InitialAdminBootstrapService:
                     await db.flush()
                 except IntegrityError:
                     await db.rollback()
-                    user = await db.scalar(select(User).where(User.email == email).with_for_update())
+                    user = await db.scalar(
+                        select(User).where(func.lower(func.trim(User.email)) == email).with_for_update()
+                    )
                     if user is None:
                         raise
                 else:
@@ -106,3 +118,8 @@ class InitialAdminBootstrapService:
                 )
                 await db.commit()
                 logger.info("Existing account promoted to initial admin; its password was preserved.")
+            if password and not await run_in_threadpool(password_hasher.verify, password, user.password_hash):
+                logger.warning(
+                    "Initial admin account exists but configured initial password does not match; "
+                    "existing password was preserved. Use reset_admin_password CLI if recovery is needed."
+                )

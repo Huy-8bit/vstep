@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -27,30 +28,47 @@ const AuthContext = createContext<{
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const authVersion = useRef(0);
   const pathname = usePathname();
+  const updateUser = useCallback((current: User | null) => {
+    authVersion.current += 1;
+    setUser(current);
+    setLoading(false);
+  }, []);
   const refreshUser = useCallback(async () => {
     try {
       const current = await api<User>("/auth/me");
-      setUser(current);
+      updateUser(current);
       return current;
     } catch {
-      setUser(null);
+      updateUser(null);
       return null;
     }
-  }, []);
+  }, [updateUser]);
   useEffect(() => {
+    let active = true;
+    const version = authVersion.current;
     api<User>("/auth/me")
-      .then(setUser)
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
+      .then((current) => {
+        if (active && version === authVersion.current) setUser(current);
+      })
+      .catch(() => {
+        if (active && version === authVersion.current) setUser(null);
+      })
+      .finally(() => {
+        if (active && version === authVersion.current) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [pathname]);
   const logout = useCallback(async () => {
     await post("/auth/logout");
-    setUser(null);
-  }, []);
+    updateUser(null);
+  }, [updateUser]);
   return (
     <AuthContext.Provider
-      value={{ user, loading, setUser, refreshUser, logout }}
+      value={{ user, loading, setUser: updateUser, refreshUser, logout }}
     >
       {children}
     </AuthContext.Provider>
@@ -63,7 +81,9 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   useEffect(() => {
     if (!loading && !user)
-      router.replace(`/login?next=${encodeURIComponent(pathname + window.location.search)}`);
+      router.replace(
+        `/login?next=${encodeURIComponent(pathname + window.location.search)}`,
+      );
   }, [user, loading, pathname, router]);
   return loading || !user ? (
     <Loading text="Đang mở không gian luyện tập..." />
